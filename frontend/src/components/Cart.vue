@@ -21,7 +21,6 @@
                 <td>
                   <v-list-item
                   key="1"
-                  @click=""
                 >
                   <v-list-item-avatar>
                     <v-img :src="require('../assets/img/shop/1.jpg')"></v-img>
@@ -51,7 +50,6 @@
                 <td>
                   <v-list-item
                   key="1"
-                  @click=""
                 >
                   <v-list-item-avatar>
                     <v-img :src="require('../assets/img/shop/2.jpg')"></v-img>

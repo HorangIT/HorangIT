@@ -70,7 +70,6 @@
             <v-list-item
               v-for="(item, index) in items"
               :key="index"
-              @click=""
               href="/shop"
             >
               <v-list-item-title>{{ item.title }}</v-list-item-title>
