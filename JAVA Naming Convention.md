@@ -1,8 +1,7 @@
 # JAVA Naming Convention
 
 * A101팀의 프로젝트를 위한 JAVA Naming Convention입니다.
-  * NAVER의 캠퍼스 핵데이 java 코딩 컨벤션을 참고했습니다.  
-
+* NAVER의 캠퍼스 핵데이 java 코딩 컨벤션을 참고했습니다.  
 ## 파일 공통
 
 1. 파일 인코딩은 UTF-8 사용
