@@ -1,5 +1,8 @@
 package com.a101.ssafy.project.controller;
 
-public class ItemController {
+import org.springframework.stereotype.Controller;
 
+@Controller
+public class ItemController {
+	
 }
