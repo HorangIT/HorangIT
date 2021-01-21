@@ -145,7 +145,7 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-# Spring application.properties
-application.properties
+### application.properties , you need to modify it
+backend/src/main/resources/application.properties
 
 # End of https://www.toptal.com/developers/gitignore/api/windows,macos,eclipse,vue,java-web,vuejs
