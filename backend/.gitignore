@@ -13,8 +13,6 @@ target/
 .springBeans
 .sts4-cache
 
-### application.properties , you need to modify it
-/src/main/resources/applicaion.properties
 ### IntelliJ IDEA ###
 .idea
 *.iws
