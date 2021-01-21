@@ -14,7 +14,7 @@ target/
 .sts4-cache
 
 ### application.properties , you need to modify it
-application.properties
+src/main/resources/applicaion.properties
 ### IntelliJ IDEA ###
 .idea
 *.iws
