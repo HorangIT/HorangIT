@@ -145,4 +145,7 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+# Spring application.properties
+application.properties
+
 # End of https://www.toptal.com/developers/gitignore/api/windows,macos,eclipse,vue,java-web,vuejs
