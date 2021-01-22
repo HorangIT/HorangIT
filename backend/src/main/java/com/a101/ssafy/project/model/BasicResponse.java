@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 public class BasicResponse {
     @ApiModelProperty(value = "status", position = 1)
-    public int status;
+    public boolean status;
     @ApiModelProperty(value = "data", position = 2)
     public String data;
     @ApiModelProperty(value = "object", position = 3)
