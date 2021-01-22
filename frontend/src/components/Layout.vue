@@ -18,7 +18,7 @@
       />
       <v-spacer></v-spacer>
       <!--로그인 유무-->
-      <span v-if="login">
+      <span v-if="false">
         <v-btn icon>
           <v-icon>mdi-account-circle</v-icon>
         </v-btn>

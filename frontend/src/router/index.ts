@@ -10,6 +10,9 @@ import Cart from '@/components/Cart.vue';
 
 import PostView from '@/views/PostView.vue';
 
+import LoginForm from '@/components/user/LoginForm.vue'
+import SignupForm from '@/components/user/SignupForm.vue'
+
 Vue.use(VueRouter);
 
 const routes: Array<RouteConfig> = [
@@ -63,6 +66,16 @@ const routes: Array<RouteConfig> = [
   //   component: () =>
   //     import(/* webpackChunkName: "about" */ "../views/About.vue")
   // }
+
+  // test page
+  {
+    path:'/signup',
+    component: SignupForm,
+  },
+  {
+    path:'/login',
+    component: LoginForm,
+  },
 ];
 
 const router = new VueRouter({
