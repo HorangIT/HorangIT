@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app class="myFont">
     <router-view></router-view>
   </v-app>
 </template>
@@ -20,3 +20,8 @@ export default Vue.extend({
   })
 });
 </script>
+<style>
+.myFont {
+  font-family: 'Raleway', cursive; 
+}
+</style>
