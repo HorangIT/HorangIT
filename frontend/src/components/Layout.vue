@@ -46,7 +46,7 @@
         </v-badge>
       </v-btn>
     </v-app-bar>
-    <v-content>
+    <v-main>
       <v-bottom-navigation
         :value="activeBtn"
         color="primary"
@@ -84,7 +84,7 @@
           <span>Blog</span>
         </v-btn>
       </v-bottom-navigation>
-    </v-content>
+    </v-main>
       <router-view/>
     <v-footer
       :padless="true"
@@ -152,6 +152,12 @@ import Vue from "vue";
       ],
       activeBtn: 1,
     }),
+    methods:{
+      on() {
+        console.log('on')
+        return "shirt"
+      }
+    }
   });
 </script>
 <style>
