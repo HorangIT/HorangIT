@@ -4,9 +4,13 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 @Valid
+@Setter
+@Getter
 @ToString
 public class RegisterRequest {
 	@ApiModelProperty(required = true)
@@ -14,15 +18,15 @@ public class RegisterRequest {
 	String title;
 	
 	@ApiModelProperty(required = true)
-	@NotNull
+//	@NotNull
 	String description;
 	
 	@ApiModelProperty(required = true)
-	@NotNull
+//	@NotNull
 	String startPrice;
 	
 	@ApiModelProperty(required = true)
-	@NotNull
+//	@NotNull
 	String happyPrice;
 	
 	@ApiModelProperty(required = true)
