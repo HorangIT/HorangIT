@@ -1,4 +1,4 @@
-package com.a101.ssafy.project.item;
+package com.a101.ssafy.project.model.item;
 
 public class Test_SampleRequestItem {
  //this is sample file
