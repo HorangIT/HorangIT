@@ -8,6 +8,8 @@ import Product from '@/components/Product.vue';
 import Post from '@/components/Post.vue';
 import Cart from '@/components/Cart.vue';
 
+import PostView from '@/views/PostView.vue';
+
 Vue.use(VueRouter);
 
 const routes: Array<RouteConfig> = [
@@ -44,7 +46,12 @@ const routes: Array<RouteConfig> = [
         path:'/cart',
         component:Cart,
         name:'Cart'
-      }
+      },
+      {
+        path:'/postview',
+        component:PostView,
+        name:'PostView'
+      },
     ]
   },
   // {

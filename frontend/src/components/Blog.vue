@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-container>
-      <p class="display-3 font-weight-light	text-center pa-4">Read About Fashion</p>
+      <p class="display-3 font-weight-light	text-center pa-4">고객센터임</p>
         <div class="row">
           <div class="col-md-4 col-sm-4 col-xs-12">
             <v-card
