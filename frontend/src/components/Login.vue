@@ -1,8 +1,11 @@
 <template>
   <transition name="modal" appear>
-    <div class="user modal modal-overlay" id="login" @click.self="$emit('close')">
-      <div class="modal-window">
-          <h1>원표님 짱짱</h1>      
+    <div class="modal-overlay" id="login" @click.self="$emit('close')">
+      <div v-if="loginShow" class="modal-window">
+        <LoginForm @goToSignup="goToSignup" />
+      </div>
+      <div v-else class="modal-window">
+        <SignupForm @goToLogin="goToLogin" />
       </div>
     </div>
   </transition>
@@ -24,11 +27,11 @@
 
   .modal-window {
     background: #fff;
-    width: 20vw;
-    height: 40vh;
+    width: 40vw;
+    height: auto;
+    padding: 1vh 0;
     border-radius: 4px;
-    overflow: hidden;
-    padding: 30px;
+    overflow: hidden
   }
 
   /* 오버레이 트랜지션 */
@@ -48,8 +51,26 @@
 
 <script lang="ts">
 import Vue from "vue";
+import LoginForm from "@/components/user/LoginForm.vue"
+import SignupForm from "@/components/user/SignupForm.vue"
 
 export default Vue.extend ({
-  
+  data () {
+    return {
+      loginShow: true,
+    }
+  },
+  components: {
+    LoginForm,
+    SignupForm,
+  },
+  methods: {
+    goToLogin () {
+      this.loginShow = true
+    },
+    goToSignup () {
+      this.loginShow = false
+    }
+  }
 });
 </script>

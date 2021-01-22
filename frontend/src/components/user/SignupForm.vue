@@ -1,12 +1,8 @@
 <template>
   <v-row justify="center">
-    <v-col
-      cols="12"
-      sm="10"
-      md="8"
-      lg="6"
-    >
+    <v-col cols="10">
       <v-card ref="form">
+        <v-card-title>회원가입</v-card-title>
         <v-card-text>
           <v-text-field
             ref="nickname"
@@ -53,8 +49,11 @@
         </v-card-text>
         <v-divider class="mt-12"></v-divider>
         <v-card-actions>
-          <v-btn text>
-            취소
+          <v-btn
+            text
+            @click="goToLogin"
+          >
+            로그인으로 돌아가기
           </v-btn>
           <v-spacer></v-spacer>
           <v-slide-x-reverse-transition>
@@ -156,6 +155,9 @@ export default {
           .catch(response => console.log(response))
       }
     },
+    goToLogin () {
+      this.$emit('goToLogin')
+    }
   },
 }
 </script>

@@ -1,12 +1,8 @@
 <template>
   <v-row justify="center">
-    <v-col
-      cols="12"
-      sm="10"
-      md="8"
-      lg="6"
-    >
+    <v-col cols="10">
       <v-card ref="form">
+        <v-card-title>로그인</v-card-title>
         <v-card-text>
           <v-text-field
             ref="email"
@@ -32,8 +28,11 @@
         </v-card-text>
         <v-divider class="mt-12"></v-divider>
         <v-card-actions>
-          <v-btn text>
-            취소
+          <v-btn
+            text
+            @click="goToSignup"
+          >
+            회원이 아니신가요?
           </v-btn>
           <v-spacer></v-spacer>
           <v-slide-x-reverse-transition>
@@ -74,6 +73,7 @@ import axios from 'axios'
 const API_BASE_URL = process.env.VUE_APP_API_BASE_URL
 
 export default {
+  name: 'Login',
   data: () => ({
     errorMessages: '',
     email: '',
@@ -129,6 +129,9 @@ export default {
           .catch(response => console.log(response))
       }
     },
+    goToSignup () {
+      this.$emit('goToSignup')
+    }
   },
 }
 </script>
