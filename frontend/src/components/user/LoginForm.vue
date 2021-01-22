@@ -67,28 +67,30 @@
   </v-row>
 </template>
 
-<script>
-import axios from 'axios'
+<script lang="ts">
+import Vue from 'vue'
+import { axiosPOST } from '@/utils/axios'
+// import axios from 'axios'
 
-const API_BASE_URL = process.env.VUE_APP_API_BASE_URL
+// const API_BASE_URL = process.env.VUE_APP_API_BASE_URL
 
-export default {
+export default Vue.extend({
   name: 'Login',
-  data: () => ({
+  data: (): any => ({
     errorMessages: '',
     email: '',
     password: '',
     passwordShow: false,
     formHasErrors: false,
     rules: {
-      required: v => !!v || '해당 칸을 입력해주세요.',
-      email: v => /.+@.+/.test(v) || '이메일 형식에 맞게 작성해주세요.',
-      password: v => /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&*+=]).*$/.test(v) || '비밀번호는 문자/숫자/특수문자를 포함한 8~15자리로 입력해주세요.',
+      required: (v: string) => !!v || '해당 칸을 입력해주세요.',
+      email: (v: string) => /.+@.+/.test(v) || '이메일 형식에 맞게 작성해주세요.',
+      password: (v: string) => /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&*+=]).*$/.test(v) || '비밀번호는 문자/숫자/특수문자를 포함한 8~15자리로 입력해주세요.',
     }
   }),
 
   computed: {
-    form () {
+    form (): Record<string, any> {
       return {
         email: this.email,
         password: this.password,
@@ -97,13 +99,13 @@ export default {
   },
 
   watch: {
-    name () {
+    name (): void {
       this.errorMessages = ''
     },
   },
 
   methods: {
-    resetForm () {
+    resetForm (): void {
       this.errorMessages = ''
       this.formHasErrors = false
 
@@ -111,7 +113,7 @@ export default {
         this.$refs[f].reset()
       })
     },
-    submit () {
+    submit (): void {
       // validation
       this.formHasErrors = false
       Object.keys(this.form).forEach(f => {
@@ -119,19 +121,34 @@ export default {
         if (!this.$refs[f].validate(true)) this.formHasErrors = true
       })
       if (!this.formHasErrors) {
-        // axios post
-        const credentials = {
+        // // axios post
+        // const credentials = {
+        //   email: this.email,
+        //   password: this.password,
+        // }
+        // axios.post(`${API_BASE_URL}/account/login/`, credentials)
+        //   .then(response => console.log(response))
+        //   .catch(response => console.log(response))
+        // axios config
+        const address = '/account/signup/';
+        const data = {
           email: this.email,
           password: this.password,
-        }
-        axios.post(`${API_BASE_URL}/account/login/`, credentials)
-          .then(response => console.log(response))
-          .catch(response => console.log(response))
+        };
+        const config = undefined;
+        // axios post
+        axiosPOST(
+          address,
+          data,
+          config,
+          (response: any) => console.log(response),
+          (error: any) => console.log(error)
+        );
       }
     },
-    goToSignup () {
+    goToSignup (): void {
       this.$emit('goToSignup')
     }
   },
-}
+})
 </script>
