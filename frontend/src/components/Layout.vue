@@ -1,136 +1,103 @@
 <template>
   <v-app id="inspire">
-    <v-app-bar
-      :clipped-left="$vuetify.breakpoint.lgAndUp"
-      app
-      color="primary"
-      dark
-    >
-<!--      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />-->
-
-      <v-toolbar-title
-        style="width: 350px"
-      >
-        <a href="/" class="white--text" style="text-decoration: none"><v-icon>mdi-truck</v-icon>&nbsp;ShipIT</a>
+    <v-app-bar app color="orange accent-3" dark>
+      <v-app-bar-nav-icon @click.stop="active = !active" />
+      <v-toolbar-title>
+        <a href="/" class="white--text" style="text-decoration: none">
+          <v-img></v-img>&nbsp;호랑IT
+        </a>
       </v-toolbar-title>
+      <v-spacer></v-spacer>
       <v-text-field
         flat
         solo-inverted
         hide-details
         prepend-inner-icon="mdi-magnify"
-        label="Search"
-        class="hidden-sm-and-down pl-10 ml-4"
+        label="구매하고 싶은 물품을 검색해보세요"
+        class="hidden-sm-and-down"
       />
-      <v-spacer />
-      <v-btn icon>
-        <v-icon>mdi-account-circle</v-icon>
-      </v-btn>
-      <v-btn v-on="on" icon>
-        <v-badge
-          content="2"
-          value="2"
-          color="green"
-          overlap
-        >
-          <v-icon>mdi-bell</v-icon>
-        </v-badge>
-      </v-btn>
-      <v-btn v-on="on" href="/cart" icon>
-        <v-badge
-          content="2"
-          value="2"
-          color="green"
-          overlap
-        >
-          <v-icon>mdi-cart</v-icon>
-        </v-badge>
-      </v-btn>
-    </v-app-bar>
-    <v-main>
-      <v-bottom-navigation
-        :value="activeBtn"
-        color="primary"
-        horizontal
-      >
-        <a href="/" class="v-btn">
-          <span>Home</span>
-        </a>
-        <v-menu open-on-hover offset-y>
+      <v-spacer></v-spacer>
+      <!--로그인 유무-->
+      <span v-if="login">
+        <v-btn icon>
+          <v-icon>mdi-account-circle</v-icon>
+        </v-btn>
+        <v-menu transition="scroll-y-transition">
           <template v-slot:activator="{ on }">
-            <v-btn v-on="on">
-              <span>Shop</span>
+            <v-btn v-on="on" icon>
+              <v-badge content="2" value="2" color="red" overlap>
+                <v-icon>mdi-bell</v-icon>
+              </v-badge>
             </v-btn>
           </template>
-          <v-card
-            class="mx-auto"
-            max-width="344"
-            outlined
-          >
-
-            <v-list-item
-              v-for="(item, index) in items"
-              :key="index"
-              href="/shop"
-            >
-              <v-list-item-title>{{ item.title }}</v-list-item-title>
+          <v-list>
+            <v-list-item v-for="n in 5" :key="n" link>
+              <v-list-item-title v-text="'alarm ' + n"></v-list-item-title>
             </v-list-item>
-
-          </v-card>
+          </v-list>
         </v-menu>
-        <a href="/product" class="v-btn">
-          <span>Product</span>
-        </a>
-        <v-btn href="/blog">
-          <span>Blog</span>
+
+        <v-btn v-on="on" href="/cart" icon>
+          <v-badge content="2" value="2" color="green" overlap>
+            <v-icon>mdi-cart</v-icon>
+          </v-badge>
         </v-btn>
-      </v-bottom-navigation>
-    </v-main>
-      <router-view/>
-    <v-footer
-      :padless="true"
-    >
-      <v-card
+        <v-btn outlined rounded color="white" class="ml-2">
+          로그아웃
+        </v-btn>
+      </span>
+      <span v-else>
+        <v-btn outlined rounded color="white">
+          로그인
+        </v-btn>
+      </span>
+    </v-app-bar>
+    <div style="height:42px;"></div>
+    <v-expand-transition>
+      <v-app-bar
+        color="grey lighten-4"
+        v-if="active"
+        class="d-flex justify-center"
         flat
-        tile
-        width="100%"
-        class="secondary white--text text-center"
+        style="position:sticky; top:63px; z-index:100;"
       >
+        <div id="nav" class="d-flex justify-space-around">
+          <v-btn text href="/">홈</v-btn>
+          <v-btn text href="/#t">경매</v-btn>
+          <v-btn text href="/shop">스토어</v-btn>
+          <v-btn text href="#">서비스 소개</v-btn>
+          <v-btn text href="/blog">고객센터</v-btn>
+        </div>
+      </v-app-bar>
+    </v-expand-transition>
+
+    <router-view />
+
+    <v-footer :padless="true">
+      <v-card flat tile width="100%" class="secondary white--text text-center">
         <v-card-text>
-          <v-btn
-            class="mx-4 white--text"
-            icon
-          >
+          <v-btn class="mx-4 white--text" icon>
             <v-icon size="24px">mdi-home</v-icon>
           </v-btn>
-          <v-btn
-            class="mx-4 white--text"
-            icon
-          >
+          <v-btn class="mx-4 white--text" icon>
             <v-icon size="24px">mdi-email</v-icon>
           </v-btn>
-          <v-btn
-            class="mx-4 white--text"
-            icon
-          >
+          <v-btn class="mx-4 white--text" icon>
             <v-icon size="24px">mdi-calendar</v-icon>
           </v-btn>
-           <v-btn
-            class="mx-4 white--text"
-            icon
-          >
+          <v-btn class="mx-4 white--text" icon>
             <v-icon size="24px">mdi-delete</v-icon>
           </v-btn>
-
         </v-card-text>
 
         <v-card-text class="white--text pt-0">
-          Phasellus feugiat arcu sapien, et iaculis ipsum elementum sit amet. Mauris cursus commodo interdum. Praesent ut risus eget metus luctus accumsan id ultrices nunc. Sed at orci sed massa consectetur dignissim a sit amet dui. Duis commodo vitae velit et faucibus. Morbi vehicula lacinia malesuada. Nulla placerat augue vel ipsum ultrices, cursus iaculis dui sollicitudin. Vestibulum eu ipsum vel diam elementum tempor vel ut orci. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+        서비스이용약관 | 온라인경매약관 | 경매서비스운영방침 | 스토어 이용약관 | 개인정보취급방침 | 이메일무단수집거부 
         </v-card-text>
 
         <v-divider></v-divider>
 
         <v-card-text class="white--text">
-          {{ new Date().getFullYear() }} — <strong>ShipIT</strong>
+          {{ new Date().getFullYear() }} — <strong>호랑IT</strong>
         </v-card-text>
       </v-card>
     </v-footer>
@@ -139,27 +106,21 @@
 <script lang="ts">
 import Vue from "vue";
 
-  export default Vue.extend({
-    name: "Layout",
+export default Vue.extend({
+  name: "Layout",
 
-    data: () => ({
-      items: [
-        { title: 'T-Shirts' },
-        { title: 'Jackets' },
-        { title: 'Shirts' },
-        { title: 'Jeans' },
-        { title: 'Shoes' },
-      ],
-      activeBtn: 1,
-    }),
-    methods:{
-      on() {
-        console.log('on')
-        return "shirt"
-      }
-    }
-  });
+  data: () => ({
+    on: true,
+    active: false,
+    login: true
+  })
+});
 </script>
 <style>
-
+#nav {
+  width: 35vw;
+}
+#nav > a {
+  font-size: 1vw;
+}
 </style>
