@@ -1,18 +1,18 @@
 import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
-import Home from "@/components/Home.vue";
-import Blog from '@/components/Blog.vue';
-import Layout from '@/components/Layout.vue';
-import Shop from '@/components/Shop.vue';
-import Product from '@/components/Product.vue';
-import Post from '@/components/Post.vue';
-import Cart from '@/components/Cart.vue';
+import Blog from "@/components/Blog.vue";
+import Layout from "@/components/Layout.vue";
+import Shop from "@/components/Shop.vue";
+import Product from "@/components/Product.vue";
+import Post from "@/components/Post.vue";
+import Cart from "@/components/Cart.vue";
 
-import PostView from '@/views/PostView.vue';
-import Auction from '@/views/Auction.vue';
+import Home from "@/views/Home.vue";
+import PostView from "@/views/PostView.vue";
+import Auction from "@/views/Auction.vue";
 
-import LoginForm from '@/components/user/LoginForm.vue'
-import SignupForm from '@/components/user/SignupForm.vue'
+import LoginForm from "@/components/user/LoginForm.vue";
+import SignupForm from "@/components/user/SignupForm.vue";
 
 Vue.use(VueRouter);
 
@@ -20,47 +20,47 @@ const routes: Array<RouteConfig> = [
   {
     path: "/",
     component: Layout,
-    children:[
+    children: [
       {
-        path:'/',
-        component:Home,
-        name:'Home'
+        path: "/",
+        component: Home,
+        name: "Home"
       },
       {
-        path:'/shop',
-        component:Shop,
-        name:'Shop'
+        path: "/shop",
+        component: Shop,
+        name: "Shop"
       },
       {
-        path:'/product',
-        component:Product,
-        name:'Product'
+        path: "/product",
+        component: Product,
+        name: "Product"
       },
       {
-        path:'/blog',
-        component:Blog,
-        name:'Blog'
+        path: "/blog",
+        component: Blog,
+        name: "Blog"
       },
       {
-        path:'/post',
-        component:Post,
-        name:'Post'
+        path: "/post",
+        component: Post,
+        name: "Post"
       },
       {
-        path:'/cart',
-        component:Cart,
-        name:'Cart'
+        path: "/cart",
+        component: Cart,
+        name: "Cart"
       },
       {
-        path:'/postview',
-        component:PostView,
-        name:'PostView'
+        path: "/postview",
+        component: PostView,
+        name: "PostView"
       },
       {
-        path:'/auction',
-        component:Auction,
-        name:'Auction'
-      },
+        path: "/auction",
+        component: Auction,
+        name: "Auction"
+      }
     ]
   },
   // {
@@ -75,13 +75,13 @@ const routes: Array<RouteConfig> = [
 
   // test page
   {
-    path:'/signup',
-    component: SignupForm,
+    path: "/signup",
+    component: SignupForm
   },
   {
-    path:'/login',
-    component: LoginForm,
-  },
+    path: "/login",
+    component: LoginForm
+  }
 ];
 
 const router = new VueRouter({
