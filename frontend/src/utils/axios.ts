@@ -1,18 +1,32 @@
-import axios from "axios";
+import axios, { AxiosInstance, AxiosResponse } from "axios";
 
-const request: any = axios.create({
-    baseURL:"http://localhost:8000"
+const request: AxiosInstance = axios.create({
+  baseURL:"http://localhost:8000"
 });
+
+function axiosGET (address: string, config: any, success: any, fail: any): void {
+  request.get(address, config)
+    .then(success)
+    .catch(fail)
+}
+
+function axiosPOST (address: string, data: any, config: any, success: any, fail: any): void {
+  request.post(address, data, config)
+    .then(success)
+    .catch(fail)
+}
 
 export const userApi = {
 }
 
 export const postApi = {
-    post:(formData: any) => {
-        return request.post("/post", formData, { // item 등록
-            headers: {
-                "content-Type" : "multipart/form-data"
-            }
-        })
-    },
+  post:(formData: any) => {
+    return request.post("/post", formData, { // item 등록
+      headers: {
+        "content-Type" : "multipart/form-data"
+      }
+    })
+  },
 }
+
+export { axiosPOST, axiosGET }
