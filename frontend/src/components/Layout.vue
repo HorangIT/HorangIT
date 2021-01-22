@@ -47,7 +47,7 @@
         </v-btn>
       </span>
       <span v-else>
-        <v-btn outlined rounded color="white">
+        <v-btn outlined rounded color="white" @click="openModal">
           로그인
         </v-btn>
       </span>
@@ -71,6 +71,8 @@
       </v-app-bar>
     </v-expand-transition>
 
+    <Login @close="closeModal" v-if="modal"> </Login>
+    
     <router-view />
 
     <v-footer :padless="true">
@@ -105,15 +107,30 @@
 </template>
 <script lang="ts">
 import Vue from "vue";
+import Login from "../components/Login.vue";
 
 export default Vue.extend({
   name: "Layout",
 
+  components: {
+    Login,
+  },
+
   data: () => ({
     on: true,
     active: false,
-    login: true
-  })
+    login: false,
+    modal: false
+  }),
+
+  methods: {
+    openModal() {
+      this.modal = true;
+    },
+    closeModal() {
+      this.modal = false;
+    },
+  }
 });
 </script>
 <style>
