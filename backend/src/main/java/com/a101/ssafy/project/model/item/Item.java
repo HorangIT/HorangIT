@@ -30,7 +30,7 @@ public class Item {
 	//나중에 수정 (buyer id)
 	private long userId;
 	
-	private String itemName;
+	private String name;
 	private String category;
 	private String location;
 	private String description;
