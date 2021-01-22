@@ -9,6 +9,7 @@ import Post from '@/components/Post.vue';
 import Cart from '@/components/Cart.vue';
 
 import PostView from '@/views/PostView.vue';
+import Auction from '@/views/Auction.vue';
 
 Vue.use(VueRouter);
 
@@ -51,6 +52,11 @@ const routes: Array<RouteConfig> = [
         path:'/postview',
         component:PostView,
         name:'PostView'
+      },
+      {
+        path:'/auction',
+        component:Auction,
+        name:'Auction'
       },
     ]
   },
