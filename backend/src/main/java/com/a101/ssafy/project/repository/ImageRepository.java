@@ -1,4 +1,4 @@
-package com.a101.ssafy.project.repository;
+package com.a101.ssafy.project.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
