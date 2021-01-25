@@ -14,6 +14,7 @@ import com.a101.ssafy.project.model.BasicResponse;
 import com.a101.ssafy.project.model.item.Item;
 import com.a101.ssafy.project.model.item.RegisterRequest;
 import com.a101.ssafy.project.service.ItemService;
+import com.a101.ssafy.project.service.S3Service;
 
 
 @CrossOrigin(origins = { "*" })
@@ -21,6 +22,9 @@ import com.a101.ssafy.project.service.ItemService;
 @RequestMapping("/item")
 public class ItemController {
 	ItemService itemService;
+	
+	@Autowired
+	S3Service s3Service;
 	
 	@Autowired
 	public void setItemService(ItemService itemService) {
