@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.a101.ssafy.project.model.user.User;
 import java.lang.String;
 
-public interface UserDao extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<User, Long> {
 	User findByEmail(String email);
 	
 	@EntityGraph(attributePaths = "authorities")

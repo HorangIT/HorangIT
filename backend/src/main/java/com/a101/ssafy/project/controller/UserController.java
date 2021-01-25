@@ -9,14 +9,15 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.a101.ssafy.project.dao.UserDao;
+import com.a101.ssafy.project.dao.UserRepository;
 import com.a101.ssafy.project.jwt.TokenProvider;
 import com.a101.ssafy.project.model.BasicResponse;
+import com.a101.ssafy.project.model.user.LoginDto;
 import com.a101.ssafy.project.model.user.TokenDto;
 import com.a101.ssafy.project.model.user.User;
 
@@ -35,7 +36,7 @@ import io.swagger.annotations.ApiResponses;
 public class UserController {
 	
     @Autowired
-    UserDao userDao;
+    UserRepository userDao;
     
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -49,20 +50,19 @@ public class UserController {
 	}
 
 	@ApiOperation(value = "로그인")
-	@GetMapping("/login")
-	public Object login(@RequestParam(required = true) final String email,
-						@RequestParam(required = true) final String password) {
+	@PostMapping("/login")
+	public Object login(@RequestBody LoginDto loginDto) {
 		final BasicResponse result = new BasicResponse();
-		User user = userDao.findByEmail(email);
+		User user = userDao.findByEmail(loginDto.getEmail());
 		
-		if(user == null || !passwordEncoder.matches(password, user.getPassword())) {
+		if(user == null || !passwordEncoder.matches(loginDto.getPassword(), user.getPassword())) {
 			result.status = false;
 	        result.data = "로그인 실패";
 	        return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
 		}
 		
 		// 이메일과, 비밀번호를 통해서 authenticationToken 생성
-		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, password);
+		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword());
 
 		Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 		SecurityContextHolder.getContext().setAuthentication(authentication);
