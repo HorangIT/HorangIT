@@ -50,6 +50,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter { // 추가적�
                         ,"/swagger-ui.html"
                         ,"/webjars/**"
                         ,"/swagger/**"
+                        ,"/index.html"
+                        
                 );
     }
 
@@ -71,9 +73,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter { // 추가적�
 
                 .and()
                 .authorizeRequests() // HttpServletRequest를 사용하는 모든 요청들에 대한 접근 제한
-                .antMatchers("/account/signup").permitAll() // /account/signup요청은 인증없이 접근 허용
-                .antMatchers("/account/login").permitAll()
-
+//                .antMatchers("/account/signup").permitAll() // /account/signup요청은 인증없이 접근 허용
+//                .antMatchers("/account/login").permitAll() 
+//                .antMatchers("/item").permitAll()
+              //나중에 이렇게 위처럼 수정하기
+                .antMatchers("/**").permitAll() //나중에 수정!
                 .anyRequest().authenticated() // 나머지 요청은 모두 인증을 받아야한다
 
                 .and()
