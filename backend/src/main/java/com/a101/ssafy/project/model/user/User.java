@@ -1,5 +1,6 @@
 package com.a101.ssafy.project.model.user;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -14,6 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
+@Builder
 @ToString
 @Setter
 @Getter
