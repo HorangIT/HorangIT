@@ -69,7 +69,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { axiosPOST } from '@/utils/axios'
+import { axiosGET } from '@/utils/axios'
 // import axios from 'axios'
 
 // const API_BASE_URL = process.env.VUE_APP_API_BASE_URL
@@ -83,9 +83,9 @@ export default Vue.extend({
     passwordShow: false,
     formHasErrors: false,
     rules: {
-      required: (v: string) => !!v || '해당 칸을 입력해주세요.',
-      email: (v: string) => /.+@.+/.test(v) || '이메일 형식에 맞게 작성해주세요.',
-      password: (v: string) => /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&*+=]).*$/.test(v) || '비밀번호는 문자/숫자/특수문자를 포함한 8~15자리로 입력해주세요.',
+      // required: (v: string) => !!v || '해당 칸을 입력해주세요.',
+      // email: (v: string) => /.+@.+/.test(v) || '이메일 형식에 맞게 작성해주세요.',
+      // password: (v: string) => /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&*+=]).*$/.test(v) || '비밀번호는 문자/숫자/특수문자를 포함한 8~15자리로 입력해주세요.',
     }
   }),
 
@@ -130,19 +130,28 @@ export default Vue.extend({
         //   .then(response => console.log(response))
         //   .catch(response => console.log(response))
         // axios config
-        const address = '/account/signup/';
+        const address = '/account/login';
         const data = {
           email: this.email,
           password: this.password,
         };
         const config = undefined;
         // axios post
-        axiosPOST(
+        // axiosPOST(
+        //   address,
+        //   data,
+        //   config,
+        //   (response: any) => console.log(response),
+        //   (error: any) => console.log(error)
+        // );
+        // axios get
+        axiosGET (
           address,
-          data,
-          config,
-          (response: any) => console.log(response),
-          (error: any) => console.log(error)
+          {
+            params: data
+          },
+          response => console.log(response),
+          error => console.log(error)
         );
       }
     },
