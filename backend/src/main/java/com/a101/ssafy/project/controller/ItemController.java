@@ -14,6 +14,7 @@ import com.a101.ssafy.project.model.BasicResponse;
 import com.a101.ssafy.project.model.item.Item;
 import com.a101.ssafy.project.model.item.RegisterRequest;
 import com.a101.ssafy.project.service.ItemService;
+import com.a101.ssafy.project.service.S3Service;
 
 
 @CrossOrigin(origins = { "*" })
@@ -21,6 +22,9 @@ import com.a101.ssafy.project.service.ItemService;
 @RequestMapping("/item")
 public class ItemController {
 	ItemService itemService;
+	
+	@Autowired
+	S3Service s3Service;
 	
 	@Autowired
 	public void setItemService(ItemService itemService) {
@@ -37,6 +41,11 @@ public class ItemController {
 		
 		BeanUtils.copyProperties(request, item);
 		
+		//String imgPath = s3Service.upload(file)
+		//file <- MultipartFile file
+		//galleryDto.setFilePath(imgPath);
+		
+		//galleryService.savePost(galleryDto);
 		//위로 안 되는 것들 따로 설정(typeCasting->회의할것)
 		item.setName(request.getTitle());
 		item.setStartPrice(Integer.parseInt(request.getStartPrice()));
