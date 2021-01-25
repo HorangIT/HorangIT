@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.a101.ssafy.project.model.BasicResponse;
 import com.a101.ssafy.project.model.item.Item;
-import com.a101.ssafy.project.model.item.RegisterRequest;
+import com.a101.ssafy.project.model.item.RegisterDto;
 import com.a101.ssafy.project.service.ItemService;
 import com.a101.ssafy.project.service.S3Service;
 
@@ -32,7 +32,7 @@ public class ItemController {
 	}
 	
 	@PostMapping
-	public Object registerItem(@RequestBody RegisterRequest request) {
+	public Object registerItem(@RequestBody RegisterDto request) {
 		System.out.println(request.toString());
 		
 		ResponseEntity response = null;
