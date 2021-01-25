@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.a101.ssafy.project.jwt.TokenProvider;
 import com.a101.ssafy.project.model.BasicResponse;
 import com.a101.ssafy.project.model.user.LoginDto;
+import com.a101.ssafy.project.model.user.SignupDto;
 import com.a101.ssafy.project.model.user.TokenDto;
 import com.a101.ssafy.project.model.user.User;
 import com.a101.ssafy.project.repository.UserRepository;
