@@ -1,14 +1,19 @@
 package com.a101.ssafy.project.model.item;
 
+import java.util.Collection;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import com.a101.ssafy.project.image.Image;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -45,4 +50,7 @@ public class Item {
 	private Date endDate;
 	private Date createdAt;
 	private Date updatedAt;
+	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "item") 
+	public Collection<Image> image;
 }
