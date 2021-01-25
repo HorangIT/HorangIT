@@ -18,7 +18,7 @@
       />
       <v-spacer></v-spacer>
       <!--로그인 유무-->
-      <span v-if="login">
+      <span v-if="false">
         <v-btn icon>
           <v-icon>mdi-account-circle</v-icon>
         </v-btn>
@@ -63,7 +63,7 @@
       >
         <div id="nav" class="d-flex justify-space-around">
           <v-btn text href="/">홈</v-btn>
-          <v-btn text href="/#t">경매</v-btn>
+          <v-btn text href="/auction">경매</v-btn>
           <v-btn text href="/shop">스토어</v-btn>
           <v-btn text href="#">서비스 소개</v-btn>
           <v-btn text href="/blog">고객센터</v-btn>
@@ -71,8 +71,7 @@
       </v-app-bar>
     </v-expand-transition>
 
-    <Login @close="closeModal" v-if="modal"> </Login>
-    
+    <LoginModal @close="closeModal" v-if="modal"> </LoginModal>
     <router-view />
 
     <v-footer :padless="true">
@@ -93,7 +92,8 @@
         </v-card-text>
 
         <v-card-text class="white--text pt-0">
-        서비스이용약관 | 온라인경매약관 | 경매서비스운영방침 | 스토어 이용약관 | 개인정보취급방침 | 이메일무단수집거부 
+          서비스이용약관 | 온라인경매약관 | 경매서비스운영방침 | 스토어 이용약관
+          | 개인정보취급방침 | 이메일무단수집거부
         </v-card-text>
 
         <v-divider></v-divider>
@@ -107,13 +107,13 @@
 </template>
 <script lang="ts">
 import Vue from "vue";
-import Login from "../components/Login.vue";
+import LoginModal from "../components/user/LoginModal.vue";
 
 export default Vue.extend({
   name: "Layout",
 
   components: {
-    Login,
+    LoginModal
   },
 
   data: () => ({
@@ -129,7 +129,7 @@ export default Vue.extend({
     },
     closeModal() {
       this.modal = false;
-    },
+    }
   }
 });
 </script>

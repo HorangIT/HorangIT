@@ -148,4 +148,7 @@ $RECYCLE.BIN/
 ### application.properties , you need to modify it
 /backend/src/main/resources/application.properties
 
+### application.yml file
+/backend/src/main/resources/application.yml
+
 # End of https://www.toptal.com/developers/gitignore/api/windows,macos,eclipse,vue,java-web,vuejs

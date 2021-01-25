@@ -1,6 +1,6 @@
 <template>
   <div id="home">
-    <v-carousel hide-delimiters>
+    <v-carousel hide-delimiters cycle height="500">
       <v-carousel-item
         :src="require('../assets/img/home/slider4.jpg')"
         class="pa-4"
@@ -12,7 +12,10 @@
           <br />
         </v-row>
       </v-carousel-item>
-      <v-carousel-item :src="require('../assets/img/home/slider2.jpg')">
+      <v-carousel-item
+        :src="require('../assets/img/home/slider2.jpg')"
+        class="pa-4"
+      >
         <v-row class="fill-height" align="center" justify="center">
           <div class="display-2 white--text pl-5 pr-5 hidden-sm-only">
             <strong>Comming Soon</strong>
@@ -20,7 +23,10 @@
           <br />
         </v-row>
       </v-carousel-item>
-      <v-carousel-item :src="require('../assets/img/home/slider3.jpg')">
+      <v-carousel-item
+        :src="require('../assets/img/home/slider3.jpg')"
+        class="pa-4"
+      >
         <v-row class="fill-height" align="center" justify="center">
           <div class="display-2 white--text pl-5 pr-5 hidden-sm-only">
             <strong>NEW</strong>
@@ -28,7 +34,10 @@
           <br />
         </v-row>
       </v-carousel-item>
-      <v-carousel-item :src="require('../assets/img/home/slider1.jpg')">
+      <v-carousel-item
+        :src="require('../assets/img/home/slider1.jpg')"
+        class="pa-4"
+      >
         <v-row class="fill-height" align="center" justify="center">
           <div class="display-2 white--text pl-5 pr-5 hidden-sm-only">
             <strong>Upto 60% + Extra 10%</strong>
