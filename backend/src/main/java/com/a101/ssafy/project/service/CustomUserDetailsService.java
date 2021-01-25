@@ -8,8 +8,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.a101.ssafy.project.dao.UserRepository;
 import com.a101.ssafy.project.model.user.User;
+import com.a101.ssafy.project.repository.UserRepository;
 
 import java.util.List;
 import java.util.Optional;

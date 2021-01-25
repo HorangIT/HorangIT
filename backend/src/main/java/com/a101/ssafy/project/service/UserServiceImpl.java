@@ -10,7 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.a101.ssafy.project.dao.UserRepository;
+import com.a101.ssafy.project.repository.UserRepository;
 import com.a101.ssafy.project.jwt.TokenProvider;
 import com.a101.ssafy.project.model.BasicResponse;
 import com.a101.ssafy.project.model.user.Authority;

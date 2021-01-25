@@ -12,7 +12,7 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
-public class RegisterRequest {
+public class RegisterDto {
 	@ApiModelProperty(required = true)
 	@NotNull
 	String title;
