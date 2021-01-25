@@ -51,7 +51,6 @@ public class Item {
 	private Date createdAt;
 	private Date updatedAt;
 	
-	//이미지 테이블과 1:N을 만들기 위함: OneToMany: 기본 fetchType:LAZY
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "item") 
 	public Collection<Image> image;
 }
