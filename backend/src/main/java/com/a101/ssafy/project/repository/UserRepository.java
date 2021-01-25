@@ -1,4 +1,4 @@
-package com.a101.ssafy.project.dao;
+package com.a101.ssafy.project.repository;
 
 import java.util.Optional;
 
