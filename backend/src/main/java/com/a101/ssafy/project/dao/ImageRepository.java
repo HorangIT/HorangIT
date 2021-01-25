@@ -4,6 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.a101.ssafy.project.image.Image;
 
-public interface ImageDao extends JpaRepository<Image, Long>{
+public interface ImageRepository extends JpaRepository<Image, Long>{
 
 }
