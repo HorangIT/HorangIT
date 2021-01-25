@@ -51,34 +51,7 @@
       <v-card-title class="subheading ">
         <strong>오늘의 경매</strong>
       </v-card-title>
-      <v-slide-group class="pa-4" show-arrows>
-        <v-slide-item v-for="n in 20" :key="n" v-slot="{ toggle }">
-          <v-hover v-slot:default="{ hover }">
-            <v-card
-              color="grey lighten-5"
-              :elevation="hover ? 10 : 0"
-              class="ma-4"
-              height="40vh"
-              width="20vw"
-              @click="toggle"
-            >
-              <v-img
-                class="white--text align-center"
-                height="60%"
-                :src="require('../assets/img/home/deal1.jpg')"
-              >
-                <h1 class="text-center font-size">Lorem & Ipsum</h1>
-              </v-img>
-              <v-card-text class="text--primary text-left">
-                <h2>고양이 저금통</h2>
-                <br />
-                <div>경매시간 21.02.28</div>
-                <div>경매가 10,000 ~ 30,000</div>
-              </v-card-text>
-            </v-card>
-          </v-hover>
-        </v-slide-item>
-      </v-slide-group>
+      <ItemList></ItemList>
     </v-card-text>
     <v-divider></v-divider>
 
@@ -86,35 +59,7 @@
       <v-card-title class="subheading ">
         <strong>추천 경매</strong>
       </v-card-title>
-      <v-slide-group class="pa-4" show-arrows>
-        <v-slide-item v-for="n in 20" :key="n" v-slot="{ toggle }">
-          <v-hover v-slot:default="{ hover }">
-            <v-card
-              color="grey lighten-5"
-              :elevation="hover ? 10 : 0"
-              class="ma-4"
-              height="40vh"
-              width="20vw"
-              @click="toggle"
-            >
-              <v-img
-                class="white--text align-center"
-                height="60%"
-                :src="require('../assets/img/home/deal2.jpg')"
-              >
-                <h1 class="text-center font-size">Lorem & Ipsum</h1>
-              </v-img>
-
-              <v-card-text class="text--primary text-left">
-                <h2>내가 그린 기린 그림</h2>
-                <br />
-                <div>경매시간 21.02.28</div>
-                <div>경매가 100,000 ~ 500,000</div>
-              </v-card-text>
-            </v-card>
-          </v-hover>
-        </v-slide-item>
-      </v-slide-group>
+      <ItemList></ItemList>
     </v-card-text>
     <v-divider></v-divider>
 
@@ -142,9 +87,9 @@
             gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
             height="400px"
           >
-            <h1 class="text-center font-size">New Arrivals</h1>
+            <h1 class="text-center font-size">FAQs</h1>
             <div class="text-center">
-              <v-btn href="/shop" class="white--text" outlined>SHOP NOW</v-btn>
+              <v-btn href="/shop" class="white--text" outlined>Go</v-btn>
             </div>
           </v-img>
         </v-card>
@@ -213,9 +158,14 @@
 
 <script lang="ts">
 import Vue from "vue";
+import ItemList from "../components/ItemList.vue";
 
 export default Vue.extend({
   name: "Home",
+
+  components: {
+    ItemList
+  },
 
   data: () => ({
     items: [
