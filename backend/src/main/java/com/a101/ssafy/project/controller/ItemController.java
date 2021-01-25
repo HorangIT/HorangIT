@@ -41,6 +41,11 @@ public class ItemController {
 		
 		BeanUtils.copyProperties(request, item);
 		
+		//String imgPath = s3Service.upload(file)
+		//file <- MultipartFile file
+		//galleryDto.setFilePath(imgPath);
+		
+		//galleryService.savePost(galleryDto);
 		//위로 안 되는 것들 따로 설정(typeCasting->회의할것)
 		item.setName(request.getTitle());
 		item.setStartPrice(Integer.parseInt(request.getStartPrice()));
