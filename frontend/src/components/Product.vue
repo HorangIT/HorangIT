@@ -58,7 +58,7 @@
             <v-btn class="primary white--text block large" outlined tile dense>
               경매 참여하기
             </v-btn>
-            <v-btn class="ml-4" outlined tile>
+            <v-btn class="ml-4" outlined tile @click="!active">
               찜하기
               <v-icon>{{ active ? "mdi-heart" : "mdi-heart-outline" }}</v-icon>
             </v-btn>
@@ -154,6 +154,7 @@
 <script lang="ts">
 import Vue from "vue";
 import ItemList from "../components/ItemList.vue";
+import { itemApi } from "../utils/axios";
 
 export default Vue.extend({
   name: "Product",
@@ -164,6 +165,7 @@ export default Vue.extend({
 
   data: () => ({
     rating: 4.5,
+    active: false,
     breadcrums: [
       {
         text: "Home",
@@ -209,7 +211,12 @@ export default Vue.extend({
         subtitle: "<span class='text--primary'>Britta Holt</span> &mdash; Lorem ipsum dolor sit amet, consectetur adipiscing elit"
       }
     ]
-  })
+  }),
+  created (){
+    const data = itemApi.get(1);
+    // console.log(itemApi.get(1))
+    console.log(data);
+  },
 });
 </script>
 <style></style>

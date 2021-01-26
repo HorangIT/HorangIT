@@ -55,7 +55,7 @@
         </v-btn>
       </span>
     </v-app-bar>
-    <div style="height:42px;"></div>
+    <div style="height:64px;"></div>
     <v-expand-transition>
       <v-app-bar
         color="grey lighten-4"

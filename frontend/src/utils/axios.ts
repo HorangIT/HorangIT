@@ -45,12 +45,15 @@ export const userApi: Record<string, any> = {
 
 }
 
-export const postApi = {
+export const itemApi = {
   post:(formData: any) => {
-    return request.post("/post", formData, { // item 등록
+    return request.post("/item", formData, { // item 등록
       headers: {
         "content-Type" : "multipart/form-data"
       }
     })
+  },
+  get:(id: number) => {
+    return request.get(`/item/${id}`).then(response => console.log(response)).catch(err => console.log(err))
   },
 }
