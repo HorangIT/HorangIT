@@ -28,10 +28,11 @@ export const userModule: Record<string, any> = {
       commit('LOGOUT');
     },
     signup ({ commit }: any, user: any) {
+      console.log('signup actions')
       return userApi.signup(user)
         .then(
           (user: any) => {
-            commit('SIGNUP', user);
+            commit('SIGNUP');
             return Promise.resolve(user);
           },
           (error: any) => {
@@ -53,9 +54,11 @@ export const userModule: Record<string, any> = {
     LOGOUT (state: any) {
       state.status.loggedIn = false;
     },
-    SIGNUP (state: any, user: any) {
-      state.status.loggedIn = true;
-      state.user = user;
+    SIGNUP (state: any) {
+      console.log('signup mutations')
+      state.status.loggedIn = false;
+      // state.status.loggedIn = true;
+      // state.user = user;
     },
     SIGNUP_FAIL (state: any) {
       state.status.loggedIn = false;
