@@ -54,7 +54,7 @@
             text
             @click="goToLogin"
           >
-            로그인으로 돌아가기
+            이미 회원이신가요?
           </v-btn>
           <v-spacer></v-spacer>
           <v-slide-x-reverse-transition>

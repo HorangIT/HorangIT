@@ -32,14 +32,15 @@
             v-model="address"
             :rules="[rules.required, rules.address]"
             label="주소"
+            @click="jusoPopup"
             required
           ></v-text-field>
         </v-col>
         <v-btn
           text
-          @click="goToLogin"
+          @click="goToMain"
         >
-          로그인으로 돌아가기
+          메인으로 돌아가기
         </v-btn>
         <v-spacer></v-spacer>
         <v-slide-x-reverse-transition>
@@ -66,7 +67,7 @@
           text
           @click="submit"
         >
-          회원가입
+          수정하기
         </v-btn>
       </v-row>
     </v-container>
@@ -93,6 +94,14 @@ export default Vue.extend({
   methods: {
     submit () {
       console.log('submit')
+    },
+    jusoPopup () {
+      console.log('juso popup')
+      // const pop = window.open("./juso.jsp","pop","width=570,height=420, scrollbars=yes, resizable=yes");
+      window.open("./juso.jsp","pop","width=570,height=420, scrollbars=yes, resizable=yes");
+    },
+    goToMain () {
+      this.$router.push('/')
     }
   }
 })
