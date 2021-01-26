@@ -21,7 +21,6 @@ import com.a101.ssafy.project.image.Image;
 import com.a101.ssafy.project.model.BasicResponse;
 import com.a101.ssafy.project.model.item.Item;
 import com.a101.ssafy.project.model.item.RegisterDto;
-import com.a101.ssafy.project.service.ImageService;
 import com.a101.ssafy.project.service.ItemService;
 import com.a101.ssafy.project.service.S3Service;
 
@@ -31,8 +30,7 @@ import com.a101.ssafy.project.service.S3Service;
 @RequestMapping("/item")
 public class ItemController {
 	ItemService itemService;
-	ImageService imageService;
-	
+
 	@Autowired
 	S3Service s3Service;
 	
@@ -44,6 +42,7 @@ public class ItemController {
 	@GetMapping("/{id}")
 	@ResponseBody
 	public Object readItem(@PathVariable("id")long id) {
+		
 		return "HI";
 	}
 	
