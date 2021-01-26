@@ -1,9 +1,9 @@
 import axios, { AxiosInstance, AxiosResponse } from "axios";
 
 const authHeader = function (): Record<string, string> {
-  const user = JSON.parse(localStorage.getItem('user') || '{}');
-  const token: string = user.object.token;
-  if (user && token) {
+  const user: Record<string, any> = JSON.parse(localStorage.getItem('user') || '{}');
+  if (Object.keys(user).length) {
+    const token = user.object.token;
     return { Authorization: 'Bearer ' + token };
   }
   return {};

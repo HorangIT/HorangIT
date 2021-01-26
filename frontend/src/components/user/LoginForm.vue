@@ -23,6 +23,7 @@
             :append-icon="passwordShow ? 'mdi-eye': 'mdi-eye-off'"
             :type="passwordShow ? 'text' : 'password'"
             @click:append="passwordShow = !passwordShow"
+            @keypress.enter="submit"
             required
           ></v-text-field>
         </v-card-text>
@@ -118,7 +119,6 @@ export default Vue.extend({
       })
       if (!this.formHasErrors) {
         // axios login
-        // userApi.login(this.form)
         this.$store.dispatch('userModule/login', this.form)
       }
     },

@@ -44,6 +44,7 @@
             :append-icon="passwordConfirmShow ? 'mdi-eye': 'mdi-eye-off'"
             :type="passwordConfirmShow ? 'text' : 'password'"
             @click:append="passwordConfirmShow = !passwordConfirmShow"
+            @keypress.enter="submit"
             required
           ></v-text-field>
         </v-card-text>

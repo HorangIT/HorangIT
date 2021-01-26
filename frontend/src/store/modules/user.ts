@@ -1,7 +1,7 @@
 import { userApi } from "@/utils/axios";
 
 const user: Record<string, any> = JSON.parse(localStorage.getItem('user') || '{}')
-const initialState: Record<string, any> = user
+const initialState: Record<string, any> = Object.keys(user).length
   ? { status: { loggedIn: true }, user }
   : { status: { loggedIn: false }, user: null };
 
@@ -10,12 +10,13 @@ export const userModule: Record<string, any> = {
   state: initialState,
   actions: {
     login ({ commit }: any, user: any) {
-      userApi.login(user)
+      return userApi.login(user)
         .then(
           (user: any) => {
           commit('LOGIN', user);
           return Promise.resolve(user);
-          },
+          })
+        .catch(
           (error: any) => {
             commit('LOGIN_FAIL');
             return Promise.reject(error);
@@ -23,6 +24,7 @@ export const userModule: Record<string, any> = {
         );
     },
     logout ({ commit }: any) {
+      localStorage.removeItem('user');
       commit('LOGOUT');
     },
     signup ({ commit }: any, user: any) {
