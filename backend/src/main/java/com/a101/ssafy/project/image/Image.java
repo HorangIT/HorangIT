@@ -1,14 +1,11 @@
 package com.a101.ssafy.project.image;
 
-import java.sql.Blob;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 
 import com.a101.ssafy.project.model.item.Item;
@@ -28,9 +25,6 @@ public class Image {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
-	@Column(length = 50, nullable = false)
-	private String title;
-	
 	@Column(columnDefinition = "TEXT")
 	private String filePath;
 	
@@ -39,4 +33,9 @@ public class Image {
 	@ManyToOne(optional = false)
 	@JoinColumn(name="item_id")
 	private Item item;
+	
+	public Image(Item item, String filePath) {
+		this.item = item;
+		this.filePath = filePath;
+	}
 }
