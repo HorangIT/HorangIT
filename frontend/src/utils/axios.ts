@@ -45,7 +45,7 @@ export const userApi: Record<string, any> = {
 
 }
 
-export const postApi = {
+export const itemApi = {
   item:(formData: any) => {
     return request.post("/item", formData, { // item 등록
       headers: {
