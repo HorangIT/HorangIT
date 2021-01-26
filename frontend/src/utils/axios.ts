@@ -19,7 +19,7 @@ function axiosPOST (address: string, data: any, config: any, success: any, fail:
 export const userApi = {
 }
 
-export const postApi = {
+export const itemApi = {
   item:(formData: any) => {
     return request.post("/item", formData, { // item 등록
       headers: {

@@ -267,7 +267,7 @@
 </template>
 <script lang="ts">
 import Vue from 'vue';
-import { postApi } from "../utils/axios";
+import { itemApi } from "../utils/axios";
 
 export default Vue.extend({
     name: "PostView",
@@ -329,10 +329,10 @@ export default Vue.extend({
           formData.append("uid", uid);
 
           files.forEach(el => {
-            formData.append("files", el.file)
+            formData.append("files", (el as any).file)
           });
 
-          const {data} = await postApi.item(formData);
+          const {data} = await itemApi.item(formData);
           
           // state true?
           console.log(data);
@@ -346,18 +346,19 @@ export default Vue.extend({
       
       imageUpload(){
         console.log(this.$refs.files);
-        console.log(this.$refs.files.files);
+        console.log((this.$refs.files as any).files);
+
         // 배열을 생성하는데
         // 실제파일을 관리하는 부분, 이미지 preview를 관리하는 부분, index까지 관리하는 배열을 제작
         let num = -1;
-        for (let i = 0; i < this.$refs.files.files.length; i++) {
-          this.files = [
+        for (let i = 0; i < (this.$refs.files as any).files.length; i++) {
+          (this.files as any) = [
             ...this.files,
             {
               // 실제 파일
-              file: this.$refs.files.files[i],
+              file: (this.$refs.files as any).files[i],
               // 이미지 프리뷰
-              preview: URL.createObjectURL(this.$refs.files.files[i]),
+              preview: URL.createObjectURL((this.$refs.files as any).files[i]),
               number: i
             }
           ];
@@ -368,18 +369,18 @@ export default Vue.extend({
       },
       imageAddUpload(){
         console.log(this.$refs.files);
-        console.log(this.$refs.files.files);
+        console.log((this.$refs.files as any).files);
         // 배열을 생성하는데
         // 실제파일을 관리하는 부분, 이미지 preview를 관리하는 부분, index까지 관리하는 배열을 제작
         let num = -1;
-        for (let i = 0; i < this.$refs.files.files.length; i++) {
-          this.files = [
+        for (let i = 0; i < (this.$refs.files as any).files.length; i++) {
+          (this.files as any) = [
             ...this.files,
             {
               // 실제 파일
-              file: this.$refs.files.files[i],
+              file: (this.$refs.files as any).files[i],
               // 이미지 프리뷰
-              preview: URL.createObjectURL(this.$refs.files.files[i]),
+              preview: URL.createObjectURL((this.$refs.files as any).files[i]),
               number: i + this.uploadImageIndex
             }
           ];
@@ -390,7 +391,7 @@ export default Vue.extend({
       },
       fileDeleteButton(e: any){
         const name = e.target.getAttribute("name");
-        this.files = this.files.filter(data => data.number !== Number(name));
+        this.files = this.files.filter(data => (data as any).number !== Number(name));
       },
 
       testButton() {
