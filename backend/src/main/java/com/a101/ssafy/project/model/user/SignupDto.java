@@ -8,23 +8,17 @@ import lombok.ToString;
 @Setter
 @Getter
 public class SignupDto {
+	private String nickname;
 	private String email;
 	private String password;
-	private String address;
-	private String userName;
-	private String nickName;
-	private String phone;
 	
 	public SignupDto() {
 	}
 
-	public SignupDto(String email, String password, String address, String userName, String nickName, String phone) {
+	public SignupDto(String nickname, String email, String password) {
 		super();
+		this.nickname = nickname;
 		this.email = email;
 		this.password = password;
-		this.address = address;
-		this.userName = userName;
-		this.nickName = nickName;
-		this.phone = phone;
 	}
 }
