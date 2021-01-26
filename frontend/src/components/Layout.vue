@@ -18,7 +18,7 @@
       />
       <v-spacer></v-spacer>
       <!--로그인 유무-->
-      <span v-if="false">
+      <span v-if="login">
         <v-btn icon>
           <v-icon>mdi-account-circle</v-icon>
         </v-btn>
@@ -42,17 +42,20 @@
             <v-icon>mdi-cart</v-icon>
           </v-badge>
         </v-btn>
-        <v-btn outlined rounded color="white" class="ml-2">
+        <v-btn outlined rounded color="white" class="ml-2" @click="logout">
           로그아웃
         </v-btn>
       </span>
       <span v-else>
-        <v-btn outlined rounded color="white" @click="openModal">
+        <v-btn outlined rounded color="white" @click="openModal(true)">
           로그인
+        </v-btn>
+        <v-btn outlined rounded color="white" @click="openModal(false)">
+          회원가입
         </v-btn>
       </span>
     </v-app-bar>
-    <div style="height:42px;"></div>
+    <div style="height:64px;"></div>
     <v-expand-transition>
       <v-app-bar
         color="grey lighten-4"
@@ -71,7 +74,7 @@
       </v-app-bar>
     </v-expand-transition>
 
-    <LoginModal @close="closeModal" v-if="modal"> </LoginModal>
+    <LoginModal @close="closeModal" v-if="modal" :loginOrSignup="loginOrSignup"> </LoginModal>
     <router-view />
 
     <v-footer :padless="true">
@@ -119,16 +122,32 @@ export default Vue.extend({
   data: () => ({
     on: true,
     active: false,
-    login: false,
-    modal: false
+    modal: false,
+    loginOrSignup: true,
   }),
-
+  computed: {
+    login () {
+      return this.$store.state.userModule.status.loggedIn;
+    }
+  },
+  created () {
+    console.log(process.env.VUE_APP_JUSO_API_KEY)
+  },
+  watch: {
+    login () {
+      this.modal = false;
+    }
+  },
   methods: {
-    openModal() {
+    openModal (loginOrSignup: boolean) {
+      this.loginOrSignup = loginOrSignup;
       this.modal = true;
     },
-    closeModal() {
+    closeModal () {
       this.modal = false;
+    },
+    logout () {
+      this.$store.dispatch('userModule/logout');
     }
   }
 });

@@ -267,7 +267,7 @@
 </template>
 <script lang="ts">
 import Vue from 'vue';
-import { postApi } from "../utils/axios";
+import { itemApi } from "../utils/axios";
 
 export default Vue.extend({
     name: "PostView",

@@ -44,9 +44,6 @@ public class RegisterDto {
 	@ApiModelProperty(required = true)
 	String category;
 	
-	//@ApiModelProperty(required = true)
-	String[] image = new String[3];
-	
 	@ApiModelProperty(required = true)
 	String userId;
 }

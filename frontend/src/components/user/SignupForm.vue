@@ -44,6 +44,7 @@
             :append-icon="passwordConfirmShow ? 'mdi-eye': 'mdi-eye-off'"
             :type="passwordConfirmShow ? 'text' : 'password'"
             @click:append="passwordConfirmShow = !passwordConfirmShow"
+            @keypress.enter="submit"
             required
           ></v-text-field>
         </v-card-text>
@@ -53,7 +54,7 @@
             text
             @click="goToLogin"
           >
-            로그인으로 돌아가기
+            이미 회원이신가요?
           </v-btn>
           <v-spacer></v-spacer>
           <v-slide-x-reverse-transition>
@@ -90,7 +91,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { axiosPOST } from '@/utils/axios'
 
 export default Vue.extend({
   data: (): any => ({
@@ -103,9 +103,10 @@ export default Vue.extend({
     passwordConfirmShow: false,
     formHasErrors: false,
     rules: {
-      required: (v: any) => !!v || '해당 칸을 입력해주세요.',
-      email: (v: any) => /.+@.+/.test(v) || '이메일 형식에 맞게 작성해주세요.',
-      password: (v: any) => /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&*+=]).*$/.test(v) || '비밀번호는 문자/숫자/특수문자를 포함한 8~15자리로 입력해주세요.',
+      // required: (v: string) => !!v || '해당 칸을 입력해주세요.',
+      // nickname: (v: string) => (v.length >= 2 && v.length <= 10) || '닉네임은 2~10자로 설정해주세요.',
+      // email: (v: string) => /.+@.+/.test(v) || '이메일 형식에 맞게 작성해주세요.',
+      // password: (v: string) => /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&*+=]).*$/.test(v) || '비밀번호는 문자/숫자/특수문자를 포함한 8~15자리로 입력해주세요.',
     }
   }),
 
@@ -145,30 +146,18 @@ export default Vue.extend({
         if (!this.$refs[f].validate(true)) this.formHasErrors = true;
       });
       if (!this.formHasErrors) {
-        // axios config
-        const address = '/account/signup';
-        const data: Record<string, any> = {
-          nickname: this.nickname,
-          email: this.email,
-          password: this.password,
-          passwordConfirm: this.passwordConfirm,
-        };
-        const config = undefined;
         // axios post
-        axiosPOST(
-          address,
-          data,
-          config,
-          (response: any) => {
-            console.log(response)
-          },
-          (error: any) => {
-            console.log(error)
-          }
-        );
-        // axios.post(`${API_BASE_URL}/account/signup/`, credentials)
-        //   .then(response => console.log(response))
-        //   .catch(response => console.log(response))
+        const user = {
+          email: this.email,
+          nickname: this.nickname,
+          password: this.password,
+        }
+        console.log('signup methods')
+        console.log(user)
+        this.$store.dispatch('userModule/signup', user).then(() => {
+          alert('회원가입이 완료되었습니다.');
+          this.goToLogin();
+        })
       }
     },
     goToLogin (): void {
