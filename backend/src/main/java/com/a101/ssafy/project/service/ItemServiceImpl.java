@@ -10,12 +10,19 @@ import com.a101.ssafy.project.repository.ItemRepository;
 public class ItemServiceImpl implements ItemService{
 
 	@Autowired
-	ItemRepository itemDao;
+	ItemRepository itemRepository;
 	
 	@Override
 	public boolean registerItem(Item item) {
-		itemDao.save(item);
+		itemRepository.save(item);
+		
 		return true;
+	}
+
+	@Override
+	public Item getItemById(long id) {
+		return null;
+				//itemRepository.getItemById(id);
 	}
 
 }
