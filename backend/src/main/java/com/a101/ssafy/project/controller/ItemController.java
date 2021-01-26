@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.a101.ssafy.project.model.BasicResponse;
 import com.a101.ssafy.project.model.item.Item;
 import com.a101.ssafy.project.model.item.RegisterDto;
+import com.a101.ssafy.project.service.ImageService;
 import com.a101.ssafy.project.service.ItemService;
 import com.a101.ssafy.project.service.S3Service;
 
@@ -28,6 +29,7 @@ import com.a101.ssafy.project.service.S3Service;
 @RequestMapping("/post")
 public class ItemController {
 	ItemService itemService;
+	ImageService imageService;
 	
 	@Autowired
 	S3Service s3Service;
@@ -39,10 +41,6 @@ public class ItemController {
 	
 	@PostMapping
 	public Object registerItem(RegisterDto request, @RequestParam("files") MultipartFile[] multipartFiles) throws IOException {
-		for(int i=0; i<multipartFiles.length; ++i) {
-			s3Service.upload(multipartFiles[i]);
-		}
-		
 		ResponseEntity response = null;
 		
 		Item item = new Item();
@@ -65,6 +63,9 @@ public class ItemController {
 		result.object = null;
 		response = new ResponseEntity<>(result, HttpStatus.OK);
 		
+		for(int i=0; i<multipartFiles.length; ++i) {
+			String url = s3Service.upload(multipartFiles[i]);
+		}
 		return response;
 	}
 	
