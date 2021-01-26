@@ -38,9 +38,6 @@ public class User {
     private String address;
     private String phone;
     
-    @Column(name = "authority_name")
-    private String authorityName;
-    
     @ManyToMany
     @JoinTable(
        name = "user_authority",
@@ -51,8 +48,7 @@ public class User {
     public User() {
 	}
 
-	public User(Long id, String email, String password, String username, String nickname, String address, String phone,
-			String authorityName, Set<Authority> authorities) {
+	public User(Long id, String email, String password, String username, String nickname, String address, String phone, Set<Authority> authorities) {
 		super();
 		this.id = id;
 		this.email = email;
@@ -61,7 +57,6 @@ public class User {
 		this.nickname = nickname;
 		this.address = address;
 		this.phone = phone;
-		this.authorityName = authorityName;
 		this.authorities = authorities;
 	}
 }
