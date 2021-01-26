@@ -35,6 +35,8 @@ import com.google.gson.JsonObject;
 @Controller
 @RequestMapping("/item")
 public class ItemController {
+	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm"); //날짜 맞출 포맷
+
 	ItemService itemService;
 
 	@Autowired
@@ -44,6 +46,8 @@ public class ItemController {
 	public void setItemService(ItemService itemService) {
 		this.itemService = itemService;
 	} 
+	
+	//이후 주석 꼭 달기!
 	
 	@GetMapping("/{id}")
 	@ResponseBody
@@ -59,6 +63,12 @@ public class ItemController {
 		jobj.addProperty("grade", item.getGrade());
 		jobj.addProperty("happyPrice", item.getHappyPrice());
 		jobj.addProperty("startPrice", item.getStartPrice());
+		
+		jobj.addProperty("startDate", format.format(item.getStartDate()));
+		jobj.addProperty("endDate", format.format(item.getEndDate()));
+		
+		jobj.addProperty("createdAt", format.format(item.getCreatedAt()));
+		
 		
 		Collection<Image> hi = item.getImage();
 		if(hi.size()!=0) {
@@ -76,7 +86,6 @@ public class ItemController {
 	
 	@PostMapping
 	public Object registerItem(RegisterDto request, @RequestParam("files") MultipartFile[] multipartFiles) throws IOException, ParseException {
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
 		ResponseEntity response = null;
 		
@@ -86,7 +95,7 @@ public class ItemController {
 		System.out.println(item.toString()+"아이템");
 		//위로 안 되는 것들 따로 설정(typeCasting->회의할것)
 		item.setName(request.getTitle());
-		item.setCategory("전자기기");
+		item.setCategory("전자기기"); //카테고리도 안 옴
 		item.setStartPrice(Integer.parseInt(request.getStartPrice()));
 		item.setHappyPrice(Integer.parseInt(request.getHappyPrice()));
 		item.setStatus(0); //status 는 기본 0으로 설정
@@ -120,16 +129,13 @@ public class ItemController {
 		
 		if(multipartFiles!=null) {
 			for(int i=0; i<multipartFiles.length; ++i) {
-//				String url = s3Service.upload(multipartFiles[i]);
-				String url = "hhh";
+				String url = s3Service.upload(multipartFiles[i]);
 				Image image = new Image(item, url);
 				
 				item.addImage(image);
 			}			
 		}
-//		System.out.println(item.toString()+"냐옹");
 		if(itemService.registerItem(item)) {
-//			System.out.println(item.getId()+"ggg");
 			System.out.println("등록 성공");
 		}else {
 			System.out.println("등록 실패");
