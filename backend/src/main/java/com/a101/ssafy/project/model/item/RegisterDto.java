@@ -46,5 +46,4 @@ public class RegisterDto {
 	
 	@ApiModelProperty(required = true)
 	String userId;
-
 }
