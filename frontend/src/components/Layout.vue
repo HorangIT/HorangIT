@@ -18,7 +18,7 @@
       />
       <v-spacer></v-spacer>
       <!--로그인 유무-->
-      <span v-if="false">
+      <span v-if="login">
         <v-btn icon>
           <v-icon>mdi-account-circle</v-icon>
         </v-btn>
@@ -42,7 +42,7 @@
             <v-icon>mdi-cart</v-icon>
           </v-badge>
         </v-btn>
-        <v-btn outlined rounded color="white" class="ml-2">
+        <v-btn outlined rounded color="white" class="ml-2" @click="logout">
           로그아웃
         </v-btn>
       </span>
@@ -119,16 +119,27 @@ export default Vue.extend({
   data: () => ({
     on: true,
     active: false,
-    login: false,
     modal: false
   }),
-
+  computed: {
+    login () {
+      return this.$store.state.userModule.status.loggedIn;
+    }
+  },
+  watch: {
+    login () {
+      this.modal = false;
+    }
+  },
   methods: {
-    openModal() {
+    openModal () {
       this.modal = true;
     },
-    closeModal() {
+    closeModal () {
       this.modal = false;
+    },
+    logout () {
+      this.$store.dispatch('userModule/logout');
     }
   }
 });
