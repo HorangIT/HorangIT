@@ -66,6 +66,8 @@ public class UserServiceImpl {
     public Object signup(SignupDto signupDto) {
     	final BasicResponse result = new BasicResponse();
     	
+    	System.out.println(signupDto);
+    	
     	if(userRepository.findByEmail(signupDto.getEmail()) != null) {
     		result.status = false;
     		result.data = "회원가입 실패 (이메일 중복)";
@@ -80,7 +82,7 @@ public class UserServiceImpl {
         User user = User.builder()
                 		.email(signupDto.getEmail())
                 		.password(passwordEncoder.encode(signupDto.getPassword()))
-                		.nickName(signupDto.getNickName())
+                		.nickname(signupDto.getNickname())
                 		.authorities(Collections.singleton(authority))
                 		.build();
         
