@@ -6,5 +6,4 @@ import com.a101.ssafy.project.model.item.Item;
 
 public interface ItemRepository extends JpaRepository<Item, Long>{
 	
-
 }
