@@ -1,25 +1,60 @@
 <template>
   <div>
       <v-container>
-          <div class="row">
-                
-                          
+          <div class="row"> 
                 <div class="col-md-12 col-sm-12 col-xs-12">
-                    <v-col
-                      cols="12"
-                      sm="6"
-                      md="3">
+                    <v-col>
+                      <h4 class="mb-5">제목</h4>
                       <v-text-field
-                        label="제목"
+                        label=""
                         solo
                         v-model="title"
                       ></v-text-field>
+                      <h4 class="mb-5">내용</h4>
                       <v-textarea
-                      label="내용"
+                      label=""
                       solo
-                      name="input-7-4"
                       v-model="description"
                     ></v-textarea>
+                    <v-select
+                      :items="items"
+                      label="category"
+                      outlined
+                    ></v-select>
+                    <v-row class="mb-5">
+                      <v-text-field
+                        label="위치"
+                        v-model="location"
+                      ></v-text-field>
+                      <v-checkbox
+                        v-model="direct"
+                        label="직거래 여부"
+                      ></v-checkbox>
+                    </v-row>
+                    <v-row>
+                      <v-text-field
+                        label="경매시작가"
+                        filled
+                        outlined
+                        v-model="startPrice"
+                      ></v-text-field>
+                      <v-text-field
+                        label="즉시구매가"
+                        filled
+                        outlined
+                        v-model="happyPrice"
+                      ></v-text-field>
+                    </v-row>
+                    <v-row>
+                      <v-text-field
+                        label="경매시작일"
+                        v-model="startDate"
+                      ></v-text-field>
+                       <v-text-field
+                        label="경매마감일"
+                        v-model="endDate"
+                      ></v-text-field>
+                    </v-row>
                   </v-col>
                   <div class="shadow mt-5">
                     <div style="border: 1px solid #dddddd">
@@ -91,6 +126,7 @@ import { postApi } from "../utils/axios";
 export default Vue.extend({
     name: "PostView",
     data: () => ({
+        uid:"",
         title: "",
         description: "",
         category: "",
@@ -102,13 +138,15 @@ export default Vue.extend({
         startDate: "",
         endDate: "",
         files: [],
-
         filesPreview: [],
         uploadImageIndex: 0,
+
+        items: ["의류", "전자기기"],
     }),
     methods: {
         async writePost(){
-        const { 
+        const {
+          uid,
           title, 
           description,
           category,
@@ -134,10 +172,17 @@ export default Vue.extend({
           formData.append("endDate", endDate);
           
           // user id, image
+          formData.append("uid", uid);
+
+          files.forEach(el => {
+            formData.append("files", el.file)
+          });
 
           const {data} = await postApi.post(formData);
+          
+          // state true?
           console.log(data);
-          if (data.upload){
+          if (data.state){
             alert("업로드가 완료되었습니다.");
             this.$router.push("/");
           } else {
@@ -165,7 +210,7 @@ export default Vue.extend({
           num = i;
         }
         this.uploadImageIndex = num + 1;
-        console.log(this.files);
+        //console.log(this.files);
       },
       imageAddUpload(){
         console.log(this.$refs.files);
@@ -193,9 +238,9 @@ export default Vue.extend({
         const name = e.target.getAttribute("name");
         this.files = this.files.filter(data => data.number !== Number(name));
       },
-    },
-    
+    },  
   });
+
 </script>
 
 <style>

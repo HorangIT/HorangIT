@@ -8,8 +8,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.a101.ssafy.project.dao.UserDao;
 import com.a101.ssafy.project.model.user.User;
+import com.a101.ssafy.project.repository.UserRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,9 +17,9 @@ import java.util.stream.Collectors;
 
 @Component("userDetailsService")
 public class CustomUserDetailsService implements UserDetailsService {
-   private final UserDao userDao;
+   private final UserRepository userDao;
 
-   public CustomUserDetailsService(UserDao userDao) {
+   public CustomUserDetailsService(UserRepository userDao) {
       this.userDao = userDao;
    }
 

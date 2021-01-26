@@ -7,17 +7,15 @@ import lombok.ToString;
 @ToString
 @Setter
 @Getter
-public class SignupDto {
-	private String nickname;
+public class LoginDto {
 	private String email;
 	private String password;
 	
-	public SignupDto() {
+	public LoginDto() {
 	}
 
-	public SignupDto(String nickname, String email, String password) {
+	public LoginDto(String email, String password) {
 		super();
-		this.nickname = nickname;
 		this.email = email;
 		this.password = password;
 	}
