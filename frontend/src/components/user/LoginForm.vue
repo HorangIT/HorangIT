@@ -69,10 +69,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { axiosGET } from '@/utils/axios'
-// import axios from 'axios'
-
-// const API_BASE_URL = process.env.VUE_APP_API_BASE_URL
 
 export default Vue.extend({
   name: 'Login',
@@ -121,38 +117,9 @@ export default Vue.extend({
         if (!this.$refs[f].validate(true)) this.formHasErrors = true
       })
       if (!this.formHasErrors) {
-        // // axios post
-        // const credentials = {
-        //   email: this.email,
-        //   password: this.password,
-        // }
-        // axios.post(`${API_BASE_URL}/account/login/`, credentials)
-        //   .then(response => console.log(response))
-        //   .catch(response => console.log(response))
-        // axios config
-        const address = '/account/login';
-        const data = {
-          email: this.email,
-          password: this.password,
-        };
-        const config = undefined;
-        // axios post
-        // axiosPOST(
-        //   address,
-        //   data,
-        //   config,
-        //   (response: any) => console.log(response),
-        //   (error: any) => console.log(error)
-        // );
-        // axios get
-        axiosGET (
-          address,
-          {
-            params: data
-          },
-          response => console.log(response),
-          error => console.log(error)
-        );
+        // axios login
+        // userApi.login(this.form)
+        this.$store.dispatch('userModule/login', this.form)
       }
     },
     goToSignup (): void {

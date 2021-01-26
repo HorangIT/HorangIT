@@ -90,7 +90,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { axiosPOST } from '@/utils/axios'
 
 export default Vue.extend({
   data: (): any => ({
@@ -146,30 +145,7 @@ export default Vue.extend({
         if (!this.$refs[f].validate(true)) this.formHasErrors = true;
       });
       if (!this.formHasErrors) {
-        // axios config
-        const address = '/account/signup';
-        const data: Record<string, any> = {
-          nickname: this.nickname,
-          email: this.email,
-          password: this.password,
-          passwordConfirm: this.passwordConfirm,
-        };
-        const config = undefined;
         // axios post
-        axiosPOST(
-          address,
-          data,
-          config,
-          (response: any) => {
-            console.log(response)
-          },
-          (error: any) => {
-            console.log(error)
-          }
-        );
-        // axios.post(`${API_BASE_URL}/account/signup/`, credentials)
-        //   .then(response => console.log(response))
-        //   .catch(response => console.log(response))
       }
     },
     goToLogin (): void {
