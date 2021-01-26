@@ -121,7 +121,7 @@
 </template>
 <script lang="ts">
 import Vue from 'vue';
-import { postApi } from "../utils/axios";
+import { itemApi } from "../utils/axios";
 
 export default Vue.extend({
     name: "PostView",
@@ -178,7 +178,7 @@ export default Vue.extend({
             formData.append("files", el.file)
           });
 
-          const {data} = await postApi.post(formData);
+          const {data} = await itemApi.post(formData);
           
           // state true?
           console.log(data);
