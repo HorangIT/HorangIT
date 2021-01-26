@@ -20,8 +20,8 @@ export const userApi = {
 }
 
 export const postApi = {
-  post:(formData: any) => {
-    return request.post("/post", formData, { // item 등록
+  item:(formData: any) => {
+    return request.post("/item", formData, { // item 등록
       headers: {
         "content-Type" : "multipart/form-data"
       }

@@ -21,6 +21,21 @@
                       label="category"
                       outlined
                     ></v-select>
+
+                     <v-row class="align-center">
+                      <h5>상품 상태</h5>
+                      <v-btn-toggle
+                        v-model="grade"
+                        tile
+                        color="deep-purple accent-3"
+                        group>
+                        <v-btn value="S">S</v-btn>
+                        <v-btn value="A">A</v-btn>
+                        <v-btn value="B">B</v-btn>
+                        <v-btn value="C">C</v-btn>
+                      </v-btn-toggle>
+                    </v-row>
+
                     <v-row class="mb-5">
                       <v-text-field
                         label="위치"
@@ -45,16 +60,143 @@
                         v-model="happyPrice"
                       ></v-text-field>
                     </v-row>
+
                     <v-row>
-                      <v-text-field
-                        label="경매시작일"
-                        v-model="startDate"
-                      ></v-text-field>
-                       <v-text-field
-                        label="경매마감일"
-                        v-model="endDate"
-                      ></v-text-field>
+                      <v-menu
+                        ref="startDateCalender"
+                        v-model="startDateCalender"
+                        :close-on-content-click="false"
+                        :return-value.sync="startDate"
+                        transition="scale-transition"
+                        offset-y
+                        min-width="auto">
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-text-field
+                            v-model="startDate"
+                            label="경매시작일"
+                            prepend-icon="mdi-calendar"
+                            readonly
+                            v-bind="attrs"
+                            v-on="on"></v-text-field>
+                        </template>
+                        <v-date-picker
+                          v-model="startDate"
+                          no-title
+                          scrollable>
+                          <v-spacer></v-spacer>
+                          <v-btn
+                            text
+                            color="primary"
+                            @click="startDateCalender = false">
+                            Cancel
+                          </v-btn>
+                           <v-dialog
+                            ref="startTimeDialog"
+                            v-model="startTimeDialog"
+                            :return-value.sync="startTime"
+                            persistent
+                            width="290px">
+                            <template v-slot:activator="{ on }">
+                              <v-btn
+                                text
+                                color="primary"
+                                v-on="on"
+                              >TIME</v-btn>
+                            </template>
+                            <v-time-picker
+                              v-if="startTimeDialog"
+                              v-model="startTime"
+                              full-width>
+                              <v-spacer></v-spacer>
+                              <v-btn
+                                text
+                                color="primary"
+                                @click="startTimeDialog = false"
+                              >Cancel</v-btn>
+                              <v-btn
+                                text
+                                color="primary"
+                                @click="$refs.startTimeDialog.save(startTime)"
+                              >OK</v-btn>
+                            </v-time-picker>
+                          </v-dialog>
+                          <v-btn
+                            text
+                            color="primary"
+                            @click="$refs.startDateCalender.save(startDate + ' ' + startTime);">
+                            OK
+                          </v-btn>
+                        </v-date-picker>
+                      </v-menu>
+
+                      <v-menu
+                        ref="endDateCalender"
+                        v-model="endDateCalender"
+                        :close-on-content-click="false"
+                        :return-value.sync="endDate"
+                        transition="scale-transition"
+                        offset-y
+                        min-width="auto">
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-text-field
+                            v-model="endDate"
+                            label="경매종료일"
+                            prepend-icon="mdi-calendar"
+                            readonly
+                            v-bind="attrs"
+                            v-on="on"></v-text-field>
+                        </template>
+                        <v-date-picker
+                          v-model="endDate"
+                          no-title
+                          scrollable>
+                          <v-spacer></v-spacer>
+                          <v-btn
+                            text
+                            color="primary"
+                            @click="endDateCalender = false">
+                            Cancel
+                          </v-btn>
+                           <v-dialog
+                            ref="endTimeDialog"
+                            v-model="endTimeDialog"
+                            :return-value.sync="endTime"
+                            persistent
+                            width="290px">
+                            <template v-slot:activator="{ on }">
+                              <v-btn
+                                text
+                                color="primary"
+                                v-on="on"
+                              >TIME</v-btn>
+                            </template>
+                            <v-time-picker
+                              v-if="endTimeDialog"
+                              v-model="endTime"
+                              full-width>
+                              <v-spacer></v-spacer>
+                              <v-btn
+                                text
+                                color="primary"
+                                @click="endTimeDialog = false"
+                              >Cancel</v-btn>
+                              <v-btn
+                                text
+                                color="primary"
+                                @click="$refs.endTimeDialog.save(endTime)"
+                              >OK</v-btn>
+                            </v-time-picker>
+                          </v-dialog>
+                          <v-btn
+                            text
+                            color="primary"
+                            @click="$refs.endDateCalender.save(endDate + ' ' + endTime);">
+                            OK
+                          </v-btn>
+                        </v-date-picker>
+                      </v-menu>
                     </v-row>
+
                   </v-col>
                   <div class="shadow mt-5">
                     <div style="border: 1px solid #dddddd">
@@ -114,6 +256,10 @@
                   <v-btn @click="writePost" block color="primary" class="mt-5 w-100">
                     작성하기
                   </v-btn>
+                
+                  <v-btn @click="testButton" block color="white" class="mt-5 w-100">
+                    테스트하기
+                  </v-btn>
                 </div>
           </div>
       </v-container>
@@ -142,6 +288,14 @@ export default Vue.extend({
         uploadImageIndex: 0,
 
         items: ["의류", "전자기기"],
+
+        startDateCalender: false,
+        startTime: "",
+        startTimeDialog: false,
+
+        endDateCalender: false,
+        endTime: "",
+        endTimeDialog: false,
     }),
     methods: {
         async writePost(){
@@ -178,11 +332,11 @@ export default Vue.extend({
             formData.append("files", el.file)
           });
 
-          const {data} = await postApi.post(formData);
+          const {data} = await postApi.item(formData);
           
           // state true?
           console.log(data);
-          if (data.state){
+          if (data.status){
             alert("업로드가 완료되었습니다.");
             this.$router.push("/");
           } else {
@@ -238,7 +392,49 @@ export default Vue.extend({
         const name = e.target.getAttribute("name");
         this.files = this.files.filter(data => data.number !== Number(name));
       },
-    },  
+
+      testButton() {
+        console.log('-----------TEST-----------')
+        console.log('변수명:타입')
+        // uid
+        console.log('uid:string')
+        console.log(this.uid)
+        // title
+        console.log('title:string')
+        console.log(this.title)
+        // description,
+        console.log('description:string')
+        console.log(this.description)
+        // category
+        console.log('category:string')
+        console.log(this.category)        
+        // location
+        console.log('location:string')
+        console.log(this.location)        
+        // startPrice
+        console.log('startPrice:string')
+        console.log(this.startPrice)      
+        // happyPrice
+        console.log('happyPrice:string')
+        console.log(this.happyPrice) 
+        // grade
+        console.log('grade:string')
+        console.log(this.grade)        
+        // direct
+        console.log('direct:string')
+        console.log(this.direct)        
+        // startDate
+        console.log('startDate:string')
+        console.log(this.startDate)        
+        // endDate 
+        console.log('endDate:string')
+        console.log(this.endDate)        
+        // files
+        console.log('files:file')
+        console.log(this.files)
+        console.log('--------------------------')
+      },
+    },
   });
 
 </script>
@@ -297,7 +493,6 @@ export default Vue.extend({
 
   .file-close-button {
     position: absolute;
-    /* align-items: center; */
     line-height: 18px;
     z-index: 99;
     font-size: 18px;
