@@ -44,8 +44,9 @@ public class Item {
 	
 	private int startPrice;
 	private int happyPrice;
-	private int grade;
+	private char grade;
 	private int direct;
+	private int status;
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date startDate;
