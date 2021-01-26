@@ -1,6 +1,10 @@
 package com.a101.ssafy.project.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +27,10 @@ import com.a101.ssafy.project.model.item.Item;
 import com.a101.ssafy.project.model.item.RegisterDto;
 import com.a101.ssafy.project.service.ItemService;
 import com.a101.ssafy.project.service.S3Service;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 
 @CrossOrigin(origins = { "*" })
@@ -42,8 +50,34 @@ public class ItemController {
 	@GetMapping("/{id}")
 	@ResponseBody
 	public Object readItem(@PathVariable("id")long id) {
+		Item item = itemService.getItemById(id);
+
+		JsonObject jobj = new JsonObject();
+		jobj.addProperty("category", item.getCategory()); //카테고리
+		jobj.addProperty("description", item.getDescription()); //
+		jobj.addProperty("location", item.getLocation());
+		jobj.addProperty("name", item.getName());
+		jobj.addProperty("direct", item.getDirect());
+		jobj.addProperty("grade", item.getGrade());
+		jobj.addProperty("happyPrice", item.getHappyPrice());
+		jobj.addProperty("startPrice", item.getStartPrice());
 		
-		return "HI";
+		Collection<Image> hi = item.getImage();
+		
+		if(hi.size()!=0) {
+			JsonArray jsonList = new JsonArray();
+			Iterator<Image> iter = hi.iterator();
+
+			while(iter.hasNext()) {
+				JsonObject obj = new JsonObject();
+				obj.addProperty("filePath", iter.next().getFilePath());
+				jsonList.add(obj);
+			}
+			
+			jobj.add("filePath", jsonList);
+		}
+//		item.toString();
+		return jobj.toString();
 	}
 	
 	@PostMapping
@@ -59,10 +93,12 @@ public class ItemController {
 		item.setCategory("전자기기");
 		item.setStartPrice(Integer.parseInt(request.getStartPrice()));
 		item.setHappyPrice(Integer.parseInt(request.getHappyPrice()));
+		item.setStatus(0);
 //		item.setGrade(Integer.parseInt(request.getGrade()));
 //		item.setDirect(Integer.parseInt(request.getDirect()));
 		item.setDirect(1);
-		item.setGrade(2);
+//		item.setGrade(request.getGrade().charAt(0));
+		item.setGrade('S');
 //		item.setUserId(Integer.parseInt(request.getUserId()));
 		//이후 date 설정 해야함!
 		System.out.println(item.toString()+"다 만든이후");
