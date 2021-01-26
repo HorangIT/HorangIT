@@ -1,13 +1,12 @@
 package com.a101.ssafy.project.controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Iterator;
-import java.util.List;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -29,9 +27,7 @@ import com.a101.ssafy.project.model.item.Item;
 import com.a101.ssafy.project.model.item.RegisterDto;
 import com.a101.ssafy.project.service.ItemService;
 import com.a101.ssafy.project.service.S3Service;
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 
@@ -79,7 +75,9 @@ public class ItemController {
 	}
 	
 	@PostMapping
-	public Object registerItem(RegisterDto request, @RequestParam("files") MultipartFile[] multipartFiles) throws IOException {
+	public Object registerItem(RegisterDto request, @RequestParam("files") MultipartFile[] multipartFiles) throws IOException, ParseException {
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
 		ResponseEntity response = null;
 		
 		Item item = new Item();
@@ -91,12 +89,25 @@ public class ItemController {
 		item.setCategory("전자기기");
 		item.setStartPrice(Integer.parseInt(request.getStartPrice()));
 		item.setHappyPrice(Integer.parseInt(request.getHappyPrice()));
-		item.setStatus(0);
+		item.setStatus(0); //status 는 기본 0으로 설정
+		item.setStartDate(format.parse(request.getStartDate()));
+		item.setEndDate(format.parse(request.getEndDate()));
+		
+		Date date = java.util.Calendar.getInstance().getTime();
+		
+		item.setCreatedAt(date);
+		item.setUpdatedAt(date);
+//		item.setCreatedAt(format.);
+		
+		//direct에 대한 처리 필요
+		item.setDirect(1);
+		item.setGrade('S');
+		/////////////
+		
+		
 //		item.setGrade(Integer.parseInt(request.getGrade()));
 //		item.setDirect(Integer.parseInt(request.getDirect()));
-		item.setDirect(1);
 //		item.setGrade(request.getGrade().charAt(0));
-		item.setGrade('S');
 //		item.setUserId(Integer.parseInt(request.getUserId()));
 		//이후 date 설정 해야함!
 		System.out.println(item.toString()+"다 만든이후");
@@ -109,7 +120,8 @@ public class ItemController {
 		
 		if(multipartFiles!=null) {
 			for(int i=0; i<multipartFiles.length; ++i) {
-				String url = s3Service.upload(multipartFiles[i]);
+//				String url = s3Service.upload(multipartFiles[i]);
+				String url = "hhh";
 				Image image = new Image(item, url);
 				
 				item.addImage(image);
