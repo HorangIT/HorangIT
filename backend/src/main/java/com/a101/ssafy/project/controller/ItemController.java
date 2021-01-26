@@ -6,6 +6,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -63,20 +65,16 @@ public class ItemController {
 		jobj.addProperty("startPrice", item.getStartPrice());
 		
 		Collection<Image> hi = item.getImage();
-		
 		if(hi.size()!=0) {
-			JsonArray jsonList = new JsonArray();
+			JsonArray jarr = new JsonArray();
 			Iterator<Image> iter = hi.iterator();
 
 			while(iter.hasNext()) {
-				JsonObject obj = new JsonObject();
-				obj.addProperty("filePath", iter.next().getFilePath());
-				jsonList.add(obj);
+				String s = iter.next().getFilePath();
+				jarr.add(s);
 			}
-			
-			jobj.add("filePath", jsonList);
+			jobj.add("filePath", jarr);
 		}
-//		item.toString();
 		return jobj.toString();
 	}
 	
