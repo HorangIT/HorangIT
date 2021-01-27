@@ -157,6 +157,19 @@
             <artifactId>json-simple</artifactId>
             <version>1.1</version>
         </dependency>
+        
+        <!-- redis -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+
+        <!-- lettuce(Redis) -->
+        <dependency>
+			<groupId>io.lettuce</groupId>
+			<artifactId>lettuce-core</artifactId>
+ 			<version>6.0.2.RELEASE</version>
+		</dependency>		
 		
 	</dependencies>
 
