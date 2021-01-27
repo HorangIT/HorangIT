@@ -3,7 +3,7 @@ import VueRouter, { RouteConfig } from "vue-router";
 import Blog from "@/components/Blog.vue";
 import Layout from "@/components/Layout.vue";
 import Shop from "@/components/Shop.vue";
-import Product from "@/components/Product.vue";
+import Item from "@/components/Item.vue";
 import Post from "@/components/Post.vue";
 import Cart from "@/components/Cart.vue";
 
@@ -31,9 +31,9 @@ const routes: Array<RouteConfig> = [
         name: "Shop"
       },
       {
-        path: "/product",
-        component: Product,
-        name: "Product"
+        path: "/item",
+        component: Item,
+        name: "Item"
       },
       {
         path: "/blog",

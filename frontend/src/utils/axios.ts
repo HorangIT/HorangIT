@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, AxiosResponse } from "axios";
 
-const authHeader = function (): Record<string, string> {
+const authHeader = function (): Record<string, string>{
   const user: Record<string, any> = JSON.parse(localStorage.getItem('user') || '{}');
   if (Object.keys(user).length) {
     const token = user.object.token;
@@ -49,11 +49,11 @@ export const itemApi = {
   post:(formData: any) => {
     return request.post("/item", formData, { // item 등록
       headers: {
-        "content-Type" : "multipart/form-data"
+        "content-Type": "multipart/form-data"
       }
-    })
+    });
   },
-  get:(id: number) => {
-    return request.get(`/item/${id}`).then(response => console.log(response)).catch(err => console.log(err))
-  },
-}
+  get(id: number): any {
+    return request.get(`/item/${id}`);
+  }
+};
