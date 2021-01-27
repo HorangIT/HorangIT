@@ -122,10 +122,6 @@ public class ItemController {
 		System.out.println(item.toString()+"다 만든이후");
 
 		final BasicResponse result = new BasicResponse();
-		result.status = true;
-		result.data = "테스트";
-		result.object = null;
-		response = new ResponseEntity<>(result, HttpStatus.OK);
 		
 		if(multipartFiles!=null) {
 			for(int i=0; i<multipartFiles.length; ++i) {
@@ -136,8 +132,16 @@ public class ItemController {
 			}			
 		}
 		if(itemService.registerItem(item)) {
+			result.status = true;
+			result.data = "물품 등록에 성공했습니다.";
+			result.object = null;
+			response = new ResponseEntity<>(result, HttpStatus.OK);
 			System.out.println("등록 성공");
 		}else {
+			result.status = false;
+			result.data = "물품 등록에 실패했습니다.";
+			result.object = null;
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);			
 			System.out.println("등록 실패");
 		}
 		return response;
