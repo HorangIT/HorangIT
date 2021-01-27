@@ -3,7 +3,7 @@ import VueRouter, { RouteConfig } from "vue-router";
 import Blog from "@/components/Blog.vue";
 import Layout from "@/components/Layout.vue";
 import Shop from "@/components/Shop.vue";
-import Product from "@/components/Product.vue";
+import Item from "@/components/Item.vue";
 import Post from "@/components/Post.vue";
 import Cart from "@/components/Cart.vue";
 
@@ -11,8 +11,7 @@ import Home from "@/views/Home.vue";
 import PostView from "@/views/PostView.vue";
 import Auction from "@/views/Auction.vue";
 
-import LoginForm from "@/components/user/LoginForm.vue";
-import SignupForm from "@/components/user/SignupForm.vue";
+import ProfileForm from "@/components/user/ProfileForm.vue";
 
 Vue.use(VueRouter);
 
@@ -32,9 +31,9 @@ const routes: Array<RouteConfig> = [
         name: "Shop"
       },
       {
-        path: "/product",
-        component: Product,
-        name: "Product"
+        path: "/item",
+        component: Item,
+        name: "Item"
       },
       {
         path: "/blog",
@@ -75,13 +74,9 @@ const routes: Array<RouteConfig> = [
 
   // test page
   {
-    path: "/signup",
-    component: SignupForm
+    path: "/profile",
+    component: ProfileForm,
   },
-  {
-    path: "/login",
-    component: LoginForm
-  }
 ];
 
 const router = new VueRouter({
