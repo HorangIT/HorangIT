@@ -17,7 +17,8 @@
                       v-model="description"
                     ></v-textarea>
                     <v-select
-                      :items="items"
+                      v-model="category"
+                      :items="categories"
                       label="category"
                       outlined
                     ></v-select>
@@ -36,15 +37,28 @@
                       </v-btn-toggle>
                     </v-row>
 
-                    <v-row class="mb-5">
+                    <v-row class="mb-5 align-center">
                       <v-text-field
                         label="위치"
                         v-model="location"
+                        class="mr-4"
                       ></v-text-field>
-                      <v-checkbox
+                      <v-radio-group
                         v-model="direct"
-                        label="직거래 여부"
-                      ></v-checkbox>
+                        mandatory>
+                        <v-radio
+                          label="택배"
+                          value="0"
+                        ></v-radio>
+                        <v-radio
+                          label="직거래"
+                          value="1"
+                        ></v-radio>
+                        <v-radio
+                          label="택배 & 직거래"
+                          value="2"
+                        ></v-radio>
+                      </v-radio-group>
                     </v-row>
                     <v-row>
                       <v-text-field
@@ -272,7 +286,7 @@ import { itemApi } from "../utils/axios";
 export default Vue.extend({
     name: "PostView",
     data: () => ({
-        uid:"",
+        uid:"dummy",
         title: "",
         description: "",
         category: "",
@@ -287,7 +301,7 @@ export default Vue.extend({
         filesPreview: [],
         uploadImageIndex: 0,
 
-        items: ["의류", "전자기기"],
+        categories: ["의류", "전자기기"],
 
         startDateCalender: false,
         startTime: "",
@@ -299,50 +313,50 @@ export default Vue.extend({
     }),
     methods: {
         async writePost(){
-        const {
-          uid,
-          title, 
-          description,
-          category,
-          location,
-          startPrice,
-          happyPrice,
-          grade,
-          direct,
-          startDate,
-          endDate, 
-          files, 
-          } = this;
-          const formData = new FormData();
-          formData.append("title", title);
-          formData.append("description", description);
-          formData.append("category", category);
-          formData.append("location", location);
-          formData.append("startPrice", startPrice);
-          formData.append("happyPrice", happyPrice);
-          formData.append("grade", grade);
-          formData.append("direct", direct);
-          formData.append("startDate", startDate);
-          formData.append("endDate", endDate);
-          
-          // user id, image
-          formData.append("uid", uid);
+          const {
+            uid,
+            title, 
+            description,
+            category,
+            location,
+            startPrice,
+            happyPrice,
+            grade,
+            direct,
+            startDate,
+            endDate, 
+            files, 
+            } = this;
+            const formData = new FormData();
+            formData.append("title", title);
+            formData.append("description", description);
+            formData.append("category", category);
+            formData.append("location", location);
+            formData.append("startPrice", startPrice);
+            formData.append("happyPrice", happyPrice);
+            formData.append("grade", grade);
+            formData.append("direct", direct);
+            formData.append("startDate", startDate);
+            formData.append("endDate", endDate);
+            
+            // user id, image
+            formData.append("uid", uid);
 
-          files.forEach(el => {
-            formData.append("files", (el as any).file)
-          });
+            files.forEach(el => {
+              formData.append("files", (el as any).file)
+            });
 
-          const {data} = await itemApi.item(formData);
-          
-          // state true?
-          console.log(data);
-          if (data.status){
-            alert("업로드가 완료되었습니다.");
-            this.$router.push("/");
-          } else {
-            alert("업로드에 실패하였습니다.");
-          }
-      },
+            const {data} = await itemApi.item(formData);
+            
+            // state true?
+            console.log(data);
+            if (data.status){
+              alert("업로드가 완료되었습니다.");
+              this.$router.push("/");
+            } else {
+              alert("업로드에 실패하였습니다.");
+            }
+        },
       
       imageUpload(){
         console.log(this.$refs.files);
