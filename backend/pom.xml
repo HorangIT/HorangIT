@@ -169,14 +169,7 @@
 			<groupId>io.lettuce</groupId>
 			<artifactId>lettuce-core</artifactId>
  			<version>6.0.2.RELEASE</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.msgpack/jackson-dataformat-msgpack -->
-		<dependency>
-		    <groupId>org.msgpack</groupId>
-		    <artifactId>jackson-dataformat-msgpack</artifactId>
-		    <version>0.8.16</version>
-		</dependency>
-		
+		</dependency>		
 		
 	</dependencies>
 
