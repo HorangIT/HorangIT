@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 /** This class can save data that type is {key, value}.
  * 
  *  We can use this as Service.
+ *  
+ *  You can check these functions in redis-cli.
  *  */
 @Service
 public class RedisUtil {
