@@ -5,9 +5,9 @@
         <div class="col-md-5 col-sm-5 col-xs-12">
           <v-carousel>
             <v-carousel-item
-              v-for="(img, i) in imgs"
+              v-for="(img, i) in item.filePath"
               :key="i"
-              :src="img.filePath"
+              :src="img"
             >
             </v-carousel-item>
           </v-carousel>
@@ -182,7 +182,6 @@ export default Vue.extend({
       }
     ],
     item: [],
-    imgs: [],
     items: [
       {
         avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
@@ -211,12 +210,16 @@ export default Vue.extend({
       }
     ]
   }),
+  methods :{
+    getItem() {
+      itemApi.get(1).then((res: any) => {
+        this.item = res.data;
+        console.log(this.item);
+      });
+    },
+  },
   created() {
-    itemApi.get(1).then((res: any) => {
-      this.item = res.data;
-      this.imgs = this.item.filePath;
-      console.log(this.imgs);
-    });
+    this.getItem();
   }
 });
 </script>
