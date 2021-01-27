@@ -69,6 +69,17 @@ public class ItemController {
 		
 		jobj.addProperty("createdAt", format.format(item.getCreatedAt()));
 		
+		switch(item.getDirect()) {
+		case 0:
+			jobj.addProperty("direct", "택배거래만 가능해요.");
+			break;
+		case 1:
+			jobj.addProperty("direct", "직거래만 가능해요.");
+			break;
+		case 2:
+			jobj.addProperty("direct", "택배와 직거래 둘 다 가능해요.");
+			break;
+		}
 		
 		Collection<Image> hi = item.getImage();
 		if(hi.size()!=0) {
