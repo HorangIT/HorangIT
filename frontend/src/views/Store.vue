@@ -104,13 +104,13 @@
                         class="d-flex transition-fast-in-fast-out white darken-2 v-card--reveal display-3 white--text"
                         style="height: 100%;"
                       >
-                        <v-btn v-if="hover" href="/item" class="" outlined>VIEW</v-btn>
+                        <v-btn v-if="hover" href="/detail" class="" outlined>VIEW</v-btn>
                       </div>
 
                     </v-expand-transition>
                   </v-img>
                   <v-card-text class="text--primary">
-                    <div><a href="/item" style="text-decoration: none">{{pro.name}}</a></div>
+                    <div><a href="/detail" style="text-decoration: none">{{pro.name}}</a></div>
                     <div>${{pro.price}}</div>
                   </v-card-text>
                 </v-card>

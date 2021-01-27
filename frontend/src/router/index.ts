@@ -1,17 +1,18 @@
 import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
-import Blog from "@/components/Blog.vue";
-import Layout from "@/components/Layout.vue";
-import Shop from "@/components/Shop.vue";
-import Item from "@/components/Item.vue";
-import Post from "@/components/Post.vue";
+
 import Cart from "@/components/Cart.vue";
+import ProfileForm from "@/components/user/ProfileForm.vue";
 
 import Home from "@/views/Home.vue";
-import PostView from "@/views/PostView.vue";
+import Layout from "@/views/Layout.vue";
 import Auction from "@/views/Auction.vue";
+import Store from "@/views/Store.vue";
+import PostView from "@/views/PostView.vue";
+import CS from "@/views/CS.vue";
+import Detail from "@/views/Detail.vue";
+import PostSample from "@/views/PostSample.vue";
 
-import ProfileForm from "@/components/user/ProfileForm.vue";
 
 Vue.use(VueRouter);
 
@@ -26,24 +27,24 @@ const routes: Array<RouteConfig> = [
         name: "Home"
       },
       {
-        path: "/shop",
-        component: Shop,
-        name: "Shop"
+        path: "/store",
+        component: Store,
+        name: "Store"
       },
       {
-        path: "/item",
-        component: Item,
-        name: "Item"
+        path: "/detail",
+        component: Detail,
+        name: "Detail"
       },
       {
-        path: "/blog",
-        component: Blog,
-        name: "Blog"
+        path: "/cs",
+        component: CS,
+        name: "CS"
       },
       {
-        path: "/post",
-        component: Post,
-        name: "Post"
+        path: "/postsample",
+        component: PostSample,
+        name: "PostSample"
       },
       {
         path: "/cart",
