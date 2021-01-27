@@ -69,6 +69,17 @@ public class ItemController {
 		
 		jobj.addProperty("createdAt", format.format(item.getCreatedAt()));
 		
+		switch(item.getDirect()) {
+		case 0:
+			jobj.addProperty("direct", "택배거래만 가능해요.");
+			break;
+		case 1:
+			jobj.addProperty("direct", "직거래만 가능해요.");
+			break;
+		case 2:
+			jobj.addProperty("direct", "택배와 직거래 둘 다 가능해요.");
+			break;
+		}
 		
 		Collection<Image> hi = item.getImage();
 		if(hi.size()!=0) {
@@ -93,9 +104,8 @@ public class ItemController {
 		BeanUtils.copyProperties(request, item);
 		System.out.println(request.toString()+"리퀘스트");
 		System.out.println(item.toString()+"아이템");
-		//위로 안 되는 것들 따로 설정(typeCasting->회의할것)
+
 		item.setName(request.getTitle());
-		item.setCategory("전자기기"); //카테고리도 안 옴
 		item.setStartPrice(Integer.parseInt(request.getStartPrice()));
 		item.setHappyPrice(Integer.parseInt(request.getHappyPrice()));
 		item.setStatus(0); //status 는 기본 0으로 설정
@@ -109,14 +119,10 @@ public class ItemController {
 //		item.setCreatedAt(format.);
 		
 		//direct에 대한 처리 필요
-		item.setDirect(1);
-		item.setGrade('S');
+		item.setDirect(Integer.parseInt(request.getDirect()));
+		item.setGrade(request.getGrade().charAt(0));
 		/////////////
 		
-		
-//		item.setGrade(Integer.parseInt(request.getGrade()));
-//		item.setDirect(Integer.parseInt(request.getDirect()));
-//		item.setGrade(request.getGrade().charAt(0));
 //		item.setUserId(Integer.parseInt(request.getUserId()));
 		//이후 date 설정 해야함!
 		System.out.println(item.toString()+"다 만든이후");
