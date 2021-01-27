@@ -25,6 +25,7 @@ import com.a101.ssafy.project.image.Image;
 import com.a101.ssafy.project.model.BasicResponse;
 import com.a101.ssafy.project.model.item.Item;
 import com.a101.ssafy.project.model.item.RegisterDto;
+import com.a101.ssafy.project.redis.RedisUtil;
 import com.a101.ssafy.project.service.ItemService;
 import com.a101.ssafy.project.service.S3Service;
 import com.google.gson.JsonArray;
