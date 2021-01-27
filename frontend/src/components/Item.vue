@@ -4,11 +4,11 @@
       <div class="row">
         <div class="col-md-5 col-sm-5 col-xs-12">
           <v-carousel>
-            <v-carousel-item :src="require('../assets/img/home/slider4.jpg')">
-            </v-carousel-item>
-            <v-carousel-item :src="require('../assets/img/home/slider2.jpg')">
-            </v-carousel-item>
-            <v-carousel-item :src="require('../assets/img/home/slider3.jpg')">
+            <v-carousel-item
+              v-for="(img, i) in imgs"
+              :key="i"
+              :src="img.filePath"
+            >
             </v-carousel-item>
           </v-carousel>
         </div>
@@ -16,14 +16,14 @@
           <v-breadcrumbs class="pt-0" :items="breadcrums"></v-breadcrumbs>
           <div class="pl-6">
             <div class="d-flex justify-space-between align-center">
-              <h1 class="d-inline-flex mb-0">경매물품 이름</h1>
+              <h1 class="d-inline-flex mb-0">{{ item.name }}</h1>
               <h3 class="d-inline-flex mb-0">
                 경매시작까지 남은시간 / 경매종료까지 남은시간
               </h3>
             </div>
             <v-divider></v-divider>
             <v-sheet tile class="py-3 d-flex">
-              <h1 class="d-inline-flex">100,000원</h1>
+              <h1 class="d-inline-flex">{{ item.startPrice }}원</h1>
               <v-spacer></v-spacer>
               <div class="d-flex align-center">
                 <v-avatar class="d-inline-flex">
@@ -41,16 +41,18 @@
                 </v-rating>
               </div>
             </v-sheet>
-            <p class="subtitle-1">상세설명이 들어갈 자리입니다. 주저리주저리...</p>
+            <p class="subtitle-1">{{ item.description }}</p>
             <div class="d-flex">
               <div style="width:50%;">
-                <p class="subtitle-1">시작가(응찰단위):</p>
-                <p class="subtitle-1">즉시낙찰가:</p>
+                <p class="subtitle-1">
+                  시작가(응찰단위): {{ item.startPrice }}원
+                </p>
+                <p class="subtitle-1">즉시낙찰가: {{ item.happyPrice }}원</p>
               </div>
               <div>
-                <p class="subtitle-1">판매지역:</p>
-                <p class="subtitle-1">상품등급:</p>
-                <p class="subtitle-1">배송유형:</p>
+                <p class="subtitle-1">판매지역: {{ item.location }}</p>
+                <p class="subtitle-1">상품등급: {{ item.grade }}</p>
+                <p class="subtitle-1">배송유형: {{ item.direct }}</p>
               </div>
             </div>
             <v-divider></v-divider>
@@ -78,11 +80,7 @@
             <v-tab-item>
               <v-list three-line="true" avatar="true">
                 <v-list-item-group v-model="item" color="primary">
-                  <v-list-item
-                    v-for="(item, i) in items"
-                    :key="i"
-                    inactive="true"
-                  >
+                  <v-list-item v-for="(item, i) in items" :key="i">
                     <v-list-item-avatar>
                       <v-img :src="item.avatar"></v-img>
                     </v-list-item-avatar>
@@ -183,7 +181,8 @@ export default Vue.extend({
         href: "breadcrumbs_shirts"
       }
     ],
-    item: 5,
+    item: [],
+    imgs: [],
     items: [
       {
         avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
@@ -212,11 +211,13 @@ export default Vue.extend({
       }
     ]
   }),
-  created (){
-    const data = itemApi.get(1);
-    // console.log(itemApi.get(1))
-    console.log(data);
-  },
+  created() {
+    itemApi.get(1).then((res: any) => {
+      this.item = res.data;
+      this.imgs = this.item.filePath;
+      console.log(this.imgs);
+    });
+  }
 });
 </script>
 <style></style>
