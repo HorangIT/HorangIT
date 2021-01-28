@@ -1,4 +1,4 @@
-package com.a101.ssafy.project.image;
+package com.a101.ssafy.project.model.image;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
