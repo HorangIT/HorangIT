@@ -37,7 +37,7 @@
           </v-list>
         </v-menu>
 
-        <v-btn v-on="on" href="/cart" icon>
+        <v-btn href="/cart" icon>
           <v-badge content="2" value="2" color="green" overlap>
             <v-icon>mdi-cart</v-icon>
           </v-badge>
@@ -74,7 +74,8 @@
       </v-app-bar>
     </v-expand-transition>
 
-    <LoginModal @close="closeModal" v-if="modal" :loginOrSignup="loginOrSignup"> </LoginModal>
+    <LoginModal @close="closeModal" v-if="modal" :loginOrSignup="loginOrSignup">
+    </LoginModal>
     <router-view />
 
     <v-footer :padless="true">
@@ -123,31 +124,31 @@ export default Vue.extend({
     on: true,
     active: false,
     modal: false,
-    loginOrSignup: true,
+    loginOrSignup: true
   }),
   computed: {
-    login () {
+    login() {
       return this.$store.state.userModule.status.loggedIn;
     }
   },
-  created () {
-    console.log(process.env.VUE_APP_JUSO_API_KEY)
+  created() {
+    console.log(process.env.VUE_APP_JUSO_API_KEY);
   },
   watch: {
-    login () {
+    login() {
       this.modal = false;
     }
   },
   methods: {
-    openModal (loginOrSignup: boolean) {
+    openModal(loginOrSignup: boolean) {
       this.loginOrSignup = loginOrSignup;
       this.modal = true;
     },
-    closeModal () {
+    closeModal() {
       this.modal = false;
     },
-    logout () {
-      this.$store.dispatch('userModule/logout');
+    logout() {
+      this.$store.dispatch("userModule/logout");
     }
   }
 });
