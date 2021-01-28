@@ -15,7 +15,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import com.a101.ssafy.project.image.Image;
+import com.a101.ssafy.project.model.image.Image;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
