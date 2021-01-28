@@ -96,7 +96,8 @@
                         <v-date-picker
                           v-model="startDate"
                           no-title
-                          scrollable>
+                          scrollable
+                          >
                           <v-spacer></v-spacer>
                           <v-btn
                             text
@@ -163,7 +164,9 @@
                         <v-date-picker
                           v-model="endDate"
                           no-title
-                          scrollable>
+                          scrollable
+                          :min="this.startDate"
+                          >
                           <v-spacer></v-spacer>
                           <v-btn
                             text
@@ -277,7 +280,7 @@
                 </div>
           </div>
       </v-container>
-  </div>
+    </div>
 </template>
 <script lang="ts">
 import Vue from 'vue';
