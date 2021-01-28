@@ -212,7 +212,7 @@ export default Vue.extend({
   }),
   methods :{
     getItem() {
-      itemApi.get(1).then((res: any) => {
+      itemApi.get(2).then((res: any) => {
         this.item = res.data;
         console.log(this.item);
       });
