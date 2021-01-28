@@ -113,6 +113,7 @@ public class ItemController {
 		item.setStartDate(format.parse(request.getStartDate()));
 		item.setEndDate(format.parse(request.getEndDate()));
 		
+		
 		Date date = java.util.Calendar.getInstance().getTime();
 		
 		item.setCreatedAt(date);
