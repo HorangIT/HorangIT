@@ -13,16 +13,16 @@ import com.a101.ssafy.project.model.chat.ChatMessage;
 //
 @Controller
 public class ChatController {
-	@MessageMapping("/{cht.sendMsg}")
-	@SendTo("/.../...")
+	@MessageMapping("/{cht.sendMsg}") // /prefix/cht.sendMsg 는 여기로 옴
+	@SendTo("/a/bb")
 	public ChatMessage sendMessage(@Payload ChatMessage chatMessage) {
 		return chatMessage;
 	}
 	
-	@MessageMapping("/{~~}")
-	@SendTo("/ttt/tttt")
+	@MessageMapping("/{cht.addUser}")
+	@SendTo("/a/bb")
 	public ChatMessage addUser(@Payload ChatMessage chatMessage, SimpMessageHeaderAccessor headerAccessor) {
-		headerAccessor.getSessionAttributes().put("username", chatMessage.getSender();
+		headerAccessor.getSessionAttributes().put("username", chatMessage.getSender());
 		return chatMessage;
 	}
 	
