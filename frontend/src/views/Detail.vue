@@ -73,9 +73,7 @@
             <v-tab>경매 톡톡</v-tab>
             <v-tab>리뷰</v-tab>
             <v-tab-item>
-              <p class="pt-10 subtitle-1 font-weight-thin">
-                경매 톡 컴포넌트 들어갈 자리입니다.
-              </p>
+              <Chat />
             </v-tab-item>
             <v-tab-item>
               <v-list three-line="true" avatar="true">
@@ -152,13 +150,15 @@
 <script lang="ts">
 import Vue from "vue";
 import ItemList from "../components/ItemList.vue";
+import Chat from "@/components/auction/Chat.vue"
 import { itemApi } from "../utils/axios";
 
 export default Vue.extend({
   name: "Product",
 
   components: {
-    ItemList
+    ItemList,
+    Chat,
   },
 
   data: () => ({

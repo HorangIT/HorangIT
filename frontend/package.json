@@ -46,6 +46,7 @@
     "prettier": "^1.19.1",
     "sass": "^1.19.0",
     "sass-loader": "^8.0.2",
+    "socket.io-client": "^3.1.0",
     "typescript": "~3.9.3",
     "vue-cli-plugin-vuetify": "~2.0.9",
     "vue-template-compiler": "^2.6.11",
