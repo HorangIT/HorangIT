@@ -21,8 +21,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.a101.ssafy.project.image.Image;
 import com.a101.ssafy.project.model.BasicResponse;
+import com.a101.ssafy.project.model.image.Image;
 import com.a101.ssafy.project.model.item.Item;
 import com.a101.ssafy.project.model.item.RegisterDto;
 import com.a101.ssafy.project.redis.RedisUtil;
@@ -112,6 +112,7 @@ public class ItemController {
 		item.setStatus(0); //status 는 기본 0으로 설정
 		item.setStartDate(format.parse(request.getStartDate()));
 		item.setEndDate(format.parse(request.getEndDate()));
+		
 		
 		Date date = java.util.Calendar.getInstance().getTime();
 		

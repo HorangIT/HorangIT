@@ -65,12 +65,14 @@
                         label="경매시작가"
                         filled
                         outlined
+                        :rules=[rules.price]
                         v-model="startPrice"
                       ></v-text-field>
                       <v-text-field
                         label="즉시구매가"
                         filled
                         outlined
+                        :rules=[rules.price]
                         v-model="happyPrice"
                       ></v-text-field>
                     </v-row>
@@ -80,13 +82,13 @@
                         ref="startDateCalender"
                         v-model="startDateCalender"
                         :close-on-content-click="false"
-                        :return-value.sync="startDate"
+                        :return-value.sync="startDateTime"
                         transition="scale-transition"
                         offset-y
                         min-width="auto">
                         <template v-slot:activator="{ on, attrs }">
                           <v-text-field
-                            v-model="startDate"
+                            v-model="startDateTime"
                             label="경매시작일"
                             prepend-icon="mdi-calendar"
                             readonly
@@ -96,7 +98,10 @@
                         <v-date-picker
                           v-model="startDate"
                           no-title
-                          scrollable>
+                          scrollable
+                          :min="todayDate"
+                          :max="endDate"
+                          >
                           <v-spacer></v-spacer>
                           <v-btn
                             text
@@ -147,13 +152,13 @@
                         ref="endDateCalender"
                         v-model="endDateCalender"
                         :close-on-content-click="false"
-                        :return-value.sync="endDate"
+                        :return-value.sync="endDateTime"
                         transition="scale-transition"
                         offset-y
                         min-width="auto">
                         <template v-slot:activator="{ on, attrs }">
                           <v-text-field
-                            v-model="endDate"
+                            v-model="endDateTime"
                             label="경매종료일"
                             prepend-icon="mdi-calendar"
                             readonly
@@ -163,7 +168,9 @@
                         <v-date-picker
                           v-model="endDate"
                           no-title
-                          scrollable>
+                          scrollable
+                          :min="this.startDate"
+                          >
                           <v-spacer></v-spacer>
                           <v-btn
                             text
@@ -197,7 +204,7 @@
                               <v-btn
                                 text
                                 color="primary"
-                                @click="$refs.endTimeDialog.save(endTime)"
+                                @click="endTimeCheck()"
                               >OK</v-btn>
                             </v-time-picker>
                           </v-dialog>
@@ -277,11 +284,12 @@
                 </div>
           </div>
       </v-container>
-  </div>
+    </div>
 </template>
 <script lang="ts">
 import Vue from 'vue';
 import { itemApi } from "../utils/axios";
+import moment from 'moment'
 
 export default Vue.extend({
     name: "PostView",
@@ -310,7 +318,24 @@ export default Vue.extend({
         endDateCalender: false,
         endTime: "",
         endTimeDialog: false,
+
+        todayDate: "",
+        todayTime: "",
+
+        startDateTime: "",
+        endDateTime: "",
+        rules: {
+           price: (v:any) => !!(v || '').match(/^[1-9][0-9]*$/) ||
+          '잘못된 입력입니다. 가격을 입력해주세요.'
+        },
     }),
+    mounted() {
+      const today = moment();
+    
+      this.startDate = this.todayDate = today.format('YYYY-MM-DD');
+      this.startTime = this.todayTime = today.format('HH:mm');
+      this.startDateTime = this.startDate + ' ' + this.startTime;
+    },
     methods: {
         async writePost(){
           const {
@@ -323,38 +348,54 @@ export default Vue.extend({
             happyPrice,
             grade,
             direct,
-            startDate,
-            endDate, 
+            startDateTime,
+            endDateTime, 
             files, 
             } = this;
-            const formData = new FormData();
-            formData.append("title", title);
-            formData.append("description", description);
-            formData.append("category", category);
-            formData.append("location", location);
-            formData.append("startPrice", startPrice);
-            formData.append("happyPrice", happyPrice);
-            formData.append("grade", grade);
-            formData.append("direct", direct);
-            formData.append("startDate", startDate);
-            formData.append("endDate", endDate);
-            
-            // user id, image
-            formData.append("uid", uid);
 
-            files.forEach(el => {
-              formData.append("files", (el as any).file)
-            });
+            if (!title) alert('제목을 입력해주세요.');
+            else if (!description) alert('내용을 입력해주세요.');
+            else if (!category) alert('카테고리를 선택해주세요.');
+            else if (!location) alert('위치를 입력해주세요.');
+            else if (!startPrice) alert('경매시작가를 입력해주세요.');
+            else if (!happyPrice) alert('즉시구매가를 입력해주세요.');
+            else if (!startPrice.match(/^[1-9][0-9]*$/)) alert('경매시작가를 다시 입력해주세요.');
+            else if (!happyPrice.match(/^[1-9][0-9]*$/)) alert('즉시구매가를 다시 입력해주세요.');
+            else if (Number(startPrice) >= Number(happyPrice)) alert('경매시작가는 즉시구매가보다 작아야합니다.');
+            else if (!grade) alert('상품등급을 입력해주세요.');
+            else if (!endDateTime) alert('경매종료일을 입력해주세요.');
+            else if (!files) alert('사진을 입력해주세요.');
+            else {
+              const formData = new FormData();
 
-            const {data} = await itemApi.item(formData);
-            
-            // state true?
-            console.log(data);
-            if (data.status){
-              alert("업로드가 완료되었습니다.");
-              this.$router.push("/");
-            } else {
-              alert("업로드에 실패하였습니다.");
+              formData.append("title", title);
+              formData.append("description", description);
+              formData.append("category", category);
+              formData.append("location", location);
+              formData.append("startPrice", startPrice);
+              formData.append("happyPrice", happyPrice);
+              formData.append("grade", grade);
+              formData.append("direct", direct);
+              formData.append("startDateTime", startDateTime);
+              formData.append("endDateTime", endDateTime);
+              
+              // user id, image
+              formData.append("uid", uid);
+
+              files.forEach(el => {
+                formData.append("files", (el as any).file)
+              });
+
+              const {data} = await itemApi.item(formData);
+              
+              // state true?
+              console.log(data);
+              if (data.status){
+                alert("업로드가 완료되었습니다.");
+                this.$router.push("/");
+              } else {
+                alert("업로드에 실패하였습니다.");
+              }
             }
         },
       
@@ -381,6 +422,7 @@ export default Vue.extend({
         this.uploadImageIndex = num + 1;
         //console.log(this.files);
       },
+
       imageAddUpload(){
         console.log(this.$refs.files);
         console.log((this.$refs.files as any).files);
@@ -403,9 +445,29 @@ export default Vue.extend({
         this.uploadImageIndex = this.uploadImageIndex + num + 1;
         console.log(this.files);      
       },
+
       fileDeleteButton(e: any){
         const name = e.target.getAttribute("name");
         this.files = this.files.filter(data => (data as any).number !== Number(name));
+      },
+
+      startTimeCheck() {
+         const today = moment();
+         this.todayDate = today.format('YYYY-MM-DD');
+         this.todayTime = today.format("HH:mm");
+
+        if (this.startDate === this.endDate && this.startTime >= this.endTime)
+          alert('시간이 잘못 입력되었습니다.');
+        else if (this.todayDate === this.startDate && this.startTime <= this.todayTime)
+          (this.$refs.startTimeDialog as any).save(this.todayTime);
+        else (this.$refs.startTimeDialog as any).save(this.startTime);
+      },
+
+      endTimeCheck() {
+        if (this.startDate === this.endDate && this.startTime >= this.endTime) {
+          alert('시간이 잘못 입력되었습니다.');
+        }
+        else (this.$refs.endTimeDialog as any).save(this.endTime);
       },
 
       testButton() {
@@ -439,11 +501,11 @@ export default Vue.extend({
         console.log('direct:string')
         console.log(this.direct)        
         // startDate
-        console.log('startDate:string')
-        console.log(this.startDate)        
+        console.log('startDateTime:string')
+        console.log(this.startDateTime)        
         // endDate 
-        console.log('endDate:string')
-        console.log(this.endDate)        
+        console.log('endDateTime:string')
+        console.log(this.endDateTime)        
         // files
         console.log('files:file')
         console.log(this.files)

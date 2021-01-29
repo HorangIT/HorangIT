@@ -33,6 +33,9 @@ public class RegisterDto {
 	String grade;
 	
 	@ApiModelProperty(required = true)
+	String location;
+	
+	@ApiModelProperty(required = true)
 	String direct;
 	
 	@ApiModelProperty(required = true)
