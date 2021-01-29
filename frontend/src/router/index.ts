@@ -7,12 +7,10 @@ import ProfileForm from "@/components/user/ProfileForm.vue";
 import Home from "@/views/Home.vue";
 import Layout from "@/views/Layout.vue";
 import Auction from "@/views/Auction.vue";
-import Store from "@/views/Store.vue";
 import PostView from "@/views/PostView.vue";
 import CS from "@/views/CS.vue";
 import Detail from "@/views/Detail.vue";
 import PostSample from "@/views/PostSample.vue";
-
 
 Vue.use(VueRouter);
 
@@ -25,11 +23,6 @@ const routes: Array<RouteConfig> = [
         path: "/",
         component: Home,
         name: "Home"
-      },
-      {
-        path: "/store",
-        component: Store,
-        name: "Store"
       },
       {
         path: "/detail",
@@ -63,21 +56,11 @@ const routes: Array<RouteConfig> = [
       }
     ]
   },
-  // {
-  //   path: "/about",
-  //   name: "About",
-  //   // route level code-splitting
-  //   // this generates a separate chunk (about.[hash].js) for this route
-  //   // which is lazy-loaded when the route is visited.
-  //   component: () =>
-  //     import(/* webpackChunkName: "about" */ "../views/About.vue")
-  // }
-
   // test page
   {
     path: "/profile",
-    component: ProfileForm,
-  },
+    component: ProfileForm
+  }
 ];
 
 const router = new VueRouter({

@@ -67,7 +67,6 @@
         <div id="nav" class="d-flex justify-space-around">
           <v-btn text href="/">홈</v-btn>
           <v-btn text href="/auction">경매</v-btn>
-          <v-btn text href="/store">스토어</v-btn>
           <v-btn text href="#">서비스 소개</v-btn>
           <v-btn text href="/cs">고객센터</v-btn>
         </div>
