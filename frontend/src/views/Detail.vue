@@ -1,6 +1,15 @@
 <template>
   <div>
     <v-container>
+      <v-sheet
+        color="grey lighten-4"
+        height="10vh"
+        class="d-flex align-center justify-center"
+      >
+        <h1>
+          경매시작까지 남은시간 / 경매종료까지 남은시간
+        </h1>
+      </v-sheet>
       <div class="row">
         <div class="col-md-5 col-sm-5 col-xs-12">
           <v-carousel>
@@ -13,17 +22,9 @@
           </v-carousel>
         </div>
         <div class="col-md-7 col-sm-7 col-xs-12">
-          <v-breadcrumbs class="pt-0" :items="breadcrums"></v-breadcrumbs>
           <div class="pl-6">
-            <div class="d-flex justify-space-between align-center">
-              <h1 class="d-inline-flex mb-0">{{ item.name }}</h1>
-              <h3 class="d-inline-flex mb-0">
-                경매시작까지 남은시간 / 경매종료까지 남은시간
-              </h3>
-            </div>
-            <v-divider></v-divider>
             <v-sheet tile class="py-3 d-flex">
-              <h1 class="d-inline-flex">{{ item.startPrice }}원</h1>
+              <h1 class="d-inline-flex my-1">{{ item.name }}</h1>
               <v-spacer></v-spacer>
               <div class="d-flex align-center">
                 <v-avatar class="d-inline-flex">
@@ -41,6 +42,9 @@
                 </v-rating>
               </div>
             </v-sheet>
+            <v-divider></v-divider>
+            <h1 class="d-inline-flex mt-1">{{ item.startPrice }}원</h1>
+            <v-spacer></v-spacer>
             <p class="subtitle-1">{{ item.description }}</p>
             <div class="d-flex">
               <div style="width:50%;">
@@ -76,29 +80,7 @@
               <Chat />
             </v-tab-item>
             <v-tab-item>
-              <v-list three-line="true" avatar="true">
-                <v-list-item-group v-model="item" color="primary">
-                  <v-list-item v-for="(item, i) in items" :key="i">
-                    <v-list-item-avatar>
-                      <v-img :src="item.avatar"></v-img>
-                    </v-list-item-avatar>
-                    <v-list-item-content>
-                      <v-list-item-title v-html="item.title">
-                      </v-list-item-title>
-                      <v-rating
-                        v-model="rating"
-                        class=""
-                        background-color="warning lighten-3"
-                        color="warning"
-                        dense
-                      >
-                      </v-rating>
-                      <v-list-item-subtitle v-html="item.subtitle">
-                      </v-list-item-subtitle>
-                    </v-list-item-content>
-                  </v-list-item>
-                </v-list-item-group>
-              </v-list>
+              <Review />
             </v-tab-item>
           </v-tabs>
         </div>
@@ -150,8 +132,10 @@
 <script lang="ts">
 import Vue from "vue";
 import ItemList from "../components/ItemList.vue";
-import Chat from "@/components/auction/Chat.vue"
+import Chat from "../components/detail/Chat.vue";
+import Review from "../components/detail/Review.vue";
 import { itemApi } from "../utils/axios";
+import { AxiosResponse } from "axios";
 
 export default Vue.extend({
   name: "Product",
@@ -159,64 +143,21 @@ export default Vue.extend({
   components: {
     ItemList,
     Chat,
+    Review
   },
 
   data: () => ({
     rating: 4.5,
     active: false,
-    breadcrums: [
-      {
-        text: "Home",
-        disabled: false,
-        href: "breadcrumbs_home"
-      },
-      {
-        text: "Clothing",
-        disabled: false,
-        href: "breadcrumbs_clothing"
-      },
-      {
-        text: "T-Shirts",
-        disabled: true,
-        href: "breadcrumbs_shirts"
-      }
-    ],
-    item: [],
-    items: [
-      {
-        avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
-        title: "Lorem ipsum dolor?",
-        subtitle: "<span class='text--primary'>Ali Connors</span> &mdash; Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Nisl tincidunt eget nullam non. Tincidunt arcu non sodales neque sodales ut etiam. Lectus arcu bibendum at varius vel pharetra. Morbi tristique senectus et netus et malesuada.\n"
-      },
-      {
-        avatar: "https://cdn.vuetifyjs.com/images/lists/2.jpg",
-        title: 'Lorem ipsum dolor <span class="grey--text text--lighten-1">4</span>',
-        subtitle: "<span class='text--primary'>to Alex, Scott, Jennifer</span> &mdash; Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore"
-      },
-      {
-        avatar: "https://cdn.vuetifyjs.com/images/lists/3.jpg",
-        title: "Lorem ipsum dolor",
-        subtitle: "<span class='text--primary'>Sandra Adams</span> &mdash; Lorem ipsum dolor sit amet, consectetur adipiscing elit"
-      },
-      {
-        avatar: "https://cdn.vuetifyjs.com/images/lists/4.jpg",
-        title: "Lorem ipsum dolor",
-        subtitle: ""
-      },
-      {
-        avatar: "https://cdn.vuetifyjs.com/images/lists/5.jpg",
-        title: "Lorem ipsum dolor",
-        subtitle: "<span class='text--primary'>Britta Holt</span> &mdash; Lorem ipsum dolor sit amet, consectetur adipiscing elit"
-      }
-    ]
+    item: []
   }),
-  methods :{
+  methods: {
     getItem() {
-      itemApi.get(1).then((res: any) => {
+      itemApi.get(1).then((res: AxiosResponse) => {
         this.item = res.data;
         console.log(this.item);
       });
-    },
+    }
   },
   created() {
     this.getItem();
