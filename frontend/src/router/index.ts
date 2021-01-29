@@ -1,18 +1,16 @@
 import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
-import Blog from "@/components/Blog.vue";
-import Layout from "@/components/Layout.vue";
-import Shop from "@/components/Shop.vue";
-import Product from "@/components/Product.vue";
-import Post from "@/components/Post.vue";
+
 import Cart from "@/components/Cart.vue";
+import ProfileForm from "@/components/user/ProfileForm.vue";
 
 import Home from "@/views/Home.vue";
-import PostView from "@/views/PostView.vue";
+import Layout from "@/views/Layout.vue";
 import Auction from "@/views/Auction.vue";
-
-import LoginForm from "@/components/user/LoginForm.vue";
-import SignupForm from "@/components/user/SignupForm.vue";
+import PostView from "@/views/PostView.vue";
+import CS from "@/views/CS.vue";
+import Detail from "@/views/Detail.vue";
+import PostSample from "@/views/PostSample.vue";
 
 Vue.use(VueRouter);
 
@@ -27,24 +25,19 @@ const routes: Array<RouteConfig> = [
         name: "Home"
       },
       {
-        path: "/shop",
-        component: Shop,
-        name: "Shop"
+        path: "/detail",
+        component: Detail,
+        name: "Detail"
       },
       {
-        path: "/product",
-        component: Product,
-        name: "Product"
+        path: "/cs",
+        component: CS,
+        name: "CS"
       },
       {
-        path: "/blog",
-        component: Blog,
-        name: "Blog"
-      },
-      {
-        path: "/post",
-        component: Post,
-        name: "Post"
+        path: "/postsample",
+        component: PostSample,
+        name: "PostSample"
       },
       {
         path: "/cart",
@@ -63,24 +56,10 @@ const routes: Array<RouteConfig> = [
       }
     ]
   },
-  // {
-  //   path: "/about",
-  //   name: "About",
-  //   // route level code-splitting
-  //   // this generates a separate chunk (about.[hash].js) for this route
-  //   // which is lazy-loaded when the route is visited.
-  //   component: () =>
-  //     import(/* webpackChunkName: "about" */ "../views/About.vue")
-  // }
-
   // test page
   {
-    path: "/signup",
-    component: SignupForm
-  },
-  {
-    path: "/login",
-    component: LoginForm
+    path: "/profile",
+    component: ProfileForm
   }
 ];
 

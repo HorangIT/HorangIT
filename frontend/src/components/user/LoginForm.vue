@@ -23,6 +23,7 @@
             :append-icon="passwordShow ? 'mdi-eye': 'mdi-eye-off'"
             :type="passwordShow ? 'text' : 'password'"
             @click:append="passwordShow = !passwordShow"
+            @keypress.enter="submit"
             required
           ></v-text-field>
         </v-card-text>
@@ -69,10 +70,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { axiosPOST } from '@/utils/axios'
-// import axios from 'axios'
-
-// const API_BASE_URL = process.env.VUE_APP_API_BASE_URL
 
 export default Vue.extend({
   name: 'Login',
@@ -83,9 +80,9 @@ export default Vue.extend({
     passwordShow: false,
     formHasErrors: false,
     rules: {
-      required: (v: string) => !!v || '해당 칸을 입력해주세요.',
-      email: (v: string) => /.+@.+/.test(v) || '이메일 형식에 맞게 작성해주세요.',
-      password: (v: string) => /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&*+=]).*$/.test(v) || '비밀번호는 문자/숫자/특수문자를 포함한 8~15자리로 입력해주세요.',
+      // required: (v: string) => !!v || '해당 칸을 입력해주세요.',
+      // email: (v: string) => /.+@.+/.test(v) || '이메일 형식에 맞게 작성해주세요.',
+      // password: (v: string) => /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&*+=]).*$/.test(v) || '비밀번호는 문자/숫자/특수문자를 포함한 8~15자리로 입력해주세요.',
     }
   }),
 
@@ -121,29 +118,8 @@ export default Vue.extend({
         if (!this.$refs[f].validate(true)) this.formHasErrors = true
       })
       if (!this.formHasErrors) {
-        // // axios post
-        // const credentials = {
-        //   email: this.email,
-        //   password: this.password,
-        // }
-        // axios.post(`${API_BASE_URL}/account/login/`, credentials)
-        //   .then(response => console.log(response))
-        //   .catch(response => console.log(response))
-        // axios config
-        const address = '/account/signup/';
-        const data = {
-          email: this.email,
-          password: this.password,
-        };
-        const config = undefined;
-        // axios post
-        axiosPOST(
-          address,
-          data,
-          config,
-          (response: any) => console.log(response),
-          (error: any) => console.log(error)
-        );
+        // axios login
+        this.$store.dispatch('userModule/login', this.form)
       }
     },
     goToSignup (): void {

@@ -3,8 +3,9 @@
     <v-app-bar app color="orange accent-3" dark>
       <v-app-bar-nav-icon @click.stop="active = !active" />
       <v-toolbar-title>
-        <a href="/" class="white--text" style="text-decoration: none">
-          <v-img></v-img>&nbsp;호랑IT
+        <a href="/" class="white--text d-flex" style="text-decoration: none">
+          <v-img :src="require('../assets/img/layout/horangit_face.png')" max-width="60"></v-img>
+          <p class="mt-4 ml-3">호랑it</p>
         </a>
       </v-toolbar-title>
       <v-spacer></v-spacer>
@@ -18,7 +19,7 @@
       />
       <v-spacer></v-spacer>
       <!--로그인 유무-->
-      <span v-if="false">
+      <span v-if="login">
         <v-btn icon>
           <v-icon>mdi-account-circle</v-icon>
         </v-btn>
@@ -37,22 +38,25 @@
           </v-list>
         </v-menu>
 
-        <v-btn v-on="on" href="/cart" icon>
+        <v-btn href="/cart" icon>
           <v-badge content="2" value="2" color="green" overlap>
             <v-icon>mdi-cart</v-icon>
           </v-badge>
         </v-btn>
-        <v-btn outlined rounded color="white" class="ml-2">
+        <v-btn outlined rounded color="white" class="ml-2" @click="logout">
           로그아웃
         </v-btn>
       </span>
       <span v-else>
-        <v-btn outlined rounded color="white" @click="openModal">
+        <v-btn outlined rounded color="white" @click="openModal(true)">
           로그인
+        </v-btn>
+        <v-btn outlined rounded color="white" @click="openModal(false)">
+          회원가입
         </v-btn>
       </span>
     </v-app-bar>
-    <div style="height:42px;"></div>
+    <div style="height:64px;"></div>
     <v-expand-transition>
       <v-app-bar
         color="grey lighten-4"
@@ -64,14 +68,14 @@
         <div id="nav" class="d-flex justify-space-around">
           <v-btn text href="/">홈</v-btn>
           <v-btn text href="/auction">경매</v-btn>
-          <v-btn text href="/shop">스토어</v-btn>
           <v-btn text href="#">서비스 소개</v-btn>
-          <v-btn text href="/blog">고객센터</v-btn>
+          <v-btn text href="/cs">고객센터</v-btn>
         </div>
       </v-app-bar>
     </v-expand-transition>
 
-    <LoginModal @close="closeModal" v-if="modal"> </LoginModal>
+    <LoginModal @close="closeModal" v-if="modal" :loginOrSignup="loginOrSignup">
+    </LoginModal>
     <router-view />
 
     <v-footer :padless="true">
@@ -119,16 +123,32 @@ export default Vue.extend({
   data: () => ({
     on: true,
     active: false,
-    login: false,
-    modal: false
+    modal: false,
+    loginOrSignup: true
   }),
-
+  computed: {
+    login() {
+      return this.$store.state.userModule.status.loggedIn;
+    }
+  },
+  created() {
+    console.log(process.env.VUE_APP_JUSO_API_KEY);
+  },
+  watch: {
+    login() {
+      this.modal = false;
+    }
+  },
   methods: {
-    openModal() {
+    openModal(loginOrSignup: boolean) {
+      this.loginOrSignup = loginOrSignup;
       this.modal = true;
     },
     closeModal() {
       this.modal = false;
+    },
+    logout() {
+      this.$store.dispatch("userModule/logout");
     }
   }
 });

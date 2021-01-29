@@ -30,16 +30,13 @@ public class User {
     private String password;
     
     @Column(name = "user_name")
-    private String userName;
+    private String username;
     
     @Column(name = "nickname")
-    private String nickName;
+    private String nickname;
     
     private String address;
     private String phone;
-    
-    @Column(name = "authority_name")
-    private String authorityName;
     
     @ManyToMany
     @JoinTable(
@@ -51,17 +48,15 @@ public class User {
     public User() {
 	}
 
-	public User(Long id, String email, String password, String userName, String nickName, String address, String phone,
-			String authorityName, Set<Authority> authorities) {
+	public User(Long id, String email, String password, String username, String nickname, String address, String phone, Set<Authority> authorities) {
 		super();
 		this.id = id;
 		this.email = email;
 		this.password = password;
-		this.userName = userName;
-		this.nickName = nickName;
+		this.username = username;
+		this.nickname = nickname;
 		this.address = address;
 		this.phone = phone;
-		this.authorityName = authorityName;
 		this.authorities = authorities;
 	}
 }
