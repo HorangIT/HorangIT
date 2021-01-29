@@ -4,6 +4,17 @@
 
 * 실시간 중고경매 서비스
 
+## :star: 참여자
+
+| :books:   | 이름(ㄱㄴㄷ) |
+| --------- | ------------ |
+| Back-End  | 김성진       |
+| Back-End  | 송은주       |
+| Front-End | 이승아       |
+| Back-End  | 이지영       |
+| Front-End | 장재용       |
+| Front-End | 전원표       |
+
 ---
 
 ## :art: 기획의도
