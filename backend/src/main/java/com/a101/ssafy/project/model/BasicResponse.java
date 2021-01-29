@@ -1,5 +1,7 @@
 package com.a101.ssafy.project.model;
 
+import com.google.gson.JsonObject;
+
 import io.swagger.annotations.ApiModelProperty;
 
 public class BasicResponse {

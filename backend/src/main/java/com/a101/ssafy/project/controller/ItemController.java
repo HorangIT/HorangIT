@@ -3,10 +3,14 @@ package com.a101.ssafy.project.controller;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -53,7 +57,12 @@ public class ItemController {
 	@GetMapping("/{id}")
 	@ResponseBody
 	public Object readItem(@PathVariable("id")long id) {
-		Item item = itemService.getItemById(id);
+		JSONObject jobj = itemService.getItemById(id);
+		
+		JSONObject sss = new JSONObject();
+		sss.put("hi", item.getCategory());
+		
+		
 
 		JsonObject jobj = new JsonObject();
 		jobj.addProperty("category", item.getCategory()); //카테고리
@@ -84,16 +93,32 @@ public class ItemController {
 		
 		Collection<Image> hi = item.getImage();
 		if(hi.size()!=0) {
+			JSONArray jaa = new JSONArray();
 			JsonArray jarr = new JsonArray();
 			Iterator<Image> iter = hi.iterator();
-
+			
+			List<String> h = new ArrayList<>();
 			while(iter.hasNext()) {
 				String s = iter.next().getFilePath();
+				h.add(s);
 				jarr.add(s);
 			}
 			jobj.add("filePath", jarr);
+			
+			jaa.add(h);
+			sss.put("object", jaa);
 		}
-		return jobj.toString();
+		
+		ResponseEntity response = null;
+		final BasicResponse result = new BasicResponse();
+		result.status = true;
+		result.data = "조회에 성공!";
+		result.object = sss;
+		
+		System.out.println(result.object);
+		
+		response = new ResponseEntity<>(result, HttpStatus.OK);
+		return response;
 	}
 	
 	@PostMapping
