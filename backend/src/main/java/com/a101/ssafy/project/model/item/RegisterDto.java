@@ -39,10 +39,10 @@ public class RegisterDto {
 	String direct;
 	
 	@ApiModelProperty(required = true)
-	String startDate;
+	String startDateTime;
 	
 	@ApiModelProperty(required = true)
-	String endDate;
+	String endDateTime;
 	
 	@ApiModelProperty(required = true)
 	String category;

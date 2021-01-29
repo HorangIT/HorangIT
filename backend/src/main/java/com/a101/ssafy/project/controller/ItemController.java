@@ -110,8 +110,8 @@ public class ItemController {
 		item.setStartPrice(Integer.parseInt(request.getStartPrice()));
 		item.setHappyPrice(Integer.parseInt(request.getHappyPrice()));
 		item.setStatus(0); //status 는 기본 0으로 설정
-		item.setStartDate(format.parse(request.getStartDate()));
-		item.setEndDate(format.parse(request.getEndDate()));
+		item.setStartDate(format.parse(request.getStartDateTime()));
+		item.setEndDate(format.parse(request.getEndDateTime()));
 		
 		
 		Date date = java.util.Calendar.getInstance().getTime();
