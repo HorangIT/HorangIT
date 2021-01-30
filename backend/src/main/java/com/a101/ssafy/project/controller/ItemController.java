@@ -3,10 +3,14 @@ package com.a101.ssafy.project.controller;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -53,105 +57,39 @@ public class ItemController {
 	@GetMapping("/{id}")
 	@ResponseBody
 	public Object readItem(@PathVariable("id")long id) {
-		Item item = itemService.getItemById(id);
-
-		JsonObject jobj = new JsonObject();
-		jobj.addProperty("category", item.getCategory()); //카테고리
-		jobj.addProperty("description", item.getDescription()); //
-		jobj.addProperty("location", item.getLocation());
-		jobj.addProperty("name", item.getName());
-		jobj.addProperty("direct", item.getDirect());
-		jobj.addProperty("grade", item.getGrade());
-		jobj.addProperty("happyPrice", item.getHappyPrice());
-		jobj.addProperty("startPrice", item.getStartPrice());
+		JSONObject jobj = itemService.getItemById(id);
 		
-		jobj.addProperty("startDate", format.format(item.getStartDate()));
-		jobj.addProperty("endDate", format.format(item.getEndDate()));
+		ResponseEntity response = null;
+		final BasicResponse result = new BasicResponse();
 		
-		jobj.addProperty("createdAt", format.format(item.getCreatedAt()));
-		
-		switch(item.getDirect()) {
-		case 0:
-			jobj.addProperty("direct", "택배거래만 가능해요.");
-			break;
-		case 1:
-			jobj.addProperty("direct", "직거래만 가능해요.");
-			break;
-		case 2:
-			jobj.addProperty("direct", "택배와 직거래 둘 다 가능해요.");
-			break;
+		if(jobj!=null) {
+			result.status = true;
+			result.data = "조회에 성공했습니다.";
+			result.object = jobj;			
+			
+			response = new ResponseEntity<>(result, HttpStatus.OK);
+		}else {
+			result.status = false;
+			result.data = "조회할 데이터가 없습니다.";
+			result.object = null;
+			
+			response = new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
 		}
 		
-		Collection<Image> hi = item.getImage();
-		if(hi.size()!=0) {
-			JsonArray jarr = new JsonArray();
-			Iterator<Image> iter = hi.iterator();
-
-			while(iter.hasNext()) {
-				String s = iter.next().getFilePath();
-				jarr.add(s);
-			}
-			jobj.add("filePath", jarr);
-		}
-		return jobj.toString();
+		return response;
 	}
 	
 	@PostMapping
 	public Object registerItem(RegisterDto request, @RequestParam("files") MultipartFile[] multipartFiles) throws IOException, ParseException {
-
+		BasicResponse result = itemService.registerItem(request, multipartFiles);
 		ResponseEntity response = null;
-		
-		Item item = new Item();
-		BeanUtils.copyProperties(request, item);
-		System.out.println(request.toString()+"리퀘스트");
-		System.out.println(item.toString()+"아이템");
-
-		item.setName(request.getTitle());
-		item.setStartPrice(Integer.parseInt(request.getStartPrice()));
-		item.setHappyPrice(Integer.parseInt(request.getHappyPrice()));
-		item.setStatus(0); //status 는 기본 0으로 설정
-		item.setStartDate(format.parse(request.getStartDate()));
-		item.setEndDate(format.parse(request.getEndDate()));
-		
-		
-		Date date = java.util.Calendar.getInstance().getTime();
-		
-		item.setCreatedAt(date);
-		item.setUpdatedAt(date);
-//		item.setCreatedAt(format.);
-		
-		//direct에 대한 처리 필요
-		item.setDirect(Integer.parseInt(request.getDirect()));
-		item.setGrade(request.getGrade().charAt(0));
-		/////////////
-		
-//		item.setUserId(Integer.parseInt(request.getUserId()));
-		//이후 date 설정 해야함!
-		System.out.println(item.toString()+"다 만든이후");
-
-		final BasicResponse result = new BasicResponse();
-		
-		if(multipartFiles!=null) {
-			for(int i=0; i<multipartFiles.length; ++i) {
-				String url = s3Service.upload(multipartFiles[i]);
-				Image image = new Image(item, url);
-				
-				item.addImage(image);
-			}			
-		}
-		if(itemService.registerItem(item)) {
-			result.status = true;
-			result.data = "물품 등록에 성공했습니다.";
-			result.object = null;
+		if(result.status==true) {
 			response = new ResponseEntity<>(result, HttpStatus.OK);
-			System.out.println("등록 성공");
-		}else {
-			result.status = false;
-			result.data = "물품 등록에 실패했습니다.";
-			result.object = null;
-			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);			
-			System.out.println("등록 실패");
 		}
+		else {
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+		}
+
 		return response;
 	}
 	
