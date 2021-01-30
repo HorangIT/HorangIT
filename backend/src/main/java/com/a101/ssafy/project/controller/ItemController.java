@@ -81,60 +81,15 @@ public class ItemController {
 	
 	@PostMapping
 	public Object registerItem(RegisterDto request, @RequestParam("files") MultipartFile[] multipartFiles) throws IOException, ParseException {
-
+		BasicResponse result = itemService.registerItem(request, multipartFiles);
 		ResponseEntity response = null;
-		
-		Item item = new Item();
-		BeanUtils.copyProperties(request, item);
-		System.out.println(request.toString()+"리퀘스트");
-		System.out.println(item.toString()+"아이템");
-
-		item.setName(request.getTitle());
-		item.setStartPrice(Integer.parseInt(request.getStartPrice()));
-		item.setHappyPrice(Integer.parseInt(request.getHappyPrice()));
-		item.setStatus(0); //status 는 기본 0으로 설정
-		item.setStartDate(format.parse(request.getStartDateTime()));
-		item.setEndDate(format.parse(request.getEndDateTime()));
-		
-		
-		Date date = java.util.Calendar.getInstance().getTime();
-		
-		item.setCreatedAt(date);
-		item.setUpdatedAt(date);
-//		item.setCreatedAt(format.);
-		
-		//direct에 대한 처리 필요
-		item.setDirect(Integer.parseInt(request.getDirect()));
-		item.setGrade(request.getGrade().charAt(0));
-		/////////////
-		
-//		item.setUserId(Integer.parseInt(request.getUserId()));
-		//이후 date 설정 해야함!
-		System.out.println(item.toString()+"다 만든이후");
-
-		final BasicResponse result = new BasicResponse();
-		
-		if(multipartFiles!=null) {
-			for(int i=0; i<multipartFiles.length; ++i) {
-				String url = s3Service.upload(multipartFiles[i]);
-				Image image = new Image(item, url);
-				
-				item.addImage(image);
-			}			
-		}
-		if(itemService.registerItem(item)) {
-			result.status = true;
-			result.data = "물품 등록에 성공했습니다.";
-			result.object = null;
+		if(result.status==true) {
 			response = new ResponseEntity<>(result, HttpStatus.OK);
-			System.out.println("등록 성공");
-		}else {
-			result.status = false;
-			result.data = "물품 등록에 실패했습니다.";
-			result.object = null;
-			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);			
-			System.out.println("등록 실패");
 		}
+		else {
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+		}
+
 		return response;
 	}
 	
