@@ -6,16 +6,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -126,7 +123,6 @@ public class ItemServiceImpl implements ItemService{
 			
 			Collection<Image> img = item.getImage();
 			if(img.size()!=0) {
-				JSONArray jarr = new JSONArray();
 				Iterator<Image> iter = img.iterator();
 				
 				List<String> list = new ArrayList<>();
@@ -135,8 +131,7 @@ public class ItemServiceImpl implements ItemService{
 					list.add(s);
 				}
 				
-				jarr.add(list);
-				jobj.put("filePath", jarr);
+				jobj.put("filePath", list);
 			}
 		}
 		
