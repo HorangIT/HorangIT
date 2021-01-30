@@ -23,7 +23,7 @@ import lombok.ToString;
 public class Image {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+	private Long id;
 	
 	@Column(columnDefinition = "TEXT")
 	private String filePath;

@@ -59,65 +59,23 @@ public class ItemController {
 	public Object readItem(@PathVariable("id")long id) {
 		JSONObject jobj = itemService.getItemById(id);
 		
-		JSONObject sss = new JSONObject();
-		sss.put("hi", item.getCategory());
-		
-		
-
-		JsonObject jobj = new JsonObject();
-		jobj.addProperty("category", item.getCategory()); //카테고리
-		jobj.addProperty("description", item.getDescription()); //
-		jobj.addProperty("location", item.getLocation());
-		jobj.addProperty("name", item.getName());
-		jobj.addProperty("direct", item.getDirect());
-		jobj.addProperty("grade", item.getGrade());
-		jobj.addProperty("happyPrice", item.getHappyPrice());
-		jobj.addProperty("startPrice", item.getStartPrice());
-		
-		jobj.addProperty("startDate", format.format(item.getStartDate()));
-		jobj.addProperty("endDate", format.format(item.getEndDate()));
-		
-		jobj.addProperty("createdAt", format.format(item.getCreatedAt()));
-		
-		switch(item.getDirect()) {
-		case 0:
-			jobj.addProperty("direct", "택배거래만 가능해요.");
-			break;
-		case 1:
-			jobj.addProperty("direct", "직거래만 가능해요.");
-			break;
-		case 2:
-			jobj.addProperty("direct", "택배와 직거래 둘 다 가능해요.");
-			break;
-		}
-		
-		Collection<Image> hi = item.getImage();
-		if(hi.size()!=0) {
-			JSONArray jaa = new JSONArray();
-			JsonArray jarr = new JsonArray();
-			Iterator<Image> iter = hi.iterator();
-			
-			List<String> h = new ArrayList<>();
-			while(iter.hasNext()) {
-				String s = iter.next().getFilePath();
-				h.add(s);
-				jarr.add(s);
-			}
-			jobj.add("filePath", jarr);
-			
-			jaa.add(h);
-			sss.put("object", jaa);
-		}
-		
 		ResponseEntity response = null;
 		final BasicResponse result = new BasicResponse();
-		result.status = true;
-		result.data = "조회에 성공!";
-		result.object = sss;
 		
-		System.out.println(result.object);
+		if(jobj!=null) {
+			result.status = true;
+			result.data = "조회에 성공했습니다.";
+			result.object = jobj;			
+			
+			response = new ResponseEntity<>(result, HttpStatus.OK);
+		}else {
+			result.status = false;
+			result.data = "조회할 데이터가 없습니다.";
+			result.object = null;
+			
+			response = new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+		}
 		
-		response = new ResponseEntity<>(result, HttpStatus.OK);
 		return response;
 	}
 	

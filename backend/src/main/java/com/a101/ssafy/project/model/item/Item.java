@@ -31,11 +31,11 @@ import lombok.ToString;
 public class Item {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+	private Long id;
 	
 	@Column
 	//나중에 수정 (buyer id)
-	private long userId;
+	private Long userId;
 	
 	private String name;
 	private String category;
