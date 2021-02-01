@@ -78,7 +78,6 @@ public class ItemController {
 		
 		return response;
 	}
-	
 	@PostMapping
 	public Object registerItem(RegisterDto request, @RequestParam("files") MultipartFile[] multipartFiles) throws IOException, ParseException {
 		BasicResponse result = itemService.registerItem(request, multipartFiles);
