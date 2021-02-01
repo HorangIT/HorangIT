@@ -20,13 +20,18 @@ import com.a101.ssafy.project.model.BasicResponse;
 import com.a101.ssafy.project.model.image.Image;
 import com.a101.ssafy.project.model.item.Item;
 import com.a101.ssafy.project.model.item.RegisterDto;
+import com.a101.ssafy.project.redis.RedisUtil;
 import com.a101.ssafy.project.repository.ItemRepository;
 
 @Service
 public class ItemServiceImpl implements ItemService{
 	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm"); //날짜 맞출 포맷
+	final String ITEM_NAME = "item";
 	@Autowired
 	ItemRepository itemRepository;
+	
+	@Autowired
+	RedisUtil redisUtil;
 	
 	@Autowired
 	S3Service s3Service;
@@ -76,11 +81,17 @@ public class ItemServiceImpl implements ItemService{
 			}
 		}
 		
-		itemRepository.save(item);
+		item = itemRepository.save(item);
 		System.out.println("등록 성공");
 		result.status = true;
 		result.data = "데이터 저장에 성공했습니다.";
 		result.object = null;
+		
+		long startTimeToEpochTime = item.getStartDate().getTime();
+		long endTimeToEpochTime = item.getEndDate().getTime(); 
+		
+		long remainingTime = (endTimeToEpochTime - startTimeToEpochTime)/1000;
+		redisUtil.setDataExpire(ITEM_NAME+item.getId(), "-1", remainingTime);
 		
 		return result;
 	}
@@ -93,6 +104,7 @@ public class ItemServiceImpl implements ItemService{
 		if(optional.isPresent()) {
 			Item item = optional.get();
 			
+			System.out.println(ITEM_NAME+item.getId());
 			jobj = new JSONObject();
 			
 			jobj.put("category", item.getCategory()); //카테고리
