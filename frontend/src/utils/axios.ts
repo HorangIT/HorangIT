@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, AxiosResponse } from "axios";
 
-const authHeader = function (): Record<string, string>{
+const authHeader = function(): Record<string, string> {
   const user: Record<string, any> = JSON.parse(localStorage.getItem('user') || '{}');
   if (Object.keys(user).length) {
     const token = user.object.token;
@@ -53,7 +53,13 @@ export const itemApi = {
       }
     });
   },
-  get(id: number): any {
+  getItem(id: number): any {
     return request.get(`/item/${id}`);
+  }
+};
+
+export const auctionApi = {
+  bidding (data: any): any {
+    return request.post("/auction", data);
   }
 };

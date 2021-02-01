@@ -4,7 +4,11 @@
       <v-app-bar-nav-icon @click.stop="active = !active" />
       <v-toolbar-title>
         <a href="/" class="white--text d-flex" style="text-decoration: none">
-          <v-img :src="require('../assets/img/layout/horangit_face.png')" max-width="60"></v-img>
+          <v-img
+            :src="require('../assets/img/layout/horangit_face.png')"
+            max-width="60"
+          >
+          </v-img>
           <p class="mt-4 ml-3">호랑it</p>
         </a>
       </v-toolbar-title>
