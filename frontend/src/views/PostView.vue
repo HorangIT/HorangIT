@@ -294,7 +294,7 @@ import moment from 'moment'
 export default Vue.extend({
     name: "PostView",
     data: () => ({
-        uid:"dummy",
+        uid:"",
         title: "",
         description: "",
         category: "",
@@ -335,6 +335,8 @@ export default Vue.extend({
       this.startDate = this.todayDate = today.format('YYYY-MM-DD');
       this.startTime = this.todayTime = today.format('HH:mm');
       this.startDateTime = this.startDate + ' ' + this.startTime;
+    
+      this.uid = this.$store.state.userModule.user.object.user.nickname;
     },
     methods: {
         async writePost(){

@@ -61,7 +61,7 @@
             </div>
             <v-divider></v-divider>
             <p class="py-4 ma-0">나의 응찰 / 전체 응찰 :</p>
-            <v-btn class="primary white--text block large" outlined tile dense>
+            <v-btn class="primary white--text block large" outlined tile dense :disabled="true">
               경매 참여하기
             </v-btn>
             <v-btn class="ml-4" outlined tile @click="!active">
@@ -161,6 +161,7 @@ export default Vue.extend({
   },
   created() {
     this.getItem();
+    console.log(this.getItem());
   }
 });
 </script>
