@@ -30,12 +30,12 @@ export default Vue.extend({
   }),
 
   mounted() {
-    this.arrayEvents = [...Array(6)].map(() => {
-      const day = Math.floor(Math.random() * 30)
-      const d = new Date()
-      d.setDate(day)
-      return d.toISOString().substr(0, 10)
-    })
+    // this.arrayEvents = [...Array(6)].map(() => {
+    //   const day = Math.floor(Math.random() * 30)
+    //   const d = new Date()
+    //   d.setDate(day)
+    //   return d.toISOString().substr(0, 10)
+    // })
     for (let plus = 0; plus < 30; plus++) {
       const now = new Date();
       const future = new Date(now.setDate(now.getDate() + plus));
