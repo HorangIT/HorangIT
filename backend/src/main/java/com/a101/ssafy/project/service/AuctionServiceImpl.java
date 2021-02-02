@@ -12,6 +12,8 @@ import com.a101.ssafy.project.redis.RedisUtil;
 public class AuctionServiceImpl implements AuctionService{
 	final String ITEM_NAME = "item";
 	final String ITEM_EXPIRED = "Expired";
+	final String ITEM_START_PRICE = "Start";
+	final String ITEM_HAPPY_PRICE = "Happy";
 	@Autowired
 	RedisUtil redisUtil;
 	
@@ -41,7 +43,7 @@ public class AuctionServiceImpl implements AuctionService{
 			double temp = Math.pow(10, length);
 			
 			return (long)temp;
-		}else if('5'<firstChar){
+		}else if('5'<=firstChar){
 			double temp = Math.pow(10, length);
 			
 			return (long)(5*temp);
@@ -52,15 +54,28 @@ public class AuctionServiceImpl implements AuctionService{
 
 	@Override
 	public JSONObject getPriceAfterAuction(String oldPrice, String itemId) {
+		if("-1".equals(oldPrice)) {
+			oldPrice = redisUtil.getData(ITEM_NAME+itemId+ITEM_START_PRICE);
+		}
+		
 		JSONObject jobj = new JSONObject();
 		long newPrice = getAuctionUnit(oldPrice);
 		newPrice += Long.parseLong(oldPrice);
+		
+		//happy price 보다 값이 커지는 경우
+		long happyPrice = Long.parseLong(redisUtil.getData(ITEM_NAME+itemId+ITEM_HAPPY_PRICE));
+		if(happyPrice < newPrice) {
+			newPrice = happyPrice;
+			jobj.put("test", "응찰 가격을 넘어섰네요  이제 사야해요");
+		}
+//		String now = redisUtil.getData(ITEM_NAME+itemId);
+		
 		
 		redisUtil.setData(ITEM_NAME+itemId, newPrice+""); //레디스 값 갱신
 		
 		jobj.put("nowPrice", newPrice);
 		
-		return jobj;		
+		return jobj;
 	}
 
 }

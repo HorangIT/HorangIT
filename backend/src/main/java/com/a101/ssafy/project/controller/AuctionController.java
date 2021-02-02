@@ -46,11 +46,14 @@ public class AuctionController {
 			
 			responseEntity = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
  		}else { //응찰 시도에 성공
-			JSONObject nowPrice = auctionService.getPriceAfterAuction(getCurrentAuctionValue, auctionInputDto.getItemId());
+			JSONObject newPrice = auctionService.getPriceAfterAuction(getCurrentAuctionValue, auctionInputDto.getItemId());
 			result = new BasicResponse();
 			result.status = true;
 			result.data = "응찰에 성공하셨습니다.";
-			result.object = nowPrice; //응찰 성공하고 나서 상품의 가격을 돌려줌
+			
+			result.object = newPrice; //응찰 성공하고 나서 상품의 가격을 돌려줌
+
+			responseEntity = new ResponseEntity<>(result, HttpStatus.OK);
 		}
 		
 		return responseEntity;
