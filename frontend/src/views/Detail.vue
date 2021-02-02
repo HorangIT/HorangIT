@@ -43,65 +43,39 @@
               </div>
             </v-sheet>
             <v-divider></v-divider>
-            <h1 class="d-inline-flex mt-1">{{ item.startPrice }}원</h1>
-            <v-spacer></v-spacer>
-            <p class="subtitle-1">{{ item.description }}</p>
-            <div class="d-flex">
-              <div style="width:50%;">
-                <p class="subtitle-1">
-                  시작가(응찰단위): {{ item.startPrice }}원
-                </p>
-                <p class="subtitle-1">즉시낙찰가: {{ item.happyPrice }}원</p>
-              </div>
-              <div>
-                <p class="subtitle-1">판매지역: {{ item.location }}</p>
-                <p class="subtitle-1">상품등급: {{ item.grade }}</p>
-                <p class="subtitle-1">배송유형: {{ item.direct }}</p>
-              </div>
-            </div>
+            <h1 class="d-inline-flex mt-1">시작가 : {{ item.startPrice }}원</h1>
+            <p class="my-3">{{ item.description }}</p> 
+            <div class="mt-2">
+              <p class="subtitle-1">지역: {{ item.location }}</p>
+              <p class="subtitle-1">등급: {{ item.grade }}</p>
+              <p class="subtitle-1">배송: {{ item.direct }}</p>
+            </div>        
             <v-divider></v-divider>
             <p class="py-4 ma-0">나의 응찰 / 전체 응찰 :</p>
-            <v-sheet
-              color="white"
-              elevation="5"
-              height="10vh"
-              width="100%"
-              class="d-flex my-3 align-center justify-end"
-            >
-              <h1 class="mr-3">{{ nowPrice }}</h1>
-              <div class="d-flex flex-column mr-1">
-                <v-btn outlined text @click="plusPrice">
-                  <v-icon dark>mdi-plus</v-icon>
-                </v-btn>
-                <v-btn outlined text @click="minusPrice">
-                  <v-icon dark>mdi-minus</v-icon>
-                </v-btn>
-              </div>
-            </v-sheet>
+            <div>
+              <v-btn
+                class="primary white--text"
+                outlined
+                tile
+                width="50%"
+                height="10vh"
+                @click="bid"
+              >
+                <h2>{{nowPrice}}원<br/>응찰하기</h2>
+              </v-btn>
+              <v-btn 
+                class="orange white--text"
+                outlined 
+                tile
+                width="50%" 
+                height="10vh"
+                @click="flex"
+              >
+                <h2>{{item.happyPrice}}원<br/>FLEX</h2>
+              </v-btn>
+            </div>
             <v-divider></v-divider>
             <BiddingLog></BiddingLog>
-            <v-btn
-              class="primary white--text block large"
-              outlined
-              tile
-              dense
-              @click="bid"
-            >
-              경매 참여하기
-            </v-btn>
-            <v-btn
-              class="warning white--text block large ml-2"
-              outlined
-              tile
-              dense
-              @click="flex"
-            >
-              <strong>FLEX!</strong>
-            </v-btn>
-            <v-btn class="ml-4" outlined tile @click="!active">
-              찜하기
-              <v-icon>{{ active ? "mdi-heart" : "mdi-heart-outline" }}</v-icon>
-            </v-btn>
           </div>
         </div>
       </div>
@@ -186,62 +160,43 @@ export default Vue.extend({
     rating: 4.5,
     active: false,
     item: Object,
-    startPrice: 0,
+    itemId: 0,
     nowPrice: 0,
-    happyPrice: 0,
-    bidUnit: 500,
-    bidding: {
-      userId: "",
-      itemID: "임의",
-      price: ""
-    }
   }),
   methods: {
     getItem() {
       itemApi.getItem(1).then((res: AxiosResponse) => {
         this.item = res.data.object;
-        this.startPrice = res.data.object.startPrice;
-        this.nowPrice = res.data.object.startPrice;
-        this.happyPrice = res.data.object.happyPrice;
+        this.itemId = res.data.object.itemId;
+        this.nowPrice = res.data.object.nowPrice;
         console.log(this.item);
       });
     },
     bid() {
       const user = JSON.parse(localStorage.getItem("user") || "{}");
-      this.bidding.userId = String(user.object.user.id);
-      this.bidding.price = String(this.nowPrice);
-      console.log(this.bidding);
-      auctionApi.bidding(this.bidding).then((res: AxiosResponse) => {
-        console.log(this.bidding);
-        console.log(res);
-      });
-    },
-    flex () {
-      const user = JSON.parse(localStorage.getItem("user") || "{}");
-      const data = {
+      const bidInfo = {
         userId: String(user.object.user.id),
-        itemId: this.bidding.itemID,
+        itemId: String(this.itemId),
+        nowPrice: String(this.nowPrice)
       }
-      auctionApi.flex(data).then((res: AxiosResponse) => {
-        console.log(data);
-        console.log(res);
+      console.log(bidInfo);
+
+      auctionApi.bidding(bidInfo).then((res: AxiosResponse) => {
+        console.log(res.data.data);
+        this.nowPrice = res.data.object.nowPrice;
       });
     },
-    plusPrice() {
-      const maximum = this.happyPrice;
-      if (this.nowPrice + this.bidUnit > maximum) {
-        alert("그만 올려!");
-      } else {
-        this.nowPrice = this.nowPrice + this.bidUnit;
+    flex() {
+      const user = JSON.parse(localStorage.getItem("user") || "{}");
+      const flexInfo = {
+        userId: "",
+        itemId: ""
       }
-    },
-    minusPrice() {
-      const minimum = this.startPrice;
-      if (this.nowPrice - this.bidUnit < minimum) {
-        alert("그만 내려!");
-      } else {
-        this.nowPrice = this.nowPrice - this.bidUnit;
-      }
+      flexInfo.userId = String(user.object.user.id);
+      flexInfo.itemId = String(this.itemId);
+      auctionApi.flex(flexInfo).then((res: AxiosResponse) => {
+        console.log(res);
+      });
     }
   },
   created() {
