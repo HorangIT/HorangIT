@@ -6,6 +6,7 @@ import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.a101.ssafy.project.model.BasicResponse;
 import com.a101.ssafy.project.redis.RedisUtil;
 
 @Service
@@ -67,6 +68,7 @@ public class AuctionServiceImpl implements AuctionService{
 		if(happyPrice < newPrice) {
 			newPrice = happyPrice;
 			jobj.put("test", "응찰 가격을 넘어섰네요  이제 사야해요");
+//			done();
 		}
 //		String now = redisUtil.getData(ITEM_NAME+itemId);
 		
@@ -76,6 +78,28 @@ public class AuctionServiceImpl implements AuctionService{
 		jobj.put("nowPrice", newPrice);
 		
 		return jobj;
+	}
+
+	
+	@Override
+	public BasicResponse flex(String itemId, String userId) {
+		BasicResponse result = new BasicResponse();
+		
+		result.status = true;
+		result.data = "flex에 성공하셨습니다!";
+		
+		redisUtil.setData(ITEM_NAME+itemId, redisUtil.getData(ITEM_NAME+itemId+ITEM_HAPPY_PRICE));
+		
+//		done(itemId, userId);
+		
+		return result;
+	}
+	
+	public void done() {
+		System.out.println("결제하고");
+		System.out.println("채팅창 서로 만들어주고(없으면안만듬)");
+		System.out.println("영수증 발행하고");
+		System.out.println("레디스 값 지우고(happy price/start price/ expired되지 않았다면 expired 지우고");	
 	}
 
 }
