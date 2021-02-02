@@ -26,7 +26,7 @@ export default Vue.extend({
     dates: new Array<Dates>(),
     arrayEvents: null,
     date1: new Date().toISOString().substr(0, 10),
-    date2: new Date().toISOString().substr(0, 10),
+    date2: new Date().toISOString().substr(0, 10)
   }),
 
   mounted() {

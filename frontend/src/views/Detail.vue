@@ -61,6 +61,34 @@
             </div>
             <v-divider></v-divider>
             <p class="py-4 ma-0">나의 응찰 / 전체 응찰 :</p>
+<<<<<<< frontend/src/views/Detail.vue
+            <v-sheet
+              color="white"
+              elevation="5"
+              height="10vh"
+              width="100%"
+              class="d-flex my-3 align-center justify-end"
+            >
+              <h1 class="mr-3">{{ nowPrice }}</h1>
+              <div class="d-flex flex-column mr-1">
+                <v-btn outlined text @click="plusPrice">
+                  <v-icon dark>mdi-plus</v-icon>
+                </v-btn>
+                <v-btn outlined text @click="minusPrice">
+                  <v-icon dark>mdi-minus</v-icon>
+                </v-btn>
+              </div>
+            </v-sheet>
+            <v-divider></v-divider>
+            <BiddingLog></BiddingLog>
+            <v-btn
+              class="primary white--text block large"
+              outlined
+              tile
+              dense
+              @click="bid"
+            >
+=======
             <div class="d-flex">
               <v-text-field
                 label="Outlined"
@@ -74,6 +102,7 @@
             <BiddingLog></BiddingLog>
             <v-btn 
               class="primary white--text block large" outlined tile dense @click="bid">
+>>>>>>> frontend/src/views/Detail.vue
               경매 참여하기
             </v-btn>
             <v-btn class="ml-4" outlined tile @click="!active">
@@ -164,7 +193,10 @@ export default Vue.extend({
     rating: 4.5,
     active: false,
     item: Object,
-    nowPrice: Number,
+    startPrice: 0,
+    nowPrice: 0,
+    happyPrice: 0,
+    bidUnit: 500,
     bidding: {
       userId: "",
       itemID: "임의",
@@ -175,7 +207,9 @@ export default Vue.extend({
     getItem() {
       itemApi.getItem(1).then((res: AxiosResponse) => {
         this.item = res.data.object;
+        this.startPrice = res.data.object.startPrice;
         this.nowPrice = res.data.object.startPrice;
+        this.happyPrice = res.data.object.happyPrice;
         console.log(this.item);
       });
     },
@@ -188,6 +222,22 @@ export default Vue.extend({
         console.log(this.bidding);
         console.log(res);
       });
+    },
+    plusPrice() {
+      const maximum = this.happyPrice;
+      if (this.nowPrice + this.bidUnit > maximum) {
+        alert("그만 올려!");
+      } else {
+        this.nowPrice = this.nowPrice + this.bidUnit;
+      }
+    },
+    minusPrice() {
+      const minimum = this.startPrice;
+      if (this.nowPrice - this.bidUnit < minimum) {
+        alert("그만 내려!");
+      } else {
+        this.nowPrice = this.nowPrice - this.bidUnit;
+      }
     }
   },
   created() {
