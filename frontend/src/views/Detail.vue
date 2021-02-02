@@ -61,7 +61,6 @@
             </div>
             <v-divider></v-divider>
             <p class="py-4 ma-0">나의 응찰 / 전체 응찰 :</p>
-<<<<<<< frontend/src/views/Detail.vue
             <v-sheet
               color="white"
               elevation="5"
@@ -88,21 +87,6 @@
               dense
               @click="bid"
             >
-=======
-            <div class="d-flex">
-              <v-text-field
-                label="Outlined"
-                single-line
-                outlined
-              ></v-text-field>
-              <v-btn outlined tile>^</v-btn>
-              <v-btn outlined tile>v</v-btn>
-            </div>
-            <v-divider></v-divider>
-            <BiddingLog></BiddingLog>
-            <v-btn 
-              class="primary white--text block large" outlined tile dense @click="bid">
->>>>>>> frontend/src/views/Detail.vue
               경매 참여하기
             </v-btn>
             <v-btn class="ml-4" outlined tile @click="!active">
