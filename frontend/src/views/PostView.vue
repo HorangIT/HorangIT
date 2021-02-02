@@ -272,154 +272,109 @@ import { itemApi } from "../utils/axios";
 import moment from 'moment'
 
 export default Vue.extend({
-    name: "PostView",
-    data: () => ({
-        uid:"",
-        title: "",
-        description: "",
-        category: "",
-        location: "",
-        startPrice: "",
-        happyPrice: "",
-        grade: "",
-        direct: "",
-        startDate: "",
-        endDate: "",
-        files: [],
-        filesPreview: [],
-        uploadImageIndex: 0,
+  name: "PostView",
+  data: () => ({
+    uid:"dummy",
+    title: "",
+    description: "",
+    category: "",
+    location: "",
+    startPrice: "",
+    happyPrice: "",
+    grade: "",
+    direct: "",
+    startDate: "",
+    endDate: "",
+    files: [],
+    filesPreview: [],
+    uploadImageIndex: 0,
 
-        categories: ["의류", "전자기기"],
+    categories: ["의류", "전자기기"],
 
-        startDateCalender: false,
-        startTime: "",
-        startTimeDialog: false,
+    startDateCalender: false,
+    startTime: "",
+    startTimeDialog: false,
 
-        endDateCalender: false,
-        endTime: "",
-        endTimeDialog: false,
+    endDateCalender: false,
+    endTime: "",
+    endTimeDialog: false,
 
-        todayDate: "",
-        todayTime: "",
+    todayDate: "",
+    todayTime: "",
 
-        startDateTime: "",
-        endDateTime: "",
-        rules: {
-           price: (v:any) => !!(v || '').match(/^[1-9][0-9]*$/) ||
-          '잘못된 입력입니다. 가격을 입력해주세요.'
-        },
-    }),
-    mounted() {
-      const today = moment();
-    
-      this.startDate = this.todayDate = today.format('YYYY-MM-DD');
-      this.startTime = this.todayTime = today.format('HH:mm');
-      this.startDateTime = this.startDate + ' ' + this.startTime;
-    
-      this.uid = this.$store.state.userModule.user.object.user.nickname;
-    },
-    methods: {
-        async writePost(){
-          const {
-            uid,
-            title, 
-            description,
-            category,
-            location,
-            startPrice,
-            happyPrice,
-            grade,
-            direct,
-            startDateTime,
-            endDateTime, 
-            files, 
-            } = this;
+    startDateTime: "",
+    endDateTime: "",
+    rules: {
+        price: (v:any) => !!(v || '').match(/^[1-9][0-9]*$/) ||
+      '잘못된 입력입니다. 가격을 입력해주세요.'
+    }
+  }),
+  mounted() {
+    const today = moment();
+  
+    this.startDate = this.todayDate = today.format('YYYY-MM-DD');
+    this.startTime = this.todayTime = today.format('HH:mm');
+    this.startDateTime = this.startDate + ' ' + this.startTime;
+  },
+  methods: {
+      async writePost(){
+        const {
+          uid,
+          title, 
+          description,
+          category,
+          location,
+          startPrice,
+          happyPrice,
+          grade,
+          direct,
+          startDateTime,
+          endDateTime, 
+          files, 
+          } = this;
 
-            if (!title) alert('제목을 입력해주세요.');
-            else if (!description) alert('내용을 입력해주세요.');
-            else if (!category) alert('카테고리를 선택해주세요.');
-            else if (!location) alert('위치를 입력해주세요.');
-            else if (!startPrice) alert('경매시작가를 입력해주세요.');
-            else if (!happyPrice) alert('즉시구매가를 입력해주세요.');
-            else if (!startPrice.match(/^[1-9][0-9]*$/)) alert('경매시작가를 다시 입력해주세요.');
-            else if (!happyPrice.match(/^[1-9][0-9]*$/)) alert('즉시구매가를 다시 입력해주세요.');
-            else if (Number(startPrice) >= Number(happyPrice)) alert('경매시작가는 즉시구매가보다 작아야합니다.');
-            else if (!grade) alert('상품등급을 입력해주세요.');
-            else if (!endDateTime) alert('경매종료일을 입력해주세요.');
-            else if (!files) alert('사진을 입력해주세요.');
-            else {
-              const formData = new FormData();
+          if (!title) alert('제목을 입력해주세요.');
+          else if (!description) alert('내용을 입력해주세요.');
+          else if (!category) alert('카테고리를 선택해주세요.');
+          else if (!location) alert('위치를 입력해주세요.');
+          else if (!startPrice) alert('경매시작가를 입력해주세요.');
+          else if (!happyPrice) alert('즉시구매가를 입력해주세요.');
+          else if (!startPrice.match(/^[1-9][0-9]*$/)) alert('경매시작가를 다시 입력해주세요.');
+          else if (!happyPrice.match(/^[1-9][0-9]*$/)) alert('즉시구매가를 다시 입력해주세요.');
+          else if (Number(startPrice) >= Number(happyPrice)) alert('경매시작가는 즉시구매가보다 작아야합니다.');
+          else if (!grade) alert('상품등급을 입력해주세요.');
+          else if (!endDateTime) alert('경매종료일을 입력해주세요.');
+          else if (!files) alert('사진을 입력해주세요.');
+          else {
+            const formData = new FormData();
 
-              formData.append("title", title);
-              formData.append("description", description);
-              formData.append("category", category);
-              formData.append("location", location);
-              formData.append("startPrice", startPrice);
-              formData.append("happyPrice", happyPrice);
-              formData.append("grade", grade);
-              formData.append("direct", direct);
-              formData.append("startDateTime", startDateTime);
-              formData.append("endDateTime", endDateTime);
-              
-              // user id, image
-              formData.append("uid", uid);
+            formData.append("title", title);
+            formData.append("description", description);
+            formData.append("category", category);
+            formData.append("location", location);
+            formData.append("startPrice", startPrice);
+            formData.append("happyPrice", happyPrice);
+            formData.append("grade", grade);
+            formData.append("direct", direct);
+            formData.append("startDateTime", startDateTime);
+            formData.append("endDateTime", endDateTime);
+            
+            // user id, image
+            formData.append("uid", uid);
 
-              files.forEach(el => {
-                formData.append("files", (el as any).file)
-              });
+            files.forEach(el => {
+              formData.append("files", (el as any).file)
+            });
 
-              const {data} = await itemApi.item(formData);
-              
-              // state true?
-              console.log(data);
-              if (data.status){
-                alert("업로드가 완료되었습니다.");
-                this.$router.push("/");
-              } else {
-                alert("업로드에 실패하였습니다.");
-              }
-            }
-        },
-      
-      imageUpload(){
-        console.log(this.$refs.files);
-        console.log((this.$refs.files as any).files);
-
-        // 배열을 생성하는데
-        // 실제파일을 관리하는 부분, 이미지 preview를 관리하는 부분, index까지 관리하는 배열을 제작
-        let num = -1;
-        for (let i = 0; i < (this.$refs.files as any).files.length; i++) {
-          (this.files as any) = [
-            ...this.files,
-            {
-              // 실제 파일
-              file: (this.$refs.files as any).files[i],
-              // 이미지 프리뷰
-              preview: URL.createObjectURL((this.$refs.files as any).files[i]),
-              number: i
-            }
-          ];
-          num = i;
-        }
-        this.uploadImageIndex = num + 1;
-        //console.log(this.files);
-      },
-
-      imageAddUpload(){
-        console.log(this.$refs.files);
-        console.log((this.$refs.files as any).files);
-        // 배열을 생성하는데
-        // 실제파일을 관리하는 부분, 이미지 preview를 관리하는 부분, index까지 관리하는 배열을 제작
-        let num = -1;
-        for (let i = 0; i < (this.$refs.files as any).files.length; i++) {
-          (this.files as any) = [
-            ...this.files,
-            {
-              // 실제 파일
-              file: (this.$refs.files as any).files[i],
-              // 이미지 프리뷰
-              preview: URL.createObjectURL((this.$refs.files as any).files[i]),
-              number: i + this.uploadImageIndex
+            const {data} = await itemApi.item(formData);
+            
+            // state true?
+            console.log(data);
+            if (data.status){
+              alert("업로드가 완료되었습니다.");
+              this.$router.push("/");
+            } else {
+              alert("업로드에 실패하였습니다.");
             }
           }
       },
