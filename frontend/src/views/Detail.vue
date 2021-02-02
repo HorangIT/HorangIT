@@ -70,6 +70,8 @@
               <v-btn outlined tile>^</v-btn>
               <v-btn outlined tile>v</v-btn>
             </div>
+            <v-divider></v-divider>
+            <BiddingLog></BiddingLog>
             <v-btn 
               class="primary white--text block large" outlined tile dense @click="bid">
               경매 참여하기
@@ -144,6 +146,7 @@ import Vue from "vue";
 import ItemList from "../components/ItemList.vue";
 import Chat from "../components/detail/Chat.vue";
 import Review from "../components/detail/Review.vue";
+import BiddingLog from "../components/detail/BiddingLog.vue";
 import { itemApi, auctionApi } from "../utils/axios";
 import { AxiosResponse } from "axios";
 
@@ -153,7 +156,8 @@ export default Vue.extend({
   components: {
     ItemList,
     Chat,
-    Review
+    Review,
+    BiddingLog,
   },
 
   data: () => ({
