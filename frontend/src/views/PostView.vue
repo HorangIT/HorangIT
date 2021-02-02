@@ -46,6 +46,7 @@
                 filled
                 outlined
                 :rules=[rules.price]
+                :blur="startPriceCheck()"
                 v-model="startPrice"
               ></v-text-field>
               <v-text-field
@@ -53,6 +54,7 @@
                 filled
                 outlined
                 :rules=[rules.price]
+                :blur="happyPriceCheck()"
                 v-model="happyPrice"
               ></v-text-field>
             </v-row>
@@ -274,7 +276,7 @@ import moment from 'moment'
 export default Vue.extend({
   name: "PostView",
   data: () => ({
-    uid:"dummy",
+    uid:"",
     title: "",
     description: "",
     category: "",
@@ -315,6 +317,8 @@ export default Vue.extend({
     this.startDate = this.todayDate = today.format('YYYY-MM-DD');
     this.startTime = this.todayTime = today.format('HH:mm');
     this.startDateTime = this.startDate + ' ' + this.startTime;
+
+    this.uid = this.$store.state.userModule.user.object.user.nickname;
   },
   methods: {
       async writePost(){
@@ -339,8 +343,6 @@ export default Vue.extend({
           else if (!location) alert('위치를 입력해주세요.');
           else if (!startPrice) alert('경매시작가를 입력해주세요.');
           else if (!happyPrice) alert('즉시구매가를 입력해주세요.');
-          else if (!startPrice.match(/^[1-9][0-9]*$/)) alert('경매시작가를 다시 입력해주세요.');
-          else if (!happyPrice.match(/^[1-9][0-9]*$/)) alert('즉시구매가를 다시 입력해주세요.');
           else if (Number(startPrice) >= Number(happyPrice)) alert('경매시작가는 즉시구매가보다 작아야합니다.');
           else if (!grade) alert('상품등급을 입력해주세요.');
           else if (!endDateTime) alert('경매종료일을 입력해주세요.');
@@ -450,50 +452,60 @@ export default Vue.extend({
       else (this.$refs.endTimeDialog as any).save(this.endTime);
     },
 
+    startPriceCheck() {
+      if (!this.startPrice.match(/^[1-9][0-9]*$/)) {
+        this.startPrice = "";
+      }
+    },
+
+    happyPriceCheck() {
+      if (!this.happyPrice.match(/^[1-9][0-9]*$/))
+        this.happyPrice = "";
+    },
+
     testButton() {
-      console.log('-----------TEST-----------')
-      console.log('변수명:타입')
+      console.log("'-----------TEST-----------'");
+      console.log("'변수명:타입'");
       // uid
-      console.log('uid:string')
-      console.log(this.uid)
+      console.log("'uid:string'");
+      console.log(this.uid);
       // title
-      console.log('title:string')
-      console.log(this.title)
+      console.log("'title:string'");
+      console.log(this.title);
       // description,
-      console.log('description:string')
-      console.log(this.description)
+      console.log("'description:string'");
+      console.log(this.description);
       // category
-      console.log('category:string')
-      console.log(this.category)        
+      console.log("'category:string'");
+      console.log(this.category);        
       // location
-      console.log('location:string')
-      console.log(this.location)        
+      console.log("'location:string'");
+      console.log(this.location);        
       // startPrice
-      console.log('startPrice:string')
-      console.log(this.startPrice)      
+      console.log("'startPrice:string'");
+      console.log(this.startPrice);      
       // happyPrice
-      console.log('happyPrice:string')
-      console.log(this.happyPrice) 
+      console.log("'happyPrice:string'");
+      console.log(this.happyPrice); 
       // grade
-      console.log('grade:string')
-      console.log(this.grade)        
+      console.log("'grade:string'");
+      console.log(this.grade);        
       // direct
-      console.log('direct:string')
-      console.log(this.direct)        
+      console.log("'direct:string'");
+      console.log(this.direct);        
       // startDate
-      console.log('startDateTime:string')
-      console.log(this.startDateTime)        
+      console.log("'startDateTime:string'");
+      console.log(this.startDateTime);      
       // endDate 
-      console.log('endDateTime:string')
-      console.log(this.endDateTime)        
+      console.log("'endDateTime:string'");
+      console.log(this.endDateTime);      
       // files
-      console.log('files:file')
-      console.log(this.files)
-      console.log('--------------------------')
+      console.log("'files:file'");
+      console.log(this.files);
+      console.log("'--------------------------'");
     }
   }
 });
-
 </script>
 
 <style>
