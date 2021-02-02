@@ -1,0 +1,19 @@
+<template>
+  <v-list-item>
+    <v-list-item-content>
+      <v-list-item-title>{{ bidding.username }}</v-list-item-title>
+      <v-list-item-subtitle>&#8361; {{ bidding.price }}</v-list-item-subtitle>
+    </v-list-item-content>
+  </v-list-item>    
+</template>
+
+<script lang="ts">
+import Vue from 'vue';
+
+export default Vue.extend({
+  name: 'Bidding',
+  props: [
+    'bidding',
+  ]
+});
+</script>
