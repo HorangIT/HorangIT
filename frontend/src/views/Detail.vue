@@ -43,13 +43,18 @@
               </div>
             </v-sheet>
             <v-divider></v-divider>
-            <h1 class="d-inline-flex mt-1">시작가 : {{ item.startPrice }}원</h1>
-            <p class="my-3">{{ item.description }}</p> 
+            <h2 class="d-inline-flex mt-1 mr-5">
+              시작가 : {{ item.startPrice }}원
+            </h2>
+            <h2 class="d-inline-flex mt-1" color="primary">
+              현재가 : {{ nowPrice }}원
+            </h2>
+            <p class="my-3">{{ item.description }}</p>
             <div class="mt-2">
               <p class="subtitle-1">지역: {{ item.location }}</p>
               <p class="subtitle-1">등급: {{ item.grade }}</p>
               <p class="subtitle-1">배송: {{ item.direct }}</p>
-            </div>        
+            </div>
             <v-divider></v-divider>
             <p class="py-4 ma-0">나의 응찰 / 전체 응찰 :</p>
             <div>
@@ -61,17 +66,17 @@
                 height="10vh"
                 @click="bid"
               >
-                <h2>{{nowPrice}}원<br/>응찰하기</h2>
+                <h2>'nextPrice'<br />응찰하기</h2>
               </v-btn>
-              <v-btn 
+              <v-btn
                 class="orange white--text"
-                outlined 
+                outlined
                 tile
-                width="50%" 
+                width="50%"
                 height="10vh"
                 @click="flex"
               >
-                <h2>{{item.happyPrice}}원<br/>FLEX</h2>
+                <h2>{{ item.happyPrice }}원<br />FLEX</h2>
               </v-btn>
             </div>
             <v-divider></v-divider>
@@ -153,7 +158,7 @@ export default Vue.extend({
     ItemList,
     Chat,
     Review,
-    BiddingLog,
+    BiddingLog
   },
 
   data: () => ({
@@ -161,7 +166,7 @@ export default Vue.extend({
     active: false,
     item: Object,
     itemId: 0,
-    nowPrice: 0,
+    nowPrice: 0
   }),
   methods: {
     getItem() {
@@ -178,9 +183,8 @@ export default Vue.extend({
         userId: String(user.object.user.id),
         itemId: String(this.itemId),
         nowPrice: String(this.nowPrice)
-      }
+      };
       console.log(bidInfo);
-
       auctionApi.bidding(bidInfo).then((res: AxiosResponse) => {
         console.log(res.data.data);
         this.nowPrice = res.data.object.nowPrice;
@@ -189,11 +193,9 @@ export default Vue.extend({
     flex() {
       const user = JSON.parse(localStorage.getItem("user") || "{}");
       const flexInfo = {
-        userId: "",
-        itemId: ""
-      }
-      flexInfo.userId = String(user.object.user.id);
-      flexInfo.itemId = String(this.itemId);
+        userId: String(user.object.user.id),
+        itemId: String(this.itemId)
+      };
       auctionApi.flex(flexInfo).then((res: AxiosResponse) => {
         console.log(res);
       });
