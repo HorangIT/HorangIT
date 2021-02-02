@@ -122,6 +122,15 @@ public class ItemServiceImpl implements ItemService{
 			jobj.put("grade", item.getGrade());
 			jobj.put("happyPrice", item.getHappyPrice());
 			jobj.put("startPrice", item.getStartPrice());
+			jobj.put("itemId", item.getId());
+			
+			String temp = redisUtil.getData(ITEM_NAME+item.getId());
+			if("-1".equals(temp)) {
+				jobj.put("nowPrice", item.getStartPrice());
+			}else {
+				jobj.put("nowPrice", Long.parseLong(temp));
+			}
+			
 			
 			jobj.put("startDate", format.format(item.getStartDate()));
 			jobj.put("endDate", format.format(item.getEndDate()));

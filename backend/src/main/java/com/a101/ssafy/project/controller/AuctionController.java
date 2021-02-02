@@ -52,6 +52,16 @@ public class AuctionController {
 			result.data = "응찰에 성공하셨습니다.";
 			
 			result.object = newPrice; //응찰 성공하고 나서 상품의 가격을 돌려줌
+			
+			if(newPrice.get("test")!=null) {
+				//이제사야해요!이게들어온건데
+				//이러면
+				
+//				~~~Controller 하나의 공통의 컨트롤러 메소드를 타서
+//				그 메소드는 무슨역할을 하냐면 : Expired됐을때나, 지금처럼 즉시낙찰 됐을때 동시에 영수증 발행되고 이걸 이어야되는 하나의 메소드(중간다리)만드는게 합당함.
+				
+			}
+			
 
 			responseEntity = new ResponseEntity<>(result, HttpStatus.OK);
 		}
