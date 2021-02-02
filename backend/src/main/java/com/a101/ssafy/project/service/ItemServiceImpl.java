@@ -59,6 +59,8 @@ public class ItemServiceImpl implements ItemService{
 		item.setDirect(Integer.parseInt(request.getDirect()));
 		item.setGrade(request.getGrade().charAt(0));
 		
+		item.setUserId(0L);
+		
 		Date date = java.util.Calendar.getInstance().getTime();
 		
 		item.setCreatedAt(date);

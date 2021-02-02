@@ -35,7 +35,7 @@ public class AuctionController {
 		if("null".equals(getCurrentExpiredValue)) {
 			result = new BasicResponse();
 			result.status = false;
-			result.data = "ㅋㅋ이미끝났지롱!";
+			result.data = "이미 끝난 경매입니당.";
 			
 			responseEntity = new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
 		}else if(auctionInputDto.getNowPrice().equals(getCurrentExpiredValue)){ //같으면 결제 반려
