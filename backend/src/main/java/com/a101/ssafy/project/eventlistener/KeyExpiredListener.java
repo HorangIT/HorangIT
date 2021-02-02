@@ -14,6 +14,7 @@ public class KeyExpiredListener implements MessageListener{
 		byte[] channel = message.getChannel();
 		System.out.println(new String(body));
 		System.out.println(new String(channel));
+	
 	}
  
 }

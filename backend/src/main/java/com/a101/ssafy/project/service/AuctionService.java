@@ -9,5 +9,5 @@ public interface AuctionService {
 	String getCurrentExpiredValue(String itemId);
 	long getAuctionUnit(String price);
 	JSONObject getPriceAfterAuction(String oldPrice, String itemId);
-
+	BasicResponse flex(String itemId, String userId);
 }
