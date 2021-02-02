@@ -27,6 +27,10 @@ import com.a101.ssafy.project.repository.ItemRepository;
 public class ItemServiceImpl implements ItemService{
 	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm"); //날짜 맞출 포맷
 	final String ITEM_NAME = "item";
+	final String ITEM_EXPIRED = "Expired";
+	final String ITEM_START_PRICE = "Start";
+	final String ITEM_HAPPY_PRICE = "Happy";
+	
 	@Autowired
 	ItemRepository itemRepository;
 	
@@ -91,7 +95,10 @@ public class ItemServiceImpl implements ItemService{
 		long endTimeToEpochTime = item.getEndDate().getTime(); 
 		
 		long remainingTime = (endTimeToEpochTime - startTimeToEpochTime)/1000;
-		redisUtil.setDataExpire(ITEM_NAME+item.getId(), "-1", remainingTime);
+		redisUtil.setData(ITEM_NAME+item.getId(), "-1"); //expired trigger 오면 삭제해주기!
+		redisUtil.setData(ITEM_NAME+item.getId()+ITEM_START_PRICE, item.getStartPrice()+""); //expired trigger 오면 삭제해주기!
+		redisUtil.setData(ITEM_NAME+item.getId()+ITEM_HAPPY_PRICE, item.getHappyPrice()+"");
+		redisUtil.setDataExpire(ITEM_NAME+item.getId()+ITEM_EXPIRED, endTimeToEpochTime+"", remainingTime); 
 		
 		return result;
 	}
@@ -115,6 +122,15 @@ public class ItemServiceImpl implements ItemService{
 			jobj.put("grade", item.getGrade());
 			jobj.put("happyPrice", item.getHappyPrice());
 			jobj.put("startPrice", item.getStartPrice());
+			jobj.put("itemId", item.getId());
+			
+			String temp = redisUtil.getData(ITEM_NAME+item.getId());
+			if("-1".equals(temp)) {
+				jobj.put("nowPrice", item.getStartPrice());
+			}else {
+				jobj.put("nowPrice", Long.parseLong(temp));
+			}
+			
 			
 			jobj.put("startDate", format.format(item.getStartDate()));
 			jobj.put("endDate", format.format(item.getEndDate()));
