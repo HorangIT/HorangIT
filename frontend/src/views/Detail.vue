@@ -61,6 +61,7 @@
             </div>
             <v-divider></v-divider>
             <p class="py-4 ma-0">나의 응찰 / 전체 응찰 :</p>
+<<<<<<< frontend/src/views/Detail.vue
             <v-sheet
               color="white"
               elevation="5"
@@ -78,6 +79,8 @@
                 </v-btn>
               </div>
             </v-sheet>
+            <v-divider></v-divider>
+            <BiddingLog></BiddingLog>
             <v-btn
               class="primary white--text block large"
               outlined
@@ -85,6 +88,21 @@
               dense
               @click="bid"
             >
+=======
+            <div class="d-flex">
+              <v-text-field
+                label="Outlined"
+                single-line
+                outlined
+              ></v-text-field>
+              <v-btn outlined tile>^</v-btn>
+              <v-btn outlined tile>v</v-btn>
+            </div>
+            <v-divider></v-divider>
+            <BiddingLog></BiddingLog>
+            <v-btn 
+              class="primary white--text block large" outlined tile dense @click="bid">
+>>>>>>> frontend/src/views/Detail.vue
               경매 참여하기
             </v-btn>
             <v-btn class="ml-4" outlined tile @click="!active">
@@ -157,6 +175,7 @@ import Vue from "vue";
 import ItemList from "../components/ItemList.vue";
 import Chat from "../components/detail/Chat.vue";
 import Review from "../components/detail/Review.vue";
+import BiddingLog from "../components/detail/BiddingLog.vue";
 import { itemApi, auctionApi } from "../utils/axios";
 import { AxiosResponse } from "axios";
 
@@ -166,7 +185,8 @@ export default Vue.extend({
   components: {
     ItemList,
     Chat,
-    Review
+    Review,
+    BiddingLog,
   },
 
   data: () => ({
