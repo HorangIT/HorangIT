@@ -2,12 +2,20 @@ package com.a101.ssafy.project.config;
 
 import java.time.Duration;
 
+import javax.annotation.Resource;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceClientConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
+import org.springframework.data.redis.listener.ChannelTopic;
+import org.springframework.data.redis.listener.RedisMessageListenerContainer;
+
+import com.a101.ssafy.project.eventlistener.KeyExpiredListener;
 
 @Configuration
 public class RedisConfig {
@@ -29,5 +37,4 @@ public class RedisConfig {
 		
 		return new LettuceConnectionFactory(redisStandaloneConfiguration, lettuceClientConfiguration);
 	}
-
 }
