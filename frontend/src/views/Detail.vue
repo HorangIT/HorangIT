@@ -61,7 +61,19 @@
             </div>
             <v-divider></v-divider>
             <p class="py-4 ma-0">나의 응찰 / 전체 응찰 :</p>
-            <v-btn class="primary white--text block large" outlined tile dense>
+            <div class="d-flex">
+              <v-text-field
+                label="Outlined"
+                single-line
+                outlined
+              ></v-text-field>
+              <v-btn outlined tile>^</v-btn>
+              <v-btn outlined tile>v</v-btn>
+            </div>
+            <v-divider></v-divider>
+            <BiddingLog></BiddingLog>
+            <v-btn 
+              class="primary white--text block large" outlined tile dense @click="bid">
               경매 참여하기
             </v-btn>
             <v-btn class="ml-4" outlined tile @click="!active">
@@ -134,7 +146,8 @@ import Vue from "vue";
 import ItemList from "../components/ItemList.vue";
 import Chat from "../components/detail/Chat.vue";
 import Review from "../components/detail/Review.vue";
-import { itemApi } from "../utils/axios";
+import BiddingLog from "../components/detail/BiddingLog.vue";
+import { itemApi, auctionApi } from "../utils/axios";
 import { AxiosResponse } from "axios";
 
 export default Vue.extend({
@@ -143,19 +156,37 @@ export default Vue.extend({
   components: {
     ItemList,
     Chat,
-    Review
+    Review,
+    BiddingLog,
   },
 
   data: () => ({
     rating: 4.5,
     active: false,
-    item: []
+    item: Object,
+    nowPrice: Number,
+    bidding: {
+      userId: "",
+      itemID: "임의",
+      price: ""
+    }
   }),
   methods: {
     getItem() {
-      itemApi.get(1).then((res: AxiosResponse) => {
-        this.item = res.data;
+      itemApi.getItem(1).then((res: AxiosResponse) => {
+        this.item = res.data.object;
+        this.nowPrice = res.data.object.startPrice;
         console.log(this.item);
+      });
+    },
+    bid() {
+      const user = JSON.parse(localStorage.getItem("user") || "{}");
+      this.bidding.userId = String(user.object.user.id);
+      this.bidding.price = String(this.nowPrice);
+      console.log(this.bidding);
+      auctionApi.bidding(this.bidding).then((res: AxiosResponse) => {
+        console.log(this.bidding);
+        console.log(res);
       });
     }
   },
