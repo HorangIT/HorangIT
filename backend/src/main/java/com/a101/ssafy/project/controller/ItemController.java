@@ -3,15 +3,8 @@ package com.a101.ssafy.project.controller;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,15 +19,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.a101.ssafy.project.model.BasicResponse;
-import com.a101.ssafy.project.model.image.Image;
-import com.a101.ssafy.project.model.item.Item;
 import com.a101.ssafy.project.model.item.RegisterDto;
-import com.a101.ssafy.project.redis.RedisUtil;
 import com.a101.ssafy.project.service.ItemService;
 import com.a101.ssafy.project.service.S3Service;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-
 
 @CrossOrigin(origins = { "*" })
 @Controller

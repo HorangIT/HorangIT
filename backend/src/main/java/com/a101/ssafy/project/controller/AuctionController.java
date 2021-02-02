@@ -3,6 +3,7 @@ package com.a101.ssafy.project.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,6 +12,7 @@ import com.a101.ssafy.project.model.BasicResponse;
 import com.a101.ssafy.project.model.auction.AuctionInputDTO;
 import com.a101.ssafy.project.service.AuctionService;
 
+@CrossOrigin(origins = { "*" })
 @RestController
 @RequestMapping("/auction")
 public class AuctionController {
