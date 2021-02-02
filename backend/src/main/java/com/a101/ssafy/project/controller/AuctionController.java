@@ -69,4 +69,25 @@ public class AuctionController {
 		return responseEntity;
 	}
 	
+	/** flex 해버렸을 때(즉시낙찰) */
+	@PostMapping("/flex")
+	public Object flex(AuctionInputDTO auctionInputDto) {
+		ResponseEntity responseEntity = null;
+		BasicResponse result = new BasicResponse();
+		
+		String getCurrentExpiredValue = auctionService.getCurrentExpiredValue(auctionInputDto.getItemId());
+		
+		if("null".equals(getCurrentExpiredValue)) {
+			result = new BasicResponse();
+			result.status = false;
+			result.data = "이미 끝난 경매입니당.";
+			
+			responseEntity = new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+		}else {
+			result = auctionService.flex(auctionInputDto.getItemId(), auctionInputDto.getUserId());
+		}
+		
+		return responseEntity;
+	}
+	
 }
