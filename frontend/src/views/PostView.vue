@@ -318,7 +318,7 @@ export default Vue.extend({
     this.startTime = this.todayTime = today.format('HH:mm');
     this.startDateTime = this.startDate + ' ' + this.startTime;
 
-    this.uid = this.$store.state.userModule.user.object.user.nickname;
+    this.uid = this.$store.state.userModule.user.object.user.id;
   },
   methods: {
       async writePost(){
