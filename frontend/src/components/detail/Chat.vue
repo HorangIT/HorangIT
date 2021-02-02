@@ -33,8 +33,6 @@
 
 <script>
 import io from 'socket.io-client'
-// 로그인 안했을 때, 예외 처리 필요
-const user = JSON.parse(localStorage.getItem('user')).object.user
 
 export default {
   created () {
@@ -44,7 +42,7 @@ export default {
   },
   data () {
     return {
-      userId: user.id,
+      // userId: user.id,
       chatInput: '',
       chatLog: [],
       chatSocket: io('https://powerticket-socket-chat.herokuapp.com/'),
@@ -55,6 +53,20 @@ export default {
     const scroll = this.$el.querySelector('.chatScroll')
     scroll.scrollTop = scroll.scrollHeight;
   },
+  computed: {
+    user () {
+      const user = JSON.parse(localStorage.getItem('user'))
+      console.log('user')
+      console.log(user)
+      if (user) {
+        return user.object.user
+      }
+      return {
+        id: 'anonymous',
+        nickname: '익명',
+      }
+    }
+  },
   methods: {
     // 채팅 submit 서버 socket에 emit
     submit (event) {
@@ -62,8 +74,8 @@ export default {
       if (this.chatInput) {
         console.log(this.chatSocket);
         const chatObj = {
-          userId: user.id,
-          nickname: user.nickname,
+          userId: this.user.id,
+          nickname: this.user.nickname,
           content: this.chatInput,
         }
         this.chatSocket.emit('chat message from client', chatObj);
