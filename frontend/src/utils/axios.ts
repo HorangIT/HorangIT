@@ -61,5 +61,8 @@ export const itemApi = {
 export const auctionApi = {
   bidding (data: any): any {
     return request.post("/auction", data);
-  }
+  },
+  flex (data: any): any {
+    return request.post("/auction/flex", data);
+  },
 };

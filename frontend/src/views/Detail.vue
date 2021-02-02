@@ -89,6 +89,15 @@
             >
               경매 참여하기
             </v-btn>
+            <v-btn
+              class="warning white--text block large ml-2"
+              outlined
+              tile
+              dense
+              @click="flex"
+            >
+              <strong>FLEX!</strong>
+            </v-btn>
             <v-btn class="ml-4" outlined tile @click="!active">
               찜하기
               <v-icon>{{ active ? "mdi-heart" : "mdi-heart-outline" }}</v-icon>
@@ -204,6 +213,17 @@ export default Vue.extend({
       console.log(this.bidding);
       auctionApi.bidding(this.bidding).then((res: AxiosResponse) => {
         console.log(this.bidding);
+        console.log(res);
+      });
+    },
+    flex () {
+      const user = JSON.parse(localStorage.getItem("user") || "{}");
+      const data = {
+        userId: String(user.object.user.id),
+        itemId: this.bidding.itemID,
+      }
+      auctionApi.flex(data).then((res: AxiosResponse) => {
+        console.log(data);
         console.log(res);
       });
     },
