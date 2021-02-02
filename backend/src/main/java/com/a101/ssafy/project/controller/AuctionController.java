@@ -1,5 +1,6 @@
 package com.a101.ssafy.project.controller;
 
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,15 +30,15 @@ public class AuctionController {
 		ResponseEntity responseEntity = null;
 		BasicResponse result = null;
 		
-		String getCurrentAuctionValue = auctionService.getCurrentAuctionValue(auctionInputDto.getItemId());
-		
-		if("null".equals(getCurrentAuctionValue)) {
+		String getCurrentExpiredValue = auctionService.getCurrentExpiredValue(auctionInputDto.getItemId());
+		String getCurrentAuctionValue = auctionService.getCurrentAuctionValue(auctionInputDto.getItemId()); 
+		if("null".equals(getCurrentExpiredValue)) {
 			result = new BasicResponse();
 			result.status = false;
 			result.data = "ㅋㅋ이미끝났지롱!";
 			
 			responseEntity = new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
-		}else if(auctionInputDto.getNowPrice().equals(getCurrentAuctionValue)){ //같으면 결제 반려
+		}else if(auctionInputDto.getNowPrice().equals(getCurrentExpiredValue)){ //같으면 결제 반려
 			result = new BasicResponse();
 			
 			result.status = false;
@@ -45,24 +46,12 @@ public class AuctionController {
 			
 			responseEntity = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
  		}else { //응찰 시도에 성공
-			
+			JSONObject nowPrice = auctionService.getPriceAfterAuction(getCurrentAuctionValue, auctionInputDto.getItemId());
+			result = new BasicResponse();
+			result.status = true;
+			result.data = "응찰에 성공하셨습니다.";
+			result.object = nowPrice; //응찰 성공하고 나서 상품의 가격을 돌려줌
 		}
-//		
-//		if(!auctionService.isAuctionNow(auctionInputDto.getItemId())) { //경매가 끝났거나, (시작이 안됐음 :나중에 생각해)
-//			result = new BasicResponse();
-//			result.status = false;
-//			result.data = "ㅋㅋ이미끝났지롱!";
-//			
-//		}else { //null 이 아니고 무슨 값이 있는 상태
-//			String nowPrice
-//			result = auctionService.onAuction()
-//			//일단은
-//			//-1을 첨에 넣은이유가
-//			//여기에 price로 갱신을 하기로 했었잖아요..
-//			//근데 첨에는 -1이니까. 그때는 item에서 startPrice 그리고 happyPrice 를 받아와야되는데..
-//			//
-//			
-//		}
 		
 		return responseEntity;
 	}

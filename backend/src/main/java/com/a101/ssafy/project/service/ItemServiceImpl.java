@@ -27,6 +27,8 @@ import com.a101.ssafy.project.repository.ItemRepository;
 public class ItemServiceImpl implements ItemService{
 	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm"); //날짜 맞출 포맷
 	final String ITEM_NAME = "item";
+	final String ITEM_EXPIRED = "Expired";
+	
 	@Autowired
 	ItemRepository itemRepository;
 	
@@ -91,7 +93,8 @@ public class ItemServiceImpl implements ItemService{
 		long endTimeToEpochTime = item.getEndDate().getTime(); 
 		
 		long remainingTime = (endTimeToEpochTime - startTimeToEpochTime)/1000;
-		redisUtil.setDataExpire(ITEM_NAME+item.getId(), "-1", remainingTime);
+		redisUtil.setData(ITEM_NAME+item.getId(), "-1"); //expired trigger 오면 삭제해주기!
+		redisUtil.setDataExpire(ITEM_NAME+item.getId()+ITEM_EXPIRED, endTimeToEpochTime+"", remainingTime); 
 		
 		return result;
 	}
