@@ -188,7 +188,6 @@ export default Vue.extend({
   },
   created() {
     this.getItem();
-    console.log(this.getItem());
   }
 });
 </script>
