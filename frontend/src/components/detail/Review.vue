@@ -57,27 +57,27 @@ export default Vue.extend({
       {
         avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
         title: "Lorem ipsum dolor?",
-        subtitle: "<span class='text--primary'>Ali Connors</span> &mdash; Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Nisl tincidunt eget nullam non. Tincidunt arcu non sodales neque sodales ut etiam. Lectus arcu bibendum at varius vel pharetra. Morbi tristique senectus et netus et malesuada.\n"
+        subtitle: "Lorem ipsum dolor sit amet"
       },
       {
         avatar: "https://cdn.vuetifyjs.com/images/lists/2.jpg",
-        title: 'Lorem ipsum dolor <span class="grey--text text--lighten-1">4</span>',
-        subtitle: "<span class='text--primary'>to Alex, Scott, Jennifer</span> &mdash; Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore"
+        title: "Lorem ipsum dolor sit amet",
+        subtitle: "Lorem ipsum dolor sit amet"
       },
       {
         avatar: "https://cdn.vuetifyjs.com/images/lists/3.jpg",
         title: "Lorem ipsum dolor",
-        subtitle: "<span class='text--primary'>Sandra Adams</span> &mdash; Lorem ipsum dolor sit amet, consectetur adipiscing elit"
+        subtitle: "Lorem ipsum dolor sit amet"
       },
       {
         avatar: "https://cdn.vuetifyjs.com/images/lists/4.jpg",
         title: "Lorem ipsum dolor",
-        subtitle: ""
+        subtitle: "Lorem ipsum dolor sit amet"
       },
       {
         avatar: "https://cdn.vuetifyjs.com/images/lists/5.jpg",
         title: "Lorem ipsum dolor",
-        subtitle: "<span class='text--primary'>Britta Holt</span> &mdash; Lorem ipsum dolor sit amet, consectetur adipiscing elit"
+        subtitle: "Lorem ipsum dolor sit amet"
       }
     ]
   })

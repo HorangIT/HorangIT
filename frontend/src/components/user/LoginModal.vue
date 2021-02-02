@@ -61,12 +61,12 @@ export default Vue.extend({
       loginShow: true
     };
   },
-  props: ['loginOrSignup'],
+  props: ["loginOrSignup"],
   components: {
     LoginForm,
     SignupForm
   },
-  created () {
+  created() {
     this.loginShow = this.loginOrSignup;
   },
   methods: {
