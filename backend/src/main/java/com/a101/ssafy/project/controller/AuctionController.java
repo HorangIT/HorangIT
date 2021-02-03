@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,7 +27,7 @@ public class AuctionController {
 	
 	/** 응찰을 시도했을 때  */
 	@PostMapping
-	public Object onAuction(AuctionInputDTO auctionInputDto) {
+	public Object onAuction(@RequestBody AuctionInputDTO auctionInputDto) {
 		ResponseEntity responseEntity = null;
 		BasicResponse result = null;
 		
@@ -71,7 +72,7 @@ public class AuctionController {
 	
 	/** flex 해버렸을 때(즉시낙찰) */
 	@PostMapping("/flex")
-	public Object flex(AuctionInputDTO auctionInputDto) {
+	public Object flex(@RequestBody AuctionInputDTO auctionInputDto) {
 		ResponseEntity responseEntity = null;
 		BasicResponse result = new BasicResponse();
 		
