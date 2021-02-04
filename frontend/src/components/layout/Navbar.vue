@@ -1,7 +1,7 @@
 <template>
     <v-app id="inspire">
     <v-app-bar app color="orange accent-3" dark height="90vh">
-      <v-app-bar-nav-icon @click.stop="active = !active" class="d-flex d-md-none"/>
+      <v-app-bar-nav-icon @click.stop="active = !active" class="d-flex d-sm-none"/>
       <v-toolbar-title class="ml-2 mr-5">
         <a href="/" class="white--text d-flex align-center" style="text-decoration: none">
           <v-img
@@ -38,10 +38,10 @@
       <v-spacer></v-spacer>
      
       <!--로그인 유무-->
-      <span v-if="login" class="d-flex">
+      <span v-if="login">
         <v-menu transition="scroll-y-transition">
           <template v-slot:activator="{ on }">
-            <v-btn v-on="on" icon class="mx-2 d-none d-md-flex">
+            <v-btn v-on="on" icon class="mx-2">
               <v-badge content="2" value="2" color="red" overlap>
                 <v-icon>mdi-bell</v-icon>
               </v-badge>
@@ -54,20 +54,20 @@
           </v-list>
         </v-menu>
         
-        <v-btn href="/cart" icon class="mx-2 d-none d-md-flex">
+        <v-btn href="/cart" icon class="mx-2">
           <v-badge content="2" value="2" color="green" overlap>
             <v-icon>mdi-cart</v-icon>
           </v-badge>
         </v-btn>
-        <v-btn outlined rounded color="white" class="mx-2 d-none d-md-flex" @click="logout">
+        <v-btn outlined rounded color="white" class="mx-2 d-none d-md-inline" @click="logout">
           로그아웃
         </v-btn>
       </span>
       <span v-else>
-        <v-btn outlined rounded color="white" class="mx-1 ml-2 d-none d-md-flex" @click="openModal(true)">
+        <v-btn outlined rounded color="white" class="mx-1 ml-2 d-none d-md-inline" @click="openModal(true)">
           로그인
         </v-btn>
-        <v-btn outlined rounded color="white" class="mx-2 d-none d-md-flex" @click="openModal(false)">
+        <v-btn outlined rounded color="white" class="mx-2 d-none d-md-inline" @click="openModal(false)">
           회원가입
         </v-btn>
       </span>
