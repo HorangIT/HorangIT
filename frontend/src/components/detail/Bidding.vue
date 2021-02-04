@@ -1,8 +1,8 @@
 <template>
   <v-list-item>
     <v-list-item-content>
-      <v-list-item-title>{{ bidding.username }}</v-list-item-title>
-      <v-list-item-subtitle>&#8361; {{ bidding.price | comma }}</v-list-item-subtitle>
+      <v-list-item-title>{{ biddingSplit[0] }} ({{ biddingSplit[2] }})</v-list-item-title>
+      <v-list-item-subtitle>&#8361; {{ biddingSplit[1] | comma }}</v-list-item-subtitle>
     </v-list-item-content>
   </v-list-item>    
 </template>
@@ -16,6 +16,11 @@ export default Vue.extend({
   props: [
     'bidding',
   ],
+  computed: {
+    biddingSplit () {
+      return this.bidding.split(';')
+    }
+  },
   filters: {
     comma (val: number | string): string {
       return numberWithCommas(Number(val));

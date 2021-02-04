@@ -43,7 +43,6 @@ public class ItemController {
 	
 	@GetMapping("/{id}")
 	@ResponseBody
-	//nowPrice넣어서 주기
 	public Object readItem(@PathVariable("id")long id) {
 		JSONObject jobj = itemService.getItemById(id);
 		

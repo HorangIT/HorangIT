@@ -61,7 +61,7 @@
                 height="12vh"
                 @click="bid"
               >
-                <h2>{{ this.nowPrice }}원<br />응찰하기<br />다음 응찰가는 {{ this.nextPrice }}원입니다.</h2>
+                <h2>{{ nowPrice | comma }}원<br />응찰하기</h2><br /><small>다음 응찰가는 650원입니다.</small>
               </v-btn>
               <v-btn
                 class="orange white--text"
@@ -75,7 +75,7 @@
               </v-btn>
             </div>
             <v-divider></v-divider>
-            <BiddingLog></BiddingLog>
+            <BiddingLog :biddingLog="biddingLog"></BiddingLog>
           </div>
         </div>
       </div>
@@ -164,7 +164,7 @@ export default Vue.extend({
     item: Object,
     itemId: 0,
     nowPrice: 0,
-    nextPrice: 0
+    biddingLog: [],
   }),
   filters: {
     comma (val: number | string) {
@@ -203,11 +203,28 @@ export default Vue.extend({
       auctionApi.flex(flexInfo).then((res: AxiosResponse) => {
         console.log(res);
       });
+    },
+    log () {
+      // 응찰 내역 불러오기
+      auctionApi.log(Number(this.$route.params.id))
+        .then((res: AxiosResponse) => {
+          this.biddingLog = res.data.object.log.reverse();
+          console.log('this.biddingLog')
+          console.log(this.biddingLog)
+        })
+        .catch(() => {
+          this.biddingLog = [];
+        })
     }
   },
   created() {
     const id = Number(this.$route.params.id);
     this.getItem(id);
+    // 응찰 내역 불러오기
+    this.log();
+  },
+  updated () {
+    this.log();
   }
 });
 </script>
