@@ -1,6 +1,6 @@
 <template>
   <v-sheet
-    height="10vh"
+    height="5vh"
     class="lighten-2 d-flex align-center justify-center"
     :class="{'primary': open, 'warning': !open}"
   >
@@ -15,10 +15,14 @@ export default {
     open: false,
     leftTime: ''
   }),
+  props: [
+    'start',
+    'end'
+  ],
   mounted () {
-    const start = new Date('2021-02-04 16:00:00');
-    const end = new Date('2021-02-04 17:00:00');
     setInterval(() => {
+      const start = new Date(this.start)
+      const end = new Date(this.end)
       const now = new Date()
       if (start > now) {
         this.open = false
