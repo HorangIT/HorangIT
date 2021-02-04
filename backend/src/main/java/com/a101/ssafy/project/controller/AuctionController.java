@@ -1,5 +1,7 @@
 package com.a101.ssafy.project.controller;
 
+import java.util.List;
+
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,7 +12,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.a101.ssafy.project.model.BasicResponse;
@@ -51,26 +52,26 @@ public class AuctionController {
 			responseEntity = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
  		}else { //응찰 시도에 성공
  			JSONObject jobj = new JSONObject();
-			JSONObject newPrice = auctionService.getPriceAfterAuction(getCurrentAuctionValue, auctionInputDto.getItemId());
+			JSONObject price = auctionService.getPriceAfterAuction(getCurrentAuctionValue, auctionInputDto.getItemId());
 			
 			result = new BasicResponse();
 			result.status = true;
 			result.data = "응찰에 성공하셨습니다.";
 			
+			//우리가 nowPrice도 받을 이유없어요.
+			//근데. nowPrice 안받고싶다? 그러면 아까 여러분이말씀해주신대로 redis에는 옛날값이 들어가는게 맞음. 그리고 그걸 꺼내서 다음가격 저장해주고 다다음가격 저장해서 보내줘야도니ㅡㄴ게 맞는거같아요.
+			//근데 지금 nowPrice 받기때문에 . 그냥 이거 받은값을 믿은상태로... 레디스에 저장하고 로그에저장하고 이거인듯 ?!
 			auctionService.addAuctionLog(auctionInputDto.getUserId(), auctionInputDto.getItemId(), auctionInputDto.getNowPrice());
 		
-//			얘를 하기 위해서는 닉네임이랑 시간이랑 가격이 필요하단말이에요.
-//			이걸 저장하는 함수 를 만들고, 그 함수 내부에서는
-			
 			//이 부분은 한번 얘기해보자(json객체)
-			jobj.put("nextPrice", newPrice.get("nextPrice"));
-			jobj.put("nowPrice", newPrice.get("nowPrice"));
-			if(newPrice.get("test")!=null) {
-				jobj.put("test", newPrice.get("test"));
+			jobj.put("nextPrice", price.get("nextPrice"));
+			jobj.put("nowPrice", price.get("nowPrice"));
+			if(price.get("test")!=null) {
+				jobj.put("test", price.get("test"));
 			}
 //			result.object = newPrice; //응찰 성공하고 나서 상품의 가격을 돌려줌
 			
-			if(newPrice.get("test")!=null) {
+			if(price.get("test")!=null) {
 				//notification event 받기 (pub/sub) pattern 등록해서 하렴!
 				//이제사야해요!이게들어온건데
 				//이러면
@@ -81,9 +82,9 @@ public class AuctionController {
 			}
 			
 			//여기서 해당 메소드를 부르는데. JSONObject를 받아야되잖아요. 응찰 내역이 담긴.
-			JSONObject logObj = auctionService.getAuctionLog(auctionInputDto.getItemId());
+			List<String>list = auctionService.getAuctionLog(auctionInputDto.getItemId());
 			
-			jobj.put("log", logObj);
+			jobj.put("log", list);
 			
 			result.object = jobj;
 			responseEntity = new ResponseEntity<>(result, HttpStatus.OK);
@@ -119,14 +120,18 @@ public class AuctionController {
 	public Object getAuctionLogForItem(@PathVariable("id")long id) {
 		ResponseEntity responseEntity = null;
 		BasicResponse result = new BasicResponse();
-		JSONObject jobj = auctionService.getAuctionLog(id+"");
 		
-		if(jobj==null) {
+		List<String> list = auctionService.getAuctionLog(id+"");
+		
+		if(list.size()==0) {
 			result.status = false;
 			result.data = "해당 물품에 대해 아직 아무도 응찰하지 않았어요! 첫번째 주인공이 되어보세요!!";
 			
 			responseEntity = new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
 		}else {
+			JSONObject jobj = new JSONObject();
+			jobj.put("log", list);
+
 			result.status = true;
 			result.data = "응찰 내역입니다.";
 			result.object = jobj;

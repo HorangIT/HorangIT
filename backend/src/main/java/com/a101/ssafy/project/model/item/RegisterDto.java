@@ -48,5 +48,5 @@ public class RegisterDto {
 	String category;
 	
 	@ApiModelProperty(required = true)
-	String userId;
+	String uid;
 }

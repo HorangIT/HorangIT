@@ -103,7 +103,7 @@ public class UserServiceImpl {
 		JSONObject jsonObject = new JSONObject();
         jsonObject.put("user", userDto);
         
-        redisUtil.setHdata("user", userDto.getId()+"", "팀장님 불주먹(추후 회원가입단에서 받든지, 랜덤으로 설정하든지)");
+        redisUtil.setHdata("user", userDto.getId()+"", userDto.getNickname());
         
         result.status = true;
 		result.data = "회원가입 성공";

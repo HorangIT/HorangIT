@@ -1,7 +1,8 @@
 package com.a101.ssafy.project.service;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import com.a101.ssafy.project.repository.UserRepository;
 
 @Service
 public class AuctionServiceImpl implements AuctionService{
+	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm"); //날짜 맞출 포맷
 	final String ITEM_NAME = "item";
 	final String ITEM_EXPIRED = "Expired";
 	final String ITEM_START_PRICE = "Start";
@@ -67,8 +69,8 @@ public class AuctionServiceImpl implements AuctionService{
 		}
 		
 		JSONObject jobj = new JSONObject();
-		long newPrice = getAuctionUnit(oldPrice);
-		newPrice += Long.parseLong(oldPrice);
+		System.out.println(oldPrice+"옛날 가격");
+		long newPrice = Long.parseLong(oldPrice)+getAuctionUnit(oldPrice);
 		
 		long nextPrice = newPrice+getAuctionUnit(newPrice+"");
 		
@@ -82,7 +84,7 @@ public class AuctionServiceImpl implements AuctionService{
 //		String now = redisUtil.getData(ITEM_NAME+itemId);
 		
 		
-		redisUtil.setData(ITEM_NAME+itemId, newPrice+""); //레디스 값 갱신
+		redisUtil.setData(ITEM_NAME+itemId, newPrice+""); //레디스 값 갱신 
 		
 		jobj.put("nowPrice", newPrice);
 		jobj.put("nextPrice", nextPrice);
@@ -113,15 +115,9 @@ public class AuctionServiceImpl implements AuctionService{
 	}
 
 	@Override
-	public JSONObject getAuctionLog(String itemId) {
-		Map<Object, Object> hm = redisUtil.getAllHdata(AUCTION+itemId);
-		if(hm.size()==0) {
-			return null;
-		}
-		
-		JSONObject jobj = new JSONObject();
-		jobj.putAll(hm);
-		return jobj;
+	public List<String> getAuctionLog(String itemId) {
+		//list 구조로 바꺼야댐
+		return redisUtil.getAllLdata(AUCTION+itemId);
 	}
 
 	@Override
@@ -133,7 +129,9 @@ public class AuctionServiceImpl implements AuctionService{
 	public void addAuctionLog(String userId, String itemId, String nowPrice) {
 		String nickname = getNicknameById(userId);
 		
-		redisUtil.setHdata(AUCTION+itemId, nickname, nowPrice);
+		Date date = java.util.Calendar.getInstance().getTime();
+		
+		redisUtil.setLdata(AUCTION+itemId, nickname+";"+nowPrice+";"+format.format(date)); //닉네임 제약에 대해서 이야기를 좀 해봐야겠다.
 	}
 	
 	
