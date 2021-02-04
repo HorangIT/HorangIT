@@ -63,5 +63,8 @@ export const auctionApi = {
   },
   flex(data: any): any {
     return request.post("/auction/flex", data);
+  },
+  log (itemId: number): any {
+    return request.get(`/auction/log/${itemId}`);
   }
 };
