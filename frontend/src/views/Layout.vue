@@ -1,7 +1,8 @@
 <template>
     <v-app id="inspire">
-    <v-app-bar app color="orange accent-3" dark>
-      <v-app-bar-nav-icon @click.stop="active = !active" />
+    <v-app-bar app color="orange accent-3" dark height="90vh">
+      <v-app-bar-nav-icon @click.stop="active = !active" class="d-flex d-sm-none"/>
+  
       <v-toolbar-title class="ml-2 mr-5">
         <a href="/" class="white--text d-flex align-center" style="text-decoration: none">
           <v-img
@@ -12,9 +13,22 @@
           <p class="mb-0 mx-1">호랑it</p>
         </a>
       </v-toolbar-title>
+      <v-responsive max-width="10vw">
+        <v-text-field
+          flat
+          dense
+          rounded
+          solo-inverted
+          hide-details
+          prepend-inner-icon="mdi-magnify"
+          label="검색"
+          class="hidden-sm-and-down"
+        >
+        </v-text-field>
+      </v-responsive>
 
       <v-btn
-        class="d-md-none"
+        class="d-none d-md-flex"
         large
         v-for="(link, idx) in links"
         :key="idx"
@@ -23,13 +37,11 @@
       >
         <h2>{{ link.name }}</h2>
       </v-btn>
-
       <v-spacer></v-spacer>
+      
+     
       <!--로그인 유무-->
       <span v-if="login">
-        <v-btn icon>
-          <v-icon>mdi-account-circle</v-icon>
-        </v-btn>
         <v-menu transition="scroll-y-transition">
           <template v-slot:activator="{ on }">
             <v-btn v-on="on" icon>
@@ -44,42 +56,55 @@
             </v-list-item>
           </v-list>
         </v-menu>
-
+        
         <v-btn href="/cart" icon>
           <v-badge content="2" value="2" color="green" overlap>
             <v-icon>mdi-cart</v-icon>
           </v-badge>
         </v-btn>
-        <v-btn outlined rounded color="white" class="mx-2" @click="logout">
+        <v-btn outlined rounded color="white" class="mx-2 d-none d-md-inline" @click="logout">
           로그아웃
         </v-btn>
       </span>
       <span v-else>
-        <v-btn outlined rounded color="white" class="mx-1" @click="openModal(true)">
+        <v-btn outlined rounded color="white" class="mx-1 ml-2 d-none d-md-inline" @click="openModal(true)">
           로그인
         </v-btn>
-        <v-btn outlined rounded color="white" class="mx-2" @click="openModal(false)">
+        <v-btn outlined rounded color="white" class="mx-2 d-none d-md-inline" @click="openModal(false)">
           회원가입
         </v-btn>
       </span>
-      <v-responsive max-width="10vw">
-        <v-text-field
-          flat
-          dense
-          rounded
-          solo-inverted
-          hide-details
-          prepend-inner-icon="mdi-magnify"
-          label="검색"
-          class="hidden-sm-and-down"
-        >
-        </v-text-field>
-      </v-responsive>
+      
     </v-app-bar>
+    
+    <v-navigation-drawer
+      v-model="active"
+      absolute
+      temporary
+    >
+      <v-list
+        nav
+        dense
+      >
+        <v-list-item-group
+          active-class="orange--text text--accent-4"
+        >
+          <v-list-item
+            large
+            v-for="(link, idx) in links"
+            :key="idx"
+            text
+            :href="link.href"
+          >
+            <v-list-item-title>{{ link.name }}</v-list-item-title>
+          </v-list-item>
+        </v-list-item-group>
+      </v-list>
+    </v-navigation-drawer>
 
     <LoginModal @close="closeModal" v-if="modal" :loginOrSignup="loginOrSignup">
     </LoginModal>
-    <div style="height:64px;"></div>
+    <div style="height:90px;"></div>
     <router-view />
 
     <v-footer :padless="true">
