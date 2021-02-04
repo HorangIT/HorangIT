@@ -1,6 +1,8 @@
 package com.a101.ssafy.project.service;
 
-import java.util.HashMap;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,15 +10,22 @@ import org.springframework.stereotype.Service;
 
 import com.a101.ssafy.project.model.BasicResponse;
 import com.a101.ssafy.project.redis.RedisUtil;
+import com.a101.ssafy.project.repository.UserRepository;
 
 @Service
 public class AuctionServiceImpl implements AuctionService{
+	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm"); //날짜 맞출 포맷
 	final String ITEM_NAME = "item";
 	final String ITEM_EXPIRED = "Expired";
 	final String ITEM_START_PRICE = "Start";
 	final String ITEM_HAPPY_PRICE = "Happy";
+
+	final String AUCTION = "auction";
 	@Autowired
 	RedisUtil redisUtil;
+	
+	@Autowired
+	UserRepository userRepository;
 	
 	@Override
 	public String getCurrentAuctionValue(String itemId) {
@@ -60,8 +69,10 @@ public class AuctionServiceImpl implements AuctionService{
 		}
 		
 		JSONObject jobj = new JSONObject();
-		long newPrice = getAuctionUnit(oldPrice);
-		newPrice += Long.parseLong(oldPrice);
+		System.out.println(oldPrice+"옛날 가격");
+		long newPrice = Long.parseLong(oldPrice)+getAuctionUnit(oldPrice);
+		
+		long nextPrice = newPrice+getAuctionUnit(newPrice+"");
 		
 		//happy price 보다 값이 커지는 경우
 		long happyPrice = Long.parseLong(redisUtil.getData(ITEM_NAME+itemId+ITEM_HAPPY_PRICE));
@@ -73,9 +84,10 @@ public class AuctionServiceImpl implements AuctionService{
 //		String now = redisUtil.getData(ITEM_NAME+itemId);
 		
 		
-		redisUtil.setData(ITEM_NAME+itemId, newPrice+""); //레디스 값 갱신
+		redisUtil.setData(ITEM_NAME+itemId, newPrice+""); //레디스 값 갱신 
 		
 		jobj.put("nowPrice", newPrice);
+		jobj.put("nextPrice", nextPrice);
 		
 		return jobj;
 	}
@@ -101,5 +113,27 @@ public class AuctionServiceImpl implements AuctionService{
 		System.out.println("영수증 발행하고");
 		System.out.println("레디스 값 지우고(happy price/start price/ expired되지 않았다면 expired 지우고");	
 	}
+
+	@Override
+	public List<String> getAuctionLog(String itemId) {
+		//list 구조로 바꺼야댐
+		return redisUtil.getAllLdata(AUCTION+itemId);
+	}
+
+	@Override
+	public String getNicknameById(String userId) {
+		return (String)redisUtil.getHdata("user", userId);
+	}
+
+	@Override
+	public void addAuctionLog(String userId, String itemId, String nowPrice) {
+		String nickname = getNicknameById(userId);
+		
+		Date date = java.util.Calendar.getInstance().getTime();
+		
+		redisUtil.setLdata(AUCTION+itemId, nickname+";"+nowPrice+";"+format.format(date)); //닉네임 제약에 대해서 이야기를 좀 해봐야겠다.
+	}
+	
+	
 
 }

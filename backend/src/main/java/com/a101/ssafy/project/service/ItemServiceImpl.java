@@ -59,7 +59,7 @@ public class ItemServiceImpl implements ItemService{
 		item.setDirect(Integer.parseInt(request.getDirect()));
 		item.setGrade(request.getGrade().charAt(0));
 		
-		item.setUserId(0L);
+		item.setUserId(Long.parseLong(request.getUid()));
 		
 		Date date = java.util.Calendar.getInstance().getTime();
 		
@@ -98,6 +98,7 @@ public class ItemServiceImpl implements ItemService{
 		
 		long remainingTime = (endTimeToEpochTime - startTimeToEpochTime)/1000;
 		redisUtil.setData(ITEM_NAME+item.getId(), "-1"); //expired trigger 오면 삭제해주기!
+//		startPrice <- 사는거 (처음에는 삼 ㅋㅋ)
 		redisUtil.setData(ITEM_NAME+item.getId()+ITEM_START_PRICE, item.getStartPrice()+""); //expired trigger 오면 삭제해주기!
 		redisUtil.setData(ITEM_NAME+item.getId()+ITEM_HAPPY_PRICE, item.getHappyPrice()+"");
 		redisUtil.setDataExpire(ITEM_NAME+item.getId()+ITEM_EXPIRED, endTimeToEpochTime+"", remainingTime); 
