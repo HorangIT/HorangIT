@@ -52,8 +52,8 @@
 
 <script lang="ts">
 import Vue from "vue";
-import LoginForm from "@/components/user/LoginForm.vue";
-import SignupForm from "@/components/user/SignupForm.vue";
+import LoginForm from "../../components/user/LoginForm.vue";
+import SignupForm from "../../components/user/SignupForm.vue";
 
 export default Vue.extend({
   data() {

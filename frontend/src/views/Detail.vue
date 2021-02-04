@@ -1,10 +1,7 @@
 <template>
   <div>
     <v-container>
-      <TimeBar
-        :start="item.startDate"
-        :end="item.endDate"
-      ></TimeBar>
+      <TimeBar :start="item.startDate" :end="item.endDate"></TimeBar>
       <div class="row">
         <div class="col-md-5 col-sm-5 col-xs-12">
           <v-carousel>
@@ -61,7 +58,10 @@
                 height="12vh"
                 @click="bid"
               >
-                <h2>{{ nowPrice | comma }}원<br />응찰하기</h2><br /><small>다음 응찰가는 {{ nextPrice | comma }}원입니다.</small>
+                <h2>
+                  {{ nowPrice | comma }}원<br />응찰하기<br />
+                  <small>다음 응찰가는 {{ nextPrice | comma }}원입니다.</small>
+                </h2>
               </v-btn>
               <v-btn
                 class="orange white--text"
@@ -155,7 +155,7 @@ export default Vue.extend({
     Chat,
     Review,
     BiddingLog,
-    TimeBar,
+    TimeBar
   },
 
   data: () => ({
@@ -165,12 +165,12 @@ export default Vue.extend({
     itemId: 0,
     nowPrice: 0,
     nextPrice: 0,
-    biddingLog: [],
+    biddingLog: []
   }),
   filters: {
-    comma (val: number | string) {
-      return numberWithCommas(Number(val))
-    },
+    comma(val: number | string) {
+      return numberWithCommas(Number(val));
+    }
   },
   methods: {
     getItem(id: number) {
@@ -206,7 +206,7 @@ export default Vue.extend({
         console.log(res);
       });
     },
-    log () {
+    log() {
       // 응찰 내역 불러오기
       auctionApi.log(Number(this.$route.params.id))
         .then((res: AxiosResponse) => {
@@ -216,7 +216,7 @@ export default Vue.extend({
         })
         .catch(() => {
           this.biddingLog = [];
-        })
+        });
     }
   },
   created() {
@@ -225,7 +225,7 @@ export default Vue.extend({
     // 응찰 내역 불러오기
     this.log();
   },
-  updated () {
+  updated() {
     this.log();
   }
 });
