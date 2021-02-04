@@ -1,29 +1,26 @@
 <template>
-    <v-app id="inspire">
+  <v-app id="inspire">
     <v-app-bar app color="orange accent-3" dark>
       <v-app-bar-nav-icon @click.stop="active = !active" />
-      <v-toolbar-title class="ml-2 mr-5">
-        <a href="/" class="white--text d-flex align-center" style="text-decoration: none">
+      <v-toolbar-title>
+        <a href="/" class="white--text d-flex" style="text-decoration: none">
           <v-img
             :src="require('../assets/img/layout/horangit_face.png')"
             max-width="60"
           >
           </v-img>
-          <p class="mb-0 mx-1">호랑it</p>
+          <p class="mt-4 ml-3">호랑it</p>
         </a>
       </v-toolbar-title>
-
-      <v-btn
-        class="d-md-none"
-        large
-        v-for="(link, idx) in links"
-        :key="idx"
-        text
-        :href="link.href"
-      >
-        <h2>{{ link.name }}</h2>
-      </v-btn>
-
+      <v-spacer></v-spacer>
+      <v-text-field
+        flat
+        solo-inverted
+        hide-details
+        prepend-inner-icon="mdi-magnify"
+        label="구매하고 싶은 물품을 검색해보세요"
+        class="hidden-sm-and-down"
+      />
       <v-spacer></v-spacer>
       <!--로그인 유무-->
       <span v-if="login">
@@ -50,36 +47,39 @@
             <v-icon>mdi-cart</v-icon>
           </v-badge>
         </v-btn>
-        <v-btn outlined rounded color="white" class="mx-2" @click="logout">
+        <v-btn outlined rounded color="white" class="ml-2" @click="logout">
           로그아웃
         </v-btn>
       </span>
       <span v-else>
-        <v-btn outlined rounded color="white" class="mx-1" @click="openModal(true)">
+        <v-btn outlined rounded color="white" @click="openModal(true)">
           로그인
         </v-btn>
-        <v-btn outlined rounded color="white" class="mx-2" @click="openModal(false)">
+        <v-btn outlined rounded color="white" @click="openModal(false)">
           회원가입
         </v-btn>
       </span>
-      <v-responsive max-width="10vw">
-        <v-text-field
-          flat
-          dense
-          rounded
-          solo-inverted
-          hide-details
-          prepend-inner-icon="mdi-magnify"
-          label="검색"
-          class="hidden-sm-and-down"
-        >
-        </v-text-field>
-      </v-responsive>
     </v-app-bar>
+    <div style="height:64px;"></div>
+    <v-expand-transition>
+      <v-app-bar
+        color="grey lighten-4"
+        v-if="active"
+        class="d-flex justify-center"
+        flat
+        style="position:sticky; top:63px; z-index:100;"
+      >
+        <div id="nav" class="d-flex justify-space-around">
+          <v-btn text href="/">홈</v-btn>
+          <v-btn text href="/auction">경매</v-btn>
+          <v-btn text href="#">서비스 소개</v-btn>
+          <v-btn text href="/cs">고객센터</v-btn>
+        </div>
+      </v-app-bar>
+    </v-expand-transition>
 
     <LoginModal @close="closeModal" v-if="modal" :loginOrSignup="loginOrSignup">
     </LoginModal>
-    <div style="height:64px;"></div>
     <router-view />
 
     <v-footer :padless="true">
@@ -125,24 +125,6 @@ export default Vue.extend({
   },
 
   data: () => ({
-    links: [
-      {
-        name: "홈",
-        href: "/" 
-      },
-      {
-        name: "경매",
-        href: "/auction" 
-      },
-      {
-        name: "서비스 소개",
-        href: "#" 
-      },
-      {
-        name: "고객센터",
-        href: "/cs" 
-      },
-    ],
     on: true,
     active: false,
     modal: false,

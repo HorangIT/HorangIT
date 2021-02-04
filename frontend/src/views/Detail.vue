@@ -61,7 +61,7 @@
                 height="10vh"
                 @click="bid"
               >
-                <h2>'nextPrice'<br />응찰하기</h2>
+                <h2>{{nowPrice}}원<br />응찰하기</h2><br /><p>다음 응찰가는 650원입니다.</p>
               </v-btn>
               <v-btn
                 class="orange white--text"
