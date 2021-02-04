@@ -58,7 +58,7 @@
                 outlined
                 tile
                 width="50%"
-                height="10vh"
+                height="12vh"
                 @click="bid"
               >
                 <h2>{{ nowPrice | comma }}원<br />응찰하기</h2><br /><small>다음 응찰가는 650원입니다.</small>
@@ -68,7 +68,7 @@
                 outlined
                 tile
                 width="50%"
-                height="10vh"
+                height="12vh"
                 @click="flex"
               >
                 <h2>{{ item.happyPrice | comma }}원<br />FLEX</h2>
@@ -146,7 +146,7 @@ import BiddingLog from "../components/detail/BiddingLog.vue";
 import TimeBar from "../components/detail/TimeBar.vue";
 import { itemApi, auctionApi } from "../utils/axios";
 import { AxiosResponse } from "axios";
-import numberWithCommas from "@/utils/numberWithCommas"
+import numberWithCommas from "../utils/numberWithCommas";
 
 export default Vue.extend({
   name: "Product",
@@ -189,8 +189,9 @@ export default Vue.extend({
       };
       console.log(bidInfo);
       auctionApi.bidding(bidInfo).then((res: AxiosResponse) => {
-        console.log(res.data.data);
+        console.log(res.data.object);
         this.nowPrice = res.data.object.nowPrice;
+        this.nextPrice = res.data.object.nextPrice;
       });
     },
     flex() {
