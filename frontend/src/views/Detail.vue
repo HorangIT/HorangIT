@@ -1,7 +1,10 @@
 <template>
   <div>
     <v-container>
-      <TimeBar></TimeBar>
+      <TimeBar
+        :start="item.startDate"
+        :end="item.endDate"
+      ></TimeBar>
       <div class="row">
         <div class="col-md-5 col-sm-5 col-xs-12">
           <v-carousel>
