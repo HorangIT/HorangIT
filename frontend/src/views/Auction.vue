@@ -1,6 +1,6 @@
 <template>
   <div id="auction">
-    <Carousel />
+    <!-- <Carousel /> -->
     <v-container>
       <p class="text-center" style="font-size:3rem;">Auction</p>
       <div class="row">
@@ -76,14 +76,14 @@
 
 <script lang="ts">
 import Vue from "vue";
-import Carousel from "../components/Carousel.vue";
+// import Carousel from "../components/Carousel.vue";
 import Filters from "../components/auction/Filters.vue";
 
 export default Vue.extend({
   name: "Auction",
 
   components: {
-    Carousel,
+    // Carousel,
     Filters
   },
 
