@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.a101.ssafy.project.model.BasicResponse;
 import com.a101.ssafy.project.redis.RedisUtil;
+import com.a101.ssafy.project.repository.UserRepository;
 
 @Service
 public class AuctionServiceImpl implements AuctionService{
@@ -16,8 +17,13 @@ public class AuctionServiceImpl implements AuctionService{
 	final String ITEM_EXPIRED = "Expired";
 	final String ITEM_START_PRICE = "Start";
 	final String ITEM_HAPPY_PRICE = "Happy";
+
+	final String AUCTION = "auction";
 	@Autowired
 	RedisUtil redisUtil;
+	
+	@Autowired
+	UserRepository userRepository;
 	
 	@Override
 	public String getCurrentAuctionValue(String itemId) {
@@ -64,6 +70,8 @@ public class AuctionServiceImpl implements AuctionService{
 		long newPrice = getAuctionUnit(oldPrice);
 		newPrice += Long.parseLong(oldPrice);
 		
+		long nextPrice = newPrice+getAuctionUnit(newPrice+"");
+		
 		//happy price 보다 값이 커지는 경우
 		long happyPrice = Long.parseLong(redisUtil.getData(ITEM_NAME+itemId+ITEM_HAPPY_PRICE));
 		if(happyPrice < newPrice) {
@@ -77,6 +85,7 @@ public class AuctionServiceImpl implements AuctionService{
 		redisUtil.setData(ITEM_NAME+itemId, newPrice+""); //레디스 값 갱신
 		
 		jobj.put("nowPrice", newPrice);
+		jobj.put("nextPrice", nextPrice);
 		
 		return jobj;
 	}
@@ -105,11 +114,28 @@ public class AuctionServiceImpl implements AuctionService{
 
 	@Override
 	public JSONObject getAuctionLog(String itemId) {
-		Map<Object, Object> hm = redisUtil.getAllHdata(itemId);
+		Map<Object, Object> hm = redisUtil.getAllHdata(AUCTION+itemId);
+		if(hm.size()==0) {
+			return null;
+		}
 		
 		JSONObject jobj = new JSONObject();
 		jobj.putAll(hm);
 		return jobj;
 	}
+
+	@Override
+	public String getNicknameById(String userId) {
+		return (String)redisUtil.getHdata("user", userId);
+	}
+
+	@Override
+	public void addAuctionLog(String userId, String itemId, String nowPrice) {
+		String nickname = getNicknameById(userId);
+		
+		redisUtil.setHdata(AUCTION+itemId, nickname, nowPrice);
+	}
+	
+	
 
 }

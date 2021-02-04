@@ -1,6 +1,7 @@
 package com.a101.ssafy.project.service;
 
 import org.json.simple.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,11 +20,15 @@ import com.a101.ssafy.project.model.user.LoginDto;
 import com.a101.ssafy.project.model.user.SignupDto;
 import com.a101.ssafy.project.model.user.User;
 import com.a101.ssafy.project.model.user.UserDto;
+import com.a101.ssafy.project.redis.RedisUtil;
 
 import java.util.Collections;
 
 @Service
 public class UserServiceImpl {
+	@Autowired
+	RedisUtil redisUtil;
+	
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 	private final TokenProvider tokenProvider;
@@ -97,6 +102,8 @@ public class UserServiceImpl {
 		UserDto userDto = new UserDto(user.getId(), user.getEmail(), user.getUsername(), user.getNickname(), user.getAddress(), user.getPhone());
 		JSONObject jsonObject = new JSONObject();
         jsonObject.put("user", userDto);
+        
+        redisUtil.setHdata("user", userDto.getId()+"", "팀장님 불주먹(추후 회원가입단에서 받든지, 랜덤으로 설정하든지)");
         
         result.status = true;
 		result.data = "회원가입 성공";

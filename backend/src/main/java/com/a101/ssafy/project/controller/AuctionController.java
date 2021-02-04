@@ -52,12 +52,22 @@ public class AuctionController {
  		}else { //응찰 시도에 성공
  			JSONObject jobj = new JSONObject();
 			JSONObject newPrice = auctionService.getPriceAfterAuction(getCurrentAuctionValue, auctionInputDto.getItemId());
+			
 			result = new BasicResponse();
 			result.status = true;
 			result.data = "응찰에 성공하셨습니다.";
 			
-			//have to refactor
-			jobj.put("newPrice", newPrice.get("newPrice"));
+			auctionService.addAuctionLog(auctionInputDto.getUserId(), auctionInputDto.getItemId(), auctionInputDto.getNowPrice());
+		
+//			얘를 하기 위해서는 닉네임이랑 시간이랑 가격이 필요하단말이에요.
+//			이걸 저장하는 함수 를 만들고, 그 함수 내부에서는
+			
+			//이 부분은 한번 얘기해보자(json객체)
+			jobj.put("nextPrice", newPrice.get("nextPrice"));
+			jobj.put("nowPrice", newPrice.get("nowPrice"));
+			if(newPrice.get("test")!=null) {
+				jobj.put("test", newPrice.get("test"));
+			}
 //			result.object = newPrice; //응찰 성공하고 나서 상품의 가격을 돌려줌
 			
 			if(newPrice.get("test")!=null) {
@@ -89,7 +99,8 @@ public class AuctionController {
 		BasicResponse result = new BasicResponse();
 		
 		String getCurrentExpiredValue = auctionService.getCurrentExpiredValue(auctionInputDto.getItemId());
-		
+
+		//auctionService.addAuctionLog(auctionInputDto.getUserId(), auctionInputDto.getItemId(), auctionInputDto.getNowPrice());		
 		if("null".equals(getCurrentExpiredValue)) {
 			result = new BasicResponse();
 			result.status = false;
