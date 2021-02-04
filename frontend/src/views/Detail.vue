@@ -39,10 +39,10 @@
             </v-sheet>
             <v-divider></v-divider>
             <h2 class="d-inline-flex mt-1 mr-5">
-              시작가 : {{ item.startPrice }}원
+              시작가 : {{ item.startPrice | comma }}원
             </h2>
             <h2 class="d-inline-flex mt-1" color="primary">
-              현재가 : {{ nowPrice }}원
+              현재가 : {{ nowPrice | comma }}원
             </h2>
             <p class="my-3">{{ item.description }}</p>
             <div class="mt-2">
@@ -71,7 +71,7 @@
                 height="10vh"
                 @click="flex"
               >
-                <h2>{{ item.happyPrice }}원<br />FLEX</h2>
+                <h2>{{ item.happyPrice | comma }}원<br />FLEX</h2>
               </v-btn>
             </div>
             <v-divider></v-divider>
@@ -146,10 +146,10 @@ import BiddingLog from "../components/detail/BiddingLog.vue";
 import TimeBar from "../components/detail/TimeBar.vue";
 import { itemApi, auctionApi } from "../utils/axios";
 import { AxiosResponse } from "axios";
+import numberWithCommas from "@/utils/numberWithCommas"
 
 export default Vue.extend({
   name: "Product",
-
   components: {
     ItemList,
     Chat,
@@ -165,6 +165,11 @@ export default Vue.extend({
     itemId: 0,
     nowPrice: 0
   }),
+  filters: {
+    comma (val: number | string) {
+      return numberWithCommas(Number(val))
+    },
+  },
   methods: {
     getItem(id: number) {
       itemApi.getItem(id).then((res: AxiosResponse) => {
