@@ -26,7 +26,7 @@
                   <v-img src="https://cdn.vuetifyjs.com/images/lists/1.jpg">
                   </v-img>
                 </v-avatar>
-                <p class="ma-0 ml-2">문어복어</p>
+                <p class="ma-0 ml-2">{{ item.nickname }}</p>
                 <v-rating
                   v-model="rating"
                   class=""
@@ -61,7 +61,7 @@
                 height="12vh"
                 @click="bid"
               >
-                <h2>{{ nowPrice | comma }}원<br />응찰하기</h2><br /><small>다음 응찰가는 650원입니다.</small>
+                <h2>{{ nowPrice | comma }}원<br />응찰하기</h2><br /><small>다음 응찰가는 {{ nextPrice | comma }}원입니다.</small>
               </v-btn>
               <v-btn
                 class="orange white--text"
@@ -164,6 +164,7 @@ export default Vue.extend({
     item: Object,
     itemId: 0,
     nowPrice: 0,
+    nextPrice: 0,
     biddingLog: [],
   }),
   filters: {
@@ -177,6 +178,7 @@ export default Vue.extend({
         this.item = res.data.object;
         this.itemId = res.data.object.itemId;
         this.nowPrice = res.data.object.nowPrice;
+        this.nextPrice = res.data.object.nextPrice;
         console.log(this.item);
       });
     },
@@ -209,8 +211,8 @@ export default Vue.extend({
       auctionApi.log(Number(this.$route.params.id))
         .then((res: AxiosResponse) => {
           this.biddingLog = res.data.object.log.reverse();
-          console.log('this.biddingLog')
-          console.log(this.biddingLog)
+          // console.log('this.biddingLog')
+          // console.log(this.biddingLog)
         })
         .catch(() => {
           this.biddingLog = [];
