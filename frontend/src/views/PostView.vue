@@ -130,7 +130,9 @@
                   <v-btn
                     text
                     color="primary"
-                    @click="$refs.startDateCalender.save(startDate + ' ' + startTime);"
+                    @click="
+                      $refs.startDateCalender.save(startDate + ' ' + startTime)
+                    "
                   >
                     OK
                   </v-btn>
@@ -183,7 +185,11 @@
                       full-width
                     >
                       <v-spacer></v-spacer>
-                      <v-btn text color="primary" @click="endTimeDialog = false">
+                      <v-btn
+                        text
+                        color="primary"
+                        @click="endTimeDialog = false"
+                      >
                         Cancel
                       </v-btn>
                       <v-btn text color="primary" @click="endTimeCheck()">
@@ -194,7 +200,7 @@
                   <v-btn
                     text
                     color="primary"
-                    @click="$refs.endDateCalender.save(endDate + ' ' + endTime);"
+                    @click="$refs.endDateCalender.save(endDate + ' ' + endTime)"
                   >
                     OK
                   </v-btn>
@@ -223,7 +229,8 @@
                   <div>
                     <div class="text-center">이미지</div>
                     <div class="room-file-notice-item">
-                      실 사진 최소 3장 이상 등록하셔야 하며. 가로사진을 권장합니다.
+                      실 사진 최소 3장 이상 등록하셔야 하며. 가로사진을
+                      권장합니다.
                     </div>
                     <div class="room-file-notice-item" style="color: #ef4351;">
                       로고를 제외한 불필요한 정보(워터마크, 상호, 전화번호 등)가
@@ -291,6 +298,9 @@
 import Vue from "vue";
 import { itemApi } from "../utils/axios";
 import moment from "moment";
+// import { TimeSelect } from "../utils/timeSelect";
+// import VuetifyTimeSelect from 'vuetify-time-select'
+// Vue.component('vuetify-time-select', VuetifyTimeSelect);
 
 export default Vue.extend({
   name: "PostView",
@@ -326,7 +336,8 @@ export default Vue.extend({
     startDateTime: "",
     endDateTime: "",
     rules: {
-      price: (v: any) => !!(v || '').match(/^[1-9][0-9]*$/) ||
+      price: (v: string) =>
+        !!(v || "").match(/^[1-9][0-9]*$/) ||
         "잘못된 입력입니다. 가격을 입력해주세요."
     }
   }),
@@ -362,7 +373,8 @@ export default Vue.extend({
       else if (!location) alert("위치를 입력해주세요.");
       else if (!startPrice) alert("경매시작가를 입력해주세요.");
       else if (!happyPrice) alert("즉시구매가를 입력해주세요.");
-      else if (Number(startPrice) >= Number(happyPrice)) alert("경매시작가는 즉시구매가보다 작아야합니다.");
+      else if (Number(startPrice) >= Number(happyPrice))
+        alert("경매시작가는 즉시구매가보다 작아야합니다.");
       else if (!grade) alert("상품등급을 입력해주세요.");
       else if (!endDateTime) alert("경매종료일을 입력해주세요.");
       else if (!files) alert("사진을 입력해주세요.");
@@ -449,7 +461,9 @@ export default Vue.extend({
 
     fileDeleteButton(e: any) {
       const name = e.target.getAttribute("name");
-      this.files = this.files.filter(data => (data as any).number !== Number(name));
+      this.files = this.files.filter(
+        data => (data as any).number !== Number(name)
+      );
     },
 
     startTimeCheck() {
@@ -459,7 +473,10 @@ export default Vue.extend({
 
       if (this.startDate === this.endDate && this.startTime >= this.endTime) {
         alert("시간이 잘못 입력되었습니다.");
-      } else if (this.todayDate === this.startDate && this.startTime <= this.todayTime) {
+      } else if (
+        this.todayDate === this.startDate &&
+        this.startTime <= this.todayTime
+      ) {
         (this.$refs.startTimeDialog as any).save(this.todayTime);
       } else (this.$refs.startTimeDialog as any).save(this.startTime);
     },

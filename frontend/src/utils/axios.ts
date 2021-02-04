@@ -54,6 +54,9 @@ export const itemApi = {
   },
   getItem(id: number): any {
     return request.get(`/item/${id}`);
+  },
+  getItemPage(page: number): any {
+    return request.get(`/item/page/${page}`);
   }
 };
 

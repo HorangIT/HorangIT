@@ -66,7 +66,7 @@
             </div>
           </div>
           <div class="text-center mt-12">
-            <v-pagination v-model="page" :length="6"></v-pagination>
+            <v-pagination v-model="page" :length="6" @input="getItemPage"></v-pagination>
           </div>
         </div>
       </div>
@@ -78,6 +78,7 @@
 import Vue from "vue";
 import Carousel from "../components/Carousel.vue";
 import Filters from "../components/auction/Filters.vue";
+import { itemApi } from "../utils/axios";
 
 export default Vue.extend({
   name: "Auction",
@@ -200,7 +201,23 @@ export default Vue.extend({
         src: require("../assets/img/shop/12.jpg")
       }
     ]
-  })
+  }),
+  methods: {
+    getItemPage(page: number) {
+      // const { data } = itemApi.getItemPage(page);
+
+      this.products = [     // 12개 
+        {
+        id: 1,
+        name: "BLACK TEE",
+        type: "Jackets",
+        price: "18.00",
+        src: require("../assets/img/shop/1.jpg")
+        },
+        ];
+
+    }
+  }
 });
 </script>
 
