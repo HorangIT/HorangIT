@@ -1,15 +1,7 @@
 <template>
   <div>
     <v-container>
-      <v-sheet
-        color="grey lighten-4"
-        height="10vh"
-        class="d-flex align-center justify-center"
-      >
-        <h1>
-          경매시작까지 남은시간 / 경매종료까지 남은시간
-        </h1>
-      </v-sheet>
+      <TimeBar></TimeBar>
       <div class="row">
         <div class="col-md-5 col-sm-5 col-xs-12">
           <v-carousel>
@@ -148,6 +140,7 @@ import ItemList from "../components/ItemList.vue";
 import Chat from "../components/detail/Chat.vue";
 import Review from "../components/detail/Review.vue";
 import BiddingLog from "../components/detail/BiddingLog.vue";
+import TimeBar from "../components/detail/TimeBar.vue";
 import { itemApi, auctionApi } from "../utils/axios";
 import { AxiosResponse } from "axios";
 
@@ -158,7 +151,8 @@ export default Vue.extend({
     ItemList,
     Chat,
     Review,
-    BiddingLog
+    BiddingLog,
+    TimeBar,
   },
 
   data: () => ({
