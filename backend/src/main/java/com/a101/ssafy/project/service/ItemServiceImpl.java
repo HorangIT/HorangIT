@@ -40,6 +40,9 @@ public class ItemServiceImpl implements ItemService{
 	@Autowired
 	S3Service s3Service;
 	
+	@Autowired
+	AuctionService auctionService;
+	
 	@Override
 	public BasicResponse registerItem(RegisterDto request, MultipartFile[] multipartFiles) throws ParseException {
 		BasicResponse result = new BasicResponse();
@@ -130,9 +133,23 @@ public class ItemServiceImpl implements ItemService{
 			String temp = redisUtil.getData(ITEM_NAME+item.getId());
 			if("-1".equals(temp)) {
 				jobj.put("nowPrice", item.getStartPrice());
+				String str = redisUtil.getData(ITEM_NAME+item.getId()+ITEM_START_PRICE);
+				
+				long nextPrice = auctionService.getAuctionUnit(str) + Long.parseLong(str);
+				jobj.put("nextPrice", nextPrice);
+				
 			}else {
 				jobj.put("nowPrice", Long.parseLong(temp));
+				String str = redisUtil.getData(ITEM_NAME+item.getId());
+				
+				long nextPrice = auctionService.getAuctionUnit(str) + Long.parseLong(str);
+				if(nextPrice >= item.getHappyPrice()) {
+					nextPrice = item.getHappyPrice();
+				}
+				jobj.put("nextPrice", nextPrice);
 			}
+			
+			jobj.put("nickname", redisUtil.getHdata("user", item.getUserId()+""));
 			
 			
 			jobj.put("startDate", format.format(item.getStartDate()));
