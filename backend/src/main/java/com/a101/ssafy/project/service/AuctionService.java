@@ -10,4 +10,5 @@ public interface AuctionService {
 	long getAuctionUnit(String price);
 	JSONObject getPriceAfterAuction(String oldPrice, String itemId);
 	BasicResponse flex(String itemId, String userId);
+	JSONObject getAuctionLog(String itemId); //item Id를 받으면 해당 아이템에 대한 응찰 내역을 JSONObject 타입으로 돌려준다.
 }

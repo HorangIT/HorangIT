@@ -1,6 +1,7 @@
 package com.a101.ssafy.project.service;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -100,6 +101,15 @@ public class AuctionServiceImpl implements AuctionService{
 		System.out.println("채팅창 서로 만들어주고(없으면안만듬)");
 		System.out.println("영수증 발행하고");
 		System.out.println("레디스 값 지우고(happy price/start price/ expired되지 않았다면 expired 지우고");	
+	}
+
+	@Override
+	public JSONObject getAuctionLog(String itemId) {
+		Map<Object, Object> hm = redisUtil.getAllHdata(itemId);
+		
+		JSONObject jobj = new JSONObject();
+		jobj.putAll(hm);
+		return jobj;
 	}
 
 }
