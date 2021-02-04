@@ -25,7 +25,7 @@ const routes: Array<RouteConfig> = [
         name: "Home"
       },
       {
-        path: "/detail",
+        path: "/detail/:id",
         component: Detail,
         name: "Detail"
       },

@@ -169,8 +169,8 @@ export default Vue.extend({
     nowPrice: 0
   }),
   methods: {
-    getItem() {
-      itemApi.getItem(1).then((res: AxiosResponse) => {
+    getItem(id: number) {
+      itemApi.getItem(id).then((res: AxiosResponse) => {
         this.item = res.data.object;
         this.itemId = res.data.object.itemId;
         this.nowPrice = res.data.object.nowPrice;
@@ -202,7 +202,8 @@ export default Vue.extend({
     }
   },
   created() {
-    this.getItem();
+    const id = Number(this.$route.params.id);
+    this.getItem(id);
   }
 });
 </script>
