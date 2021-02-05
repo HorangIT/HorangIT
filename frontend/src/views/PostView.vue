@@ -234,6 +234,8 @@
   </div>
 </template>
 <script lang="ts">
+/* eslint-disable */
+
 import Vue from "vue";
 import { itemApi } from "../utils/axios";
 import moment from "moment";
@@ -405,27 +407,6 @@ export default Vue.extend({
       this.files = this.files.filter(
         data => (data as any).number !== Number(name)
       );
-    },
-
-    startTimeCheck() {
-      const today = moment();
-      this.todayDate = today.format("YYYY-MM-DD");
-      this.todayTime = today.format("HH:mm");
-
-      if (this.startDate === this.endDate && this.startTime >= this.endTime) {
-        alert("시간이 잘못 입력되었습니다.");
-      } else if (
-        this.todayDate === this.startDate &&
-        this.startTime <= this.todayTime
-      ) {
-        (this.$refs.startTimeDialog as any).save(this.todayTime);
-      } else (this.$refs.startTimeDialog as any).save(this.startTime);
-    },
-
-    endTimeCheck() {
-      if (this.startDate === this.endDate && this.startTime >= this.endTime) {
-        alert("시간이 잘못 입력되었습니다.");
-      } else (this.$refs.endTimeDialog as any).save(this.endTime);
     },
 
     startPriceCheck() {

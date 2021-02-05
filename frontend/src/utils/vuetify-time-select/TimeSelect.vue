@@ -54,6 +54,7 @@
 </template>
 
 <script lang="ts">
+/* eslint-disable */
 export default {
   name: "TimeSelect",
   props: {
