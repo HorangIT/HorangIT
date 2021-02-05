@@ -76,10 +76,15 @@ public class AuctionServiceImpl implements AuctionService{
 		
 		//happy price 보다 값이 커지는 경우
 		long happyPrice = Long.parseLong(redisUtil.getData(ITEM_NAME+itemId+ITEM_HAPPY_PRICE));
-		if(happyPrice < newPrice) {
+		if(happyPrice <= newPrice) {
 			newPrice = happyPrice;
-			jobj.put("test", "응찰 가격을 넘어섰네요  이제 사야해요");
+			jobj.put("test", "응찰 가격을 넘어섰어요! 이제 사야해요.");
 //			done();
+		}
+		
+		if(happyPrice <= nextPrice) {			
+			nextPrice = happyPrice;
+			jobj.put("test", "응찰 가격을 넘어섰어요! 이제 사야해요.");
 		}
 //		String now = redisUtil.getData(ITEM_NAME+itemId);
 		
@@ -101,6 +106,16 @@ public class AuctionServiceImpl implements AuctionService{
 		result.data = "flex에 성공하셨습니다!";
 		
 		redisUtil.setData(ITEM_NAME+itemId, redisUtil.getData(ITEM_NAME+itemId+ITEM_HAPPY_PRICE));
+		JSONObject jobj = new JSONObject();
+		jobj = getPriceAfterAuction(redisUtil.getData(ITEM_NAME+itemId), itemId);
+		
+		addAuctionLog(userId, itemId, redisUtil.getData(ITEM_NAME+itemId));
+		
+		jobj.put("log", getAuctionLog(itemId));
+		
+		jobj.put("test", "응찰 가격을 넘어섰네요, 이제 사야해요 (FLEX!)");
+		
+		result.object = jobj;
 		
 //		done(itemId, userId);
 		
