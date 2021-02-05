@@ -12,6 +12,18 @@
             >
             </v-carousel-item>
           </v-carousel>
+          <div class="col-sm-12 col-xs-12 col-md-12">
+            <v-tabs>
+              <v-tab>경매 톡톡</v-tab>
+              <v-tab>리뷰</v-tab>
+              <v-tab-item>
+                <Chat />
+              </v-tab-item>
+              <v-tab-item>
+                <Review />
+              </v-tab-item>
+            </v-tabs>
+          </div>
         </div>
         <div class="col-md-7 col-sm-7 col-xs-12">
           <div class="pl-6">
@@ -58,7 +70,10 @@
                 height="12vh"
                 @click="bid"
               >
-                <h2>
+                <h2 v-if="isFlex">
+                  Flex!!!!!!!!!!!!
+                </h2>
+                <h2 v-else>
                   {{ nowPrice | comma }}원<br />응찰하기<br />
                   <small>다음 응찰가는 {{ nextPrice | comma }}원입니다.</small>
                 </h2>
@@ -75,22 +90,9 @@
               </v-btn>
             </div>
             <v-divider></v-divider>
+            <p class="py-4 ma-0">응찰내역</p>
             <BiddingLog :biddingLog="biddingLog"></BiddingLog>
           </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-12 col-xs-12 col-md-12">
-          <v-tabs>
-            <v-tab>경매 톡톡</v-tab>
-            <v-tab>리뷰</v-tab>
-            <v-tab-item>
-              <Chat />
-            </v-tab-item>
-            <v-tab-item>
-              <Review />
-            </v-tab-item>
-          </v-tabs>
         </div>
       </div>
     </v-container>
@@ -106,7 +108,7 @@
       <div class="col-md-6 col-sm-6 col-xs-12">
         <v-card>
           <v-img
-            :src="require('../assets/img/home/slider2.jpg')"
+            :src="require('../assets/img/layout/horangit_2.png')"
             class="white--text align-center"
             gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
             height="400px"
@@ -165,7 +167,8 @@ export default Vue.extend({
     itemId: 0,
     nowPrice: 0,
     nextPrice: 0,
-    biddingLog: []
+    biddingLog: [],
+    isFlex: false
   }),
   filters: {
     comma(val: number | string) {
@@ -179,6 +182,9 @@ export default Vue.extend({
         this.itemId = res.data.object.itemId;
         this.nowPrice = res.data.object.nowPrice;
         this.nextPrice = res.data.object.nextPrice;
+        if (this.nowPrice === this.item.happyPrice){
+          this.isFlex = true;
+        }
         console.log(this.item);
       });
     },
@@ -200,10 +206,13 @@ export default Vue.extend({
       const user = JSON.parse(localStorage.getItem("user") || "{}");
       const flexInfo = {
         userId: String(user.object.user.id),
-        itemId: String(this.itemId)
+        itemId: String(this.itemId),
+        nowPrice: String(this.nowPrice)
       };
       auctionApi.flex(flexInfo).then((res: AxiosResponse) => {
+
         console.log(res);
+        this.isFlex = true;
       });
     },
     log() {

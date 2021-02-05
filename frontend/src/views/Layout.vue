@@ -45,7 +45,7 @@
       <v-spacer></v-spacer>
       <!--로그인 유무-->
       <span v-if="login" class="d-flex align-center">
-        <h3>{{ nickname }}</h3>
+        <h3 class="d-none d-md-flex">{{ nickname }}</h3>
         <v-menu transition="scroll-y-transition">
           <template v-slot:activator="{ on }">
             <v-btn v-on="on" icon class="mx-1">
