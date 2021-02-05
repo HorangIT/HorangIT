@@ -9,7 +9,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import numberWithCommas from '@/utils/numberWithCommas'
+import numberWithCommas from '../../utils/numberWithCommas'
 
 export default Vue.extend({
   name: 'Bidding',
