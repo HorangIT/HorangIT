@@ -167,6 +167,7 @@ export default Vue.extend({
     itemId: 0,
     nowPrice: 0,
     nextPrice: 0,
+    happyPrice: 0,
     biddingLog: [],
     isFlex: false
   }),
@@ -182,7 +183,8 @@ export default Vue.extend({
         this.itemId = res.data.object.itemId;
         this.nowPrice = res.data.object.nowPrice;
         this.nextPrice = res.data.object.nextPrice;
-        if (this.nowPrice === this.item.happyPrice){
+        this.happyPrice = res.data.object.happyPrice;
+        if (this.nowPrice === this.happyPrice){
           this.isFlex = true;
         }
         console.log(this.item);
@@ -210,8 +212,8 @@ export default Vue.extend({
         nowPrice: String(this.nowPrice)
       };
       auctionApi.flex(flexInfo).then((res: AxiosResponse) => {
-
-        console.log(res);
+        console.log(res.data);
+        this.nowPrice = res.data.object.nowPrice;
         this.isFlex = true;
       });
     },
