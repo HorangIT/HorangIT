@@ -110,7 +110,9 @@ public class AuctionController {
 			responseEntity = new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
 		}else {
 			result = auctionService.flex(auctionInputDto.getItemId(), auctionInputDto.getUserId());
+			responseEntity = new ResponseEntity<>(result, HttpStatus.OK);
 		}
+		
 		
 		return responseEntity;
 	}

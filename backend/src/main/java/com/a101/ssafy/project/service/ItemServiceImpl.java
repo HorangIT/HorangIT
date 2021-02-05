@@ -145,6 +145,7 @@ public class ItemServiceImpl implements ItemService{
 				long nextPrice = auctionService.getAuctionUnit(str) + Long.parseLong(str);
 				if(nextPrice >= item.getHappyPrice()) {
 					nextPrice = item.getHappyPrice();
+					jobj.put("test", "응찰 가격을 넘어섰어요! 이제 사야해요.");
 				}
 				jobj.put("nextPrice", nextPrice);
 			}
