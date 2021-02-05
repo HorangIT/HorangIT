@@ -1,6 +1,7 @@
 <template>
   <v-list-item>
     <v-list-item-content>
+      <!-- 응찰시간 포맷 수정 필요 -->
       <v-list-item-title>{{ biddingSplit[0] }} ({{ biddingSplit[2] }})</v-list-item-title>
       <v-list-item-subtitle>&#8361; {{ biddingSplit[1] | comma }}</v-list-item-subtitle>
     </v-list-item-content>
@@ -17,6 +18,7 @@ export default Vue.extend({
     'bidding',
   ],
   computed: {
+    // bidding: string = "닉네임;응찰가격;응찰시간"
     biddingSplit () {
       return this.bidding.split(';')
     }

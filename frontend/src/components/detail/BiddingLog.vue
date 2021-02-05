@@ -1,4 +1,5 @@
 <template>
+  <!-- 응찰 내역 높이, 스크롤 설정 -->
   <v-list
     height="300px"
     style="overflow: auto"
