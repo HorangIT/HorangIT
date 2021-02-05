@@ -46,7 +46,7 @@
                 filled
                 outlined
                 :rules="[rules.price]"
-                :blur="startPriceCheck()"
+                @blur="startPriceCheck()"
                 v-model="startPrice"
               ></v-text-field>
               <v-text-field
@@ -54,7 +54,7 @@
                 filled
                 outlined
                 :rules="[rules.price]"
-                :blur="happyPriceCheck()"
+                @blur="happyPriceCheck()"
                 v-model="happyPrice"
               ></v-text-field>
             </v-row>
@@ -64,14 +64,14 @@
                 ref="startDateCalender"
                 v-model="startDateCalender"
                 :close-on-content-click="false"
-                :return-value.sync="startDateTime"
+                :return-value.sync="startDate"
                 transition="scale-transition"
                 offset-y
                 min-width="auto"
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
-                    v-model="startDateTime"
+                    v-model="startDate"
                     label="경매시작일"
                     prepend-icon="mdi-calendar"
                     readonly
@@ -95,62 +95,28 @@
                   >
                     Cancel
                   </v-btn>
-                  <v-dialog
-                    ref="startTimeDialog"
-                    v-model="startTimeDialog"
-                    :return-value.sync="startTime"
-                    persistent
-                    width="290px"
-                  >
-                    <template v-slot:activator="{ on }">
-                      <v-btn text color="primary" v-on="on">TIME</v-btn>
-                    </template>
-                    <v-time-picker
-                      v-if="startTimeDialog"
-                      v-model="startTime"
-                      full-width
-                    >
-                      <v-spacer></v-spacer>
-                      <v-btn
-                        text
-                        color="primary"
-                        @click="startTimeDialog = false"
-                      >
-                        Cancel
-                      </v-btn>
-                      <v-btn
-                        text
-                        color="primary"
-                        @click="$refs.startTimeDialog.save(startTime)"
-                      >
-                        OK
-                      </v-btn>
-                    </v-time-picker>
-                  </v-dialog>
                   <v-btn
                     text
                     color="primary"
-                    @click="
-                      $refs.startDateCalender.save(startDate + ' ' + startTime)
-                    "
+                    @click="$refs.startDateCalender.save(startDate)"
                   >
                     OK
                   </v-btn>
                 </v-date-picker>
               </v-menu>
-
+              <time-select v-model="startTime"></time-select>
               <v-menu
                 ref="endDateCalender"
                 v-model="endDateCalender"
                 :close-on-content-click="false"
-                :return-value.sync="endDateTime"
+                :return-value.sync="endDate"
                 transition="scale-transition"
                 offset-y
                 min-width="auto"
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
-                    v-model="endDateTime"
+                    v-model="endDate"
                     label="경매종료일"
                     prepend-icon="mdi-calendar"
                     readonly
@@ -169,43 +135,16 @@
                   <v-btn text color="primary" @click="endDateCalender = false">
                     Cancel
                   </v-btn>
-                  <v-dialog
-                    ref="endTimeDialog"
-                    v-model="endTimeDialog"
-                    :return-value.sync="endTime"
-                    persistent
-                    width="290px"
-                  >
-                    <template v-slot:activator="{ on }">
-                      <v-btn text color="primary" v-on="on">TIME</v-btn>
-                    </template>
-                    <v-time-picker
-                      v-if="endTimeDialog"
-                      v-model="endTime"
-                      full-width
-                    >
-                      <v-spacer></v-spacer>
-                      <v-btn
-                        text
-                        color="primary"
-                        @click="endTimeDialog = false"
-                      >
-                        Cancel
-                      </v-btn>
-                      <v-btn text color="primary" @click="endTimeCheck()">
-                        OK
-                      </v-btn>
-                    </v-time-picker>
-                  </v-dialog>
                   <v-btn
                     text
                     color="primary"
-                    @click="$refs.endDateCalender.save(endDate + ' ' + endTime)"
+                    @click="$refs.endDateCalender.save(endDate)"
                   >
                     OK
                   </v-btn>
                 </v-date-picker>
               </v-menu>
+              <time-select v-model="endTime"></time-select>
             </v-row>
           </v-col>
           <div class="shadow mt-5">
@@ -298,11 +237,10 @@
 import Vue from "vue";
 import { itemApi } from "../utils/axios";
 import moment from "moment";
-// import { TimeSelect } from "../utils/timeSelect";
-// import VuetifyTimeSelect from 'vuetify-time-select'
-// Vue.component('vuetify-time-select', VuetifyTimeSelect);
+import TimeSelect from "../utils/vuetify-time-select/TimeSelect.vue";
 
 export default Vue.extend({
+  components: { TimeSelect },
   name: "PostView",
   data: () => ({
     uid: "",
@@ -352,6 +290,9 @@ export default Vue.extend({
   },
   methods: {
     async writePost() {
+      this.startDateTime = this.startDate + " " + this.startTime;
+      this.endDateTime = this.endDate + " " + this.endTime;
+
       const {
         uid,
         title,
@@ -500,6 +441,9 @@ export default Vue.extend({
     },
 
     testButton() {
+      this.startDateTime = this.startDate + " " + this.startTime;
+      this.endDateTime = this.endDate + " " + this.endTime;
+
       console.log("'-----------TEST-----------'");
       console.log("'변수명:타입'");
       // uid
