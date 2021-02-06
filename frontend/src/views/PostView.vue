@@ -234,8 +234,6 @@
   </div>
 </template>
 <script lang="ts">
-/* eslint-disable */
-
 import Vue from "vue";
 import { itemApi } from "../utils/axios";
 import moment from "moment";
@@ -348,7 +346,7 @@ export default Vue.extend({
         console.log(data);
         if (data.status) {
           alert("업로드가 완료되었습니다.");
-          this.$router.push("/");
+          this.$emit("close")
         } else {
           alert("업로드에 실패하였습니다.");
         }

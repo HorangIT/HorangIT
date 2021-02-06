@@ -1,11 +1,9 @@
 <template>
   <div>
-    <v-card-title>Filters</v-card-title>
+    <v-card-title>Category</v-card-title>
     <template>
       <v-treeview
         :items="items"
-        :open="[1]"
-        :active="[5]"
         :selected-color="'#fff'"
         activatable
         open-on-click
