@@ -11,6 +11,7 @@ import PostView from "@/views/PostView.vue";
 import CS from "@/views/CS.vue";
 import Detail from "@/views/Detail.vue";
 import PostSample from "@/views/PostSample.vue";
+import Notfound from "@/views/Notfound.vue";
 
 Vue.use(VueRouter);
 
@@ -55,6 +56,14 @@ const routes: Array<RouteConfig> = [
         name: "Auction"
       }
     ]
+  },
+  {
+    path: "*",
+    redirect: "/404",
+  },
+  {
+    path: "/404",
+    component: Notfound
   },
   // test page
   {

@@ -42,6 +42,7 @@
                   background-color="warning lighten-3"
                   color="warning"
                   dense
+                  readonly
                 >
                 </v-rating>
               </div>
@@ -70,7 +71,7 @@
                 height="12vh"
                 @click="bid"
               >
-                <h2 v-if="isFlex">
+                <h2 v-if="isOver">
                   Flex!!!!!!!!!!!!
                 </h2>
                 <h2 v-else>
@@ -84,10 +85,30 @@
                 tile
                 width="50%"
                 height="12vh"
-                @click="flex"
+                @click="dialog = true"
               >
-                <h2>{{ item.happyPrice | comma }}원<br />FLEX</h2>
+                <h2 v-if="isOver">
+                  Flex!!!!!!!!!!!!
+                </h2>
+                <h2 v-else>{{ item.happyPrice | comma }}원<br />FLEX</h2>
               </v-btn>
+              <v-dialog v-model="dialog" max-width="290">
+                <v-card>
+                  <h1 class="pt-4 text-center">
+                    ARE YOU SURE?
+                  </h1>
+                  <v-img src="../assets/img/layout/horangit_6.png"></v-img>
+                  <v-card-actions>
+                    <v-btn color="primary" @click="dialog = false">
+                      한 번 더 생각해볼게요
+                    </v-btn>
+                    <v-spacer></v-spacer>
+                    <v-btn color="warning" @click="flex">
+                      FLEX!!!
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
             </div>
             <v-divider></v-divider>
             <p class="py-4 ma-0">응찰내역</p>
@@ -104,44 +125,14 @@
       <ItemList></ItemList>
     </v-card-text>
     <v-divider></v-divider>
-    <div class="pl-4 pr-4 row">
-      <div class="col-md-6 col-sm-6 col-xs-12">
-        <v-card>
-          <v-img
-            :src="require('../assets/img/layout/horangit_2.png')"
-            class="white--text align-center"
-            gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
-            height="400px"
-          >
-            <h1 class="text-center font-size">경매 참여 방법</h1>
-            <div class="text-center">
-              <v-btn href="#" class="white--text" outlined>Go</v-btn>
-            </div>
-          </v-img>
-        </v-card>
-      </div>
-      <div class="col-md-6 col-sm-6 col-xs-12">
-        <v-card>
-          <v-img
-            :src="require('../assets/img/home/slider3.jpg')"
-            class="white--text align-center"
-            gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
-            height="400px"
-          >
-            <h1 class="text-center font-size">FAQs</h1>
-            <div class="text-center">
-              <v-btn href="/shop" class="white--text" outlined>Go</v-btn>
-            </div>
-          </v-img>
-        </v-card>
-      </div>
-    </div>
+    <Info />
     <br /><br /><br /><br /><br />
   </div>
 </template>
 <script lang="ts">
 import Vue from "vue";
 import ItemList from "../components/ItemList.vue";
+import Info from "../components/Info.vue";
 import Chat from "../components/detail/Chat.vue";
 import Review from "../components/detail/Review.vue";
 import BiddingLog from "../components/detail/BiddingLog.vue";
@@ -157,69 +148,85 @@ export default Vue.extend({
     Chat,
     Review,
     BiddingLog,
-    TimeBar
+    TimeBar,
+    Info
   },
 
   data: () => ({
-    rating: 4.5,
-    active: false,
-    item: Object,
+    item: {},
     itemId: 0,
     nowPrice: 0,
     nextPrice: 0,
     happyPrice: 0,
     biddingLog: [],
-    isFlex: false
+    isOver: false,
+    rating: 4.5,
+    dialog: false
   }),
   filters: {
     comma(val: number | string) {
       return numberWithCommas(Number(val));
     }
   },
+  watch: {
+    nowPrice() {
+      if (this.nowPrice === this.happyPrice) {
+        this.isOver = true;
+      }
+    }
+  },
   methods: {
     getItem(id: number) {
-      itemApi.getItem(id).then((res: AxiosResponse) => {
-        this.item = res.data.object;
-        this.itemId = res.data.object.itemId;
-        this.nowPrice = res.data.object.nowPrice;
-        this.nextPrice = res.data.object.nextPrice;
-        this.happyPrice = res.data.object.happyPrice;
-        if (this.nowPrice === this.happyPrice){
-          this.isFlex = true;
-        }
-        console.log(this.item);
-      });
+      itemApi
+        .getItem(id)
+        .then((res: AxiosResponse) => {
+          this.item = res.data.object;
+          this.itemId = res.data.object.itemId;
+          this.nowPrice = res.data.object.nowPrice;
+          this.nextPrice = res.data.object.nextPrice;
+          this.happyPrice = res.data.object.happyPrice;
+        })
+        .catch(this.$router.push("/404"));
     },
     bid() {
-      const user = JSON.parse(localStorage.getItem("user") || "{}");
-      const bidInfo = {
-        userId: String(user.object.user.id),
-        itemId: String(this.itemId),
-        nowPrice: String(this.nowPrice)
-      };
-      console.log(bidInfo);
-      auctionApi.bidding(bidInfo).then((res: AxiosResponse) => {
-        console.log(res.data.object);
-        this.nowPrice = res.data.object.nowPrice;
-        this.nextPrice = res.data.object.nextPrice;
-      });
+      if (localStorage.getItem("user")) {
+        const user = JSON.parse(localStorage.getItem("user") || "{}");
+        const bidInfo = {
+          userId: String(user.object.user.id),
+          itemId: String(this.itemId),
+          nowPrice: String(this.nowPrice)
+        };
+        auctionApi.bidding(bidInfo).then((res: AxiosResponse) => {
+          console.log(res.data.object);
+          this.nowPrice = res.data.object.nowPrice;
+          this.nextPrice = res.data.object.nextPrice;
+        });
+      } else {
+        alert("로그인 해주세요!");
+      }
     },
     flex() {
-      const user = JSON.parse(localStorage.getItem("user") || "{}");
-      const flexInfo = {
-        userId: String(user.object.user.id),
-        itemId: String(this.itemId),
-        nowPrice: String(this.nowPrice)
-      };
-      auctionApi.flex(flexInfo).then((res: AxiosResponse) => {
-        console.log(res.data);
-        this.nowPrice = res.data.object.nowPrice;
-        this.isFlex = true;
-      });
+      if (localStorage.getItem("user")) {
+        const user = JSON.parse(localStorage.getItem("user") || "{}");
+        const flexInfo = {
+          userId: String(user.object.user.id),
+          itemId: String(this.itemId),
+          nowPrice: String(this.nowPrice)
+        };
+        auctionApi.flex(flexInfo).then((res: AxiosResponse) => {
+          console.log(res.data);
+          this.nowPrice = this.happyPrice;
+          this.isOver = true;
+        });
+      } else {
+        alert("로그인 해주세요!");
+      }
+      this.dialog = false;
     },
     log() {
       // 응찰 내역 불러오기
-      auctionApi.log(Number(this.$route.params.id))
+      auctionApi
+        .log(Number(this.$route.params.id))
         .then((res: AxiosResponse) => {
           this.biddingLog = res.data.object.log.reverse();
           // console.log('this.biddingLog')
@@ -233,7 +240,6 @@ export default Vue.extend({
   created() {
     const id = Number(this.$route.params.id);
     this.getItem(id);
-    // 응찰 내역 불러오기
     this.log();
   },
   updated() {

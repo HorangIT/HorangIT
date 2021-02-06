@@ -1,14 +1,29 @@
 <template>
   <div id="auction">
-    <!-- <Carousel /> -->
     <v-container>
       <p class="text-center" style="font-size:3rem;">Auction</p>
+      <v-btn
+        color="orange accent-3"
+        fab
+        min-width="70"
+        min-height="70"
+        fixed
+        bottom
+        right
+        @click="dialog = true"
+      >
+        <v-icon>mdi-pencil</v-icon>
+      </v-btn>
+      <v-dialog v-model="dialog" max-width="50vw">
+        <v-card>
+          <PostView @close="dialog = false"/>
+        </v-card>
+      </v-dialog>
       <div class="row">
         <div class="col-md-3 col-sm-3 col-xs-12">
           <Filters />
         </div>
         <div class="col-md-9 col-sm-9 col-xs-12">
-          <v-breadcrumbs class="pb-0" :items="breadcrums"></v-breadcrumbs>
           <v-row dense>
             <v-col cols="12" sm="8" class="pl-6 pt-6">
               <small>Showing 1-12 of 200 products</small>
@@ -66,7 +81,12 @@
             </div>
           </div>
           <div class="text-center mt-12">
-            <v-pagination v-model="page" :length="6" @input="getItemPage"></v-pagination>
+            <v-pagination
+              v-model="page"
+              :length="6"
+              @input="getItemPage"
+            >
+            </v-pagination>
           </div>
         </div>
       </div>
@@ -76,16 +96,15 @@
 
 <script lang="ts">
 import Vue from "vue";
-// import Carousel from "../components/Carousel.vue";
 import Filters from "../components/auction/Filters.vue";
-import { itemApi } from "../utils/axios";
+import PostView from "./PostView.vue";
 
 export default Vue.extend({
   name: "Auction",
 
   components: {
-    // Carousel,
-    Filters
+    Filters,
+    PostView
   },
 
   data: () => ({
@@ -98,23 +117,7 @@ export default Vue.extend({
       "낮은가격순으로",
       "높은가격순으로"
     ],
-    breadcrums: [
-      {
-        text: "Home",
-        disabled: false,
-        href: "breadcrumbs_home"
-      },
-      {
-        text: "Clothing",
-        disabled: false,
-        href: "breadcrumbs_clothing"
-      },
-      {
-        text: "T-Shirts",
-        disabled: true,
-        href: "breadcrumbs_shirts"
-      }
-    ],
+    dialog: false,
     products: [
       {
         id: 1,
@@ -205,8 +208,7 @@ export default Vue.extend({
   methods: {
     getItemPage(page: number) {
       // const { data } = itemApi.getItemPage(page);
-
-      this.products = [     // 12개 
+      this.products = [ // 12개 
         {
         id: 1,
         name: "BLACK TEE",

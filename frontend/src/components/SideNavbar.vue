@@ -95,8 +95,10 @@ export default Vue.extend({
     }
   },
   created() {
-    const user = JSON.parse(localStorage.getItem("user") || "{}");
-    this.nickname = user.object.user.nickname;
+    if (localStorage.getItem("user")) {
+      const user = JSON.parse(localStorage.getItem("user") || "{}");
+      this.nickname = user.object.user.nickname;
+    }
   }
 });
 </script>
