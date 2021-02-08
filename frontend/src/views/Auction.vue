@@ -194,7 +194,7 @@ export default Vue.extend({
         ];
 
     },
-    search(data) {
+    search(data: any) {
       itemApi.search(data).then((res: AxiosResponse) => {
         console.log(data);
         console.log(res);

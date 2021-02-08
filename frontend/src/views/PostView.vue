@@ -48,6 +48,12 @@
                 <v-radio label="택배 & 직거래" value="2"></v-radio>
               </v-radio-group>
             </v-row>
+            <v-row class="mb-5">
+              <DaumPostcode
+                :on-complete=handleAddress
+              />
+
+            </v-row>
             <v-row class="mb-5 mr-5">
               <v-text-field
                 label="경매시작가"
@@ -245,8 +251,6 @@
     </v-container>
   </div>
 </template>
-
-<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script lang="ts">
 /* eslint-disable */
 
@@ -254,9 +258,10 @@ import Vue from "vue";
 import { itemApi } from "../utils/axios";
 import moment from "moment";
 import TimeSelect from "../utils/vuetify-time-select/TimeSelect.vue";
+import DaumPostcode from "vuejs-daum-postcode";
 
 export default Vue.extend({
-  components: { TimeSelect },
+  components: { TimeSelect, DaumPostcode },
   name: "PostView",
   data: () => ({
     uid: "",
@@ -434,6 +439,23 @@ export default Vue.extend({
       if (!this.happyPrice.match(/^[1-9][0-9]*$/)) {
         this.happyPrice = "";
       }
+    },
+
+    handleAddress(data: any) {
+      let fullAddress = data.address
+      let extraAddress = ''
+      if (data.addressType === 'R') {
+        if (data.bname !== '') {
+          extraAddress += data.bname
+        }
+        if (data.buildingName !== '') {
+          extraAddress += (extraAddress !== '' ? `, ${data.buildingName}` : data.buildingName)
+        }
+        fullAddress += (extraAddress !== '' ? ` (${extraAddress})` : '')
+      }
+
+      console.log(fullAddress) // e.g. '서울 성동구 왕십리로2길 20 (성수동1가)'
+      this.location = fullAddress;
     },
 
     testButton() {
