@@ -22,8 +22,10 @@ public class SiGunGu {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	String name;
+	
 	@ManyToOne(optional = false)
-	@JoinColumn(name="disctrict_id")
+	@JoinColumn(name="district_id")
 	private District district;
 	
 	
