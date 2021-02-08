@@ -16,6 +16,7 @@
 
 	<properties>
 		<java.version>1.8</java.version>
+		<docker.image.prefix>docker-spring</docker.image.prefix>
 	</properties>
 
 	<dependencies>
@@ -188,8 +189,9 @@
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
+				<groupId>com.spotify</groupId>
+				<artifactId>dockerfile-maven-plugin</artifactId>
+				<version>1.4.9</version>
 				<configuration>
 					<excludes>
 						<exclude>
@@ -197,6 +199,7 @@
 							<artifactId>lombok</artifactId>
 						</exclude>
 					</excludes>
+					<repository>${docker.image.prefix}/${project.artifactId}</repository>
 				</configuration>
 			</plugin>
 		</plugins>
