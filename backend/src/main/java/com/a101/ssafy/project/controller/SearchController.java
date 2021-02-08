@@ -62,16 +62,20 @@ public class SearchController {
 	
 	@GetMapping
 	public Object getLocationNames(SearchLocationDto searchLocationDto) {
+		JSONObject jobj = new JSONObject();
 		
 		if(searchLocationDto.getDistrictName()==null) {
-			JSONObject jobj = new JSONObject();
 			List<String> list = searchService.getDistrict();
-			jobj.put("districtList", list);
+			jobj.put("list", list);
 			
 			return jobj;
+		}else {
+			List<String> list = searchService.getSiGunGu(searchLocationDto.getDistrictName());
+			jobj.put("list", list);
+			
 		}
 		
-		return null;
+		return jobj;
 	}
 	
 

@@ -4,5 +4,5 @@ import java.util.List;
 
 public interface SearchService {
 	public List<String> getDistrict();
-
+	public List<String> getSiGunGu(String name);
 }
