@@ -3,6 +3,9 @@ package com.a101.ssafy.project.controller;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import org.json.simple.JSONObject;
@@ -22,11 +25,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.a101.ssafy.project.model.BasicResponse;
+import com.a101.ssafy.project.model.image.Image;
 import com.a101.ssafy.project.model.item.Item;
 import com.a101.ssafy.project.model.item.RegisterDto;
 import com.a101.ssafy.project.repository.ItemRepository;
 import com.a101.ssafy.project.service.ItemService;
 import com.a101.ssafy.project.service.S3Service;
+import com.google.gson.JsonObject;
 
 @CrossOrigin(origins = { "*" })
 @Controller
@@ -95,35 +100,52 @@ public class ItemController {
 	public Object getAllItems(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue ="12") int size) {
 
 		try {
+			// paging은 1~N까지 하기 때문에 기본 page에서 1을 빼준다 (0보다 큰 값이 들어올거니까)
+			Pageable paging = PageRequest.of(page-1, size);
+			Page<Item> itemPage = itemRepository.findAll(paging);		
+			List<Item> items = itemPage.getContent();			
 			
-			PageRequest paging = PageRequest.of(page, size);
-			Page<Item> itemPage = itemRepository.findAll(paging);
+			/*
+			 * Items의 image가 collections 형태이기 때문에 jpa가 알아서 serialization을 해주지 못함
+			 * 따라서 직접 리턴해줄 item들의 리스트 형태를 지정해줬음
+			 * 
+			 * returningItems = [
+			 * 	{
+			 * 		"itemId": 1,
+			 * 		"image": "filePath",
+			 * 		"grade": "S",
+			 * 		"name": "1",
+			 * 		"category": "category",
+			 * 		"startDate": "datetime"
+			 * ] 
+			 * 
+			 */
 			
-			System.out.println(itemPage.toString());
-//			
-			List<Item> items = itemPage.getContent();
-			System.out.println(items.size());
-			System.out.println(items.get(0).getName());
 			
-			JSONObject jobj = new JSONObject();
+			List<JSONObject> returningItems = new ArrayList<JSONObject>();
+									
+			for (int i = 0; i < items.size(); i++) {
+				JSONObject jobj = new JSONObject();
+				jobj.put("itemId",items.get(i).getId());
+				jobj.put("name",items.get(i).getName());
+				jobj.put("category",items.get(i).getCategory());
+				jobj.put("grade",items.get(i).getGrade());
+				jobj.put("startDate",items.get(i).getStartDate());
+				jobj.put("image", items.get(i).image.iterator().next().getFilePath());
+				
+				returningItems.add(jobj);
+			}
 			
+			System.out.println(returningItems.toString());
 			
-//			Page<Item> itemPage = itemRepository.findByCategory("전자기기", paging);
-//			
-//			System.out.println(items.toString());
-//						
-//			
-//			Map<String, Object> response = new HashMap<String, Object>();
-//			response.put("items", items);
-//			response.put("currentPage", itemPage.getNumber());
-//			response.put("totalPages", itemPage.getTotalPages());
-//			
-//			System.out.println(response.toString());
-			
-			return new ResponseEntity<>(itemPage, HttpStatus.OK);
+			BasicResponse result = new BasicResponse();
+			result.status = true;
+			result.data = "모든 아이템 보내기!";
+			result.object = returningItems;
+						
+			return new ResponseEntity<>(result, HttpStatus.OK);
 			
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
