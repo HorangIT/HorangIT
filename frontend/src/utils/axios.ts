@@ -55,6 +55,9 @@ export const itemApi = {
   getItem(id: number): any {
     return request.get(`/item/${id}`);
   },
+  search(data: any): any {
+    return request.get("/search", data);
+  },
   getItemPage(page: number): any {
     return request.get(`/item/page/${page}`);
   }
