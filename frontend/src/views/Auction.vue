@@ -35,7 +35,7 @@
                   class="white--text align-end"
                   :aspect-ratio="16 / 9"
                   height="200px"
-                  :src="pro.src"
+                  :src="pro.image"
                 >
                   <v-card-title>{{ pro.type }} </v-card-title>
                   <v-expand-transition>
@@ -56,7 +56,8 @@
                       {{ pro.name }}
                     </a>
                   </div>
-                  <div>${{ pro.price }}</div>
+                  <div>{{ pro.category }}</div>
+                  <div>{{ pro.startPrice }} 원</div>
                 </v-card-text>
               </v-card>
             </v-hover>
@@ -180,20 +181,21 @@ export default Vue.extend({
       }
     ]
   }),
+  mounted() {
+    this.getItemPage(1);
+  },
   methods: {
-    getItemPage(page: number) {
-      // const { data } = itemApi.getItemPage(page);
-      this.products = [ // 12개 
-        {
-        id: 1,
-        name: "BLACK TEE",
-        type: "Jackets",
-        price: "18.00",
-        src: require("../assets/img/shop/1.jpg")
-        },
-        ];
-
+    async getItemPage(page: number) {
+      try {
+      const { data } = await itemApi.getItemPage(page);
+      console.log(data);
+      this.products = data.object;
+      }
+      catch (error) {
+        console.log(error);
+      }
     },
+
     search(data: any) {
       itemApi.search(data).then((res: AxiosResponse) => {
         console.log(data);

@@ -59,7 +59,7 @@ export const itemApi = {
     return request.get("/search", data);
   },
   getItemPage(page: number): any {
-    return request.get(`/item/page/${page}`);
+    return request.get(`/item/page?page=${page}`);
   }
 };
 
