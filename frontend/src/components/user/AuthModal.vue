@@ -40,3 +40,9 @@ export default Vue.extend({
   },
 });
 </script>
+
+<style scoped>
+  .v-btn:hover {
+    color: #FF9100 ;
+  }
+</style>

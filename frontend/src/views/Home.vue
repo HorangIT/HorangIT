@@ -2,45 +2,37 @@
   <div id="home">
     <v-carousel hide-delimiters cycle height="500">
       <v-carousel-item
-        :src="require('../assets/img/home/slider4.jpg')"
+        :src="require('../assets/img/home/main_buy.jpg')"
         class="pa-4"
+        to="/auction"
       >
         <v-row class="fill-height" align="center" justify="center">
           <div class="display-2 white--text pl-5 pr-5 hidden-sm-only">
-            <strong>🔥HOT🔥</strong>
+            <strong>대충 경매 참여하라는 멘트</strong>
           </div>
           <br />
         </v-row>
       </v-carousel-item>
       <v-carousel-item
-        :src="require('../assets/img/home/slider2.jpg')"
+        :src="require('../assets/img/home/main_sell.jpg')"
         class="pa-4"
+        to="/postview"
       >
         <v-row class="fill-height" align="center" justify="center">
           <div class="display-2 white--text pl-5 pr-5 hidden-sm-only">
-            <strong>Comming Soon</strong>
+            <strong>집에서 놀고 있는 물건을 경매에 등록하세요!</strong>
           </div>
           <br />
         </v-row>
       </v-carousel-item>
       <v-carousel-item
-        :src="require('../assets/img/home/slider3.jpg')"
+        :src="require('../assets/img/home/main_info.jpg')"
         class="pa-4"
+        to="/"
       >
         <v-row class="fill-height" align="center" justify="center">
           <div class="display-2 white--text pl-5 pr-5 hidden-sm-only">
-            <strong>NEW</strong>
-          </div>
-          <br />
-        </v-row>
-      </v-carousel-item>
-      <v-carousel-item
-        :src="require('../assets/img/home/slider1.jpg')"
-        class="pa-4"
-      >
-        <v-row class="fill-height" align="center" justify="center">
-          <div class="display-2 white--text pl-5 pr-5 hidden-sm-only">
-            <strong>Upto 60% + Extra 10%</strong>
+            <strong>대충 우리 서비스에 대한 소개</strong>
           </div>
           <br />
         </v-row>

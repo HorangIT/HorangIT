@@ -3,6 +3,7 @@
     <v-card-title>회원가입</v-card-title>
     <v-card-text>
       <v-text-field
+        color="orange accent-3"
         ref="nickname"
         v-model="nickname"
         :rules="[rules.required, rules.nickname]"
@@ -12,6 +13,7 @@
         required
       ></v-text-field>
       <v-text-field
+        color="orange accent-3"
         ref="email"
         v-model="email"
         :rules="[rules.required, rules.email]"
@@ -21,6 +23,7 @@
         required
       ></v-text-field>
       <v-text-field
+        color="orange accent-3"
         ref="password"
         v-model="password"
         :rules="[rules.required, rules.password]"
@@ -33,6 +36,7 @@
         required
       ></v-text-field>
       <v-text-field
+        color="orange accent-3"
         ref="passwordConfirm"
         v-model="passwordConfirm"
         :rules="[rules.required, rules.password, passwordConfirmRule]"
@@ -170,3 +174,9 @@ export default Vue.extend({
   },
 })
 </script>
+
+<style scoped>
+  .v-btn:hover {
+    color: #FF9100 ;
+  }
+</style>
