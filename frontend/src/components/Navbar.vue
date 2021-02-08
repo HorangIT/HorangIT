@@ -118,11 +118,11 @@ export default Vue.extend({
     nickname: "",
     dialog: false,
   }),
-  // computed: {
-  //   login() {
-  //     return this.$store.state.userModule.status.loggedIn;
-  //   }
-  // },
+  computed: {
+    login() {
+      return this.$store.state.userModule.status.loggedIn;
+    }
+  },
   created() {
     if (localStorage.getItem("user")) {
       const user = JSON.parse(localStorage.getItem("user") || "{}");
