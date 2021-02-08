@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.a101.ssafy.project.model.item.Item;
 import com.a101.ssafy.project.model.search.SearchDto;
+import com.a101.ssafy.project.model.search.SearchLocationDto;
 import com.a101.ssafy.project.model.search.SearchSpecs;
 import com.a101.ssafy.project.repository.SearchRepository;
 
@@ -26,7 +27,7 @@ public class SearchController {
 	SearchRepository searchRepository;
 	
 	/** 검색할 때 */
-	@GetMapping
+	@GetMapping("/hi")
 	public Object searchWithFilter(SearchDto searchDto) {
 		Specification<Item> spe = Specification.where(SearchSpecs.price(10000, 20000));
 		PageRequest pageRequest = PageRequest.of(0, 5);
@@ -48,6 +49,12 @@ public class SearchController {
 			System.out.println(kk.get(i).getId()+"zz");
 		}
 		return "hi";
+	}
+	
+	
+	@GetMapping
+	public Object getLocationNames(SearchLocationDto searchLocationDto) {
+		
 	}
 	
 

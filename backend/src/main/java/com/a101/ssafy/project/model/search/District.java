@@ -31,7 +31,7 @@ public class District {
 	private String name;
 	
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name="disctrict_id")
+	@JoinColumn(name="district_id")
 	private Collection<SiGunGu> siGunGu = new ArrayList<>();
 	
 	private void addsiGunGu(final SiGunGu sgg) {
