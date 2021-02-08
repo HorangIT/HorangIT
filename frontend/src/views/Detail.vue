@@ -176,17 +176,13 @@ export default Vue.extend({
     }
   },
   methods: {
-    getItem(id: number) {
-      itemApi
-        .getItem(id)
-        .then((res: AxiosResponse) => {
-          this.item = res.data.object;
-          this.itemId = res.data.object.itemId;
-          this.nowPrice = res.data.object.nowPrice;
-          this.nextPrice = res.data.object.nextPrice;
-          this.happyPrice = res.data.object.happyPrice;
-        })
-        .catch(this.$router.push("/404"));
+    getItem(id: number) {itemApi.getItem(id).then((res: AxiosResponse) => {
+        this.item = res.data.object;
+        this.itemId = res.data.object.itemId;
+        this.nowPrice = res.data.object.nowPrice;
+        this.nextPrice = res.data.object.nextPrice;
+        this.happyPrice = res.data.object.happyPrice;
+      })
     },
     bid() {
       if (localStorage.getItem("user")) {
@@ -239,6 +235,7 @@ export default Vue.extend({
   },
   created() {
     const id = Number(this.$route.params.id);
+    console.log(id)
     this.getItem(id);
     this.log();
   },
