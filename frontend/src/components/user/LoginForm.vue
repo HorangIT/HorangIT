@@ -6,7 +6,7 @@
         <v-card-text>
           <v-text-field
             ref="email"
-            color="orange"
+            color="orange accent-3"
             v-model="email"
             :rules="[rules.required, rules.email]"
             :error-messages="errorMessages"
@@ -16,7 +16,7 @@
           ></v-text-field>
           <v-text-field
             ref="password"
-            color="orange"
+            color="orange accent-3"
             v-model="password"
             :rules="[rules.required, rules.password]"
             :error-messages="errorMessages"
@@ -140,3 +140,9 @@ export default Vue.extend({
   },
 })
 </script>
+
+<style scoped>
+  .v-btn:hover {
+    color: #FF9100 ;
+  }
+</style>
