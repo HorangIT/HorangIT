@@ -13,5 +13,7 @@ public class SearchDto {
 	long minPrice;
 	long maxPrice;
 	
-	boolean checkButton;
+	char[] grade;
+	
+	
 }
