@@ -1,103 +1,86 @@
 <template>
-  <div id="auction">
-    <v-container>
-      <p class="text-center" style="font-size:3rem;">Auction</p>
-      <v-btn
-        color="orange accent-3"
-        fab
-        min-width="70"
-        min-height="70"
-        fixed
-        bottom
-        right
-        @click="dialog = true"
-      >
-        <v-icon>mdi-pencil</v-icon>
-      </v-btn>
-      <v-dialog v-model="dialog" max-width="50vw">
-        <v-card>
-          <PostView @close="dialog = false"/>
-        </v-card>
-      </v-dialog>
-      <div class="row">
-        <div class="col-md-3 col-sm-3 col-xs-12">
-          <Filters />
-        </div>
-        <div class="col-md-9 col-sm-9 col-xs-12">
-          <v-row dense>
-            <v-col cols="12" sm="8" class="pl-6 pt-6">
-              <small>Showing 1-12 of 200 products</small>
-            </v-col>
-            <v-col cols="12" sm="4">
-              <v-select
-                class="pa-0"
-                v-model="select"
-                :items="options"
-                style="margin-bottom: -20px;"
-                outlined
-                dense
-              >
-              </v-select>
-            </v-col>
-          </v-row>
-          <v-divider></v-divider>
-          <div class="row text-center">
-            <div
-              class="col-md-3 col-sm-6 col-xs-12"
-              :key="pro.id"
-              v-for="pro in products"
-            >
-              <v-hover v-slot:default="{ hover }">
-                <v-card class="mx-auto" color="grey lighten-4" max-width="600">
-                  <v-img
-                    class="white--text align-end"
-                    :aspect-ratio="16 / 9"
-                    height="200px"
-                    :src="pro.src"
-                  >
-                    <v-card-title>{{ pro.type }} </v-card-title>
-                    <v-expand-transition>
-                      <div
-                        v-if="hover"
-                        class="d-flex transition-fast-in-fast-out white darken-2 v-card--reveal display-3 white--text"
-                        style="height: 100%;"
-                      >
-                        <v-btn v-if="hover" href="/detail" class="" outlined>
-                          VIEW
-                        </v-btn>
-                      </div>
-                    </v-expand-transition>
-                  </v-img>
-                  <v-card-text class="text--primary">
-                    <div>
-                      <a href="/detail" style="text-decoration: none">
-                        {{ pro.name }}
-                      </a>
+  <v-container id="auction">
+    <p class="text-center" style="font-size:3rem;">Auction</p>
+    <v-btn
+      color="orange accent-3"
+      fab
+      min-width="70"
+      min-height="70"
+      fixed
+      bottom
+      right
+      @click="dialog = true"
+    >
+      <v-icon>mdi-pencil</v-icon>
+    </v-btn>
+    <v-dialog v-model="dialog" max-width="50vw">
+      <v-card>
+        <PostView @close="dialog = false"/>
+      </v-card>
+    </v-dialog>
+    <div class="row">
+      <div class="col-md-3 col-sm-3 col-xs-12">
+        <Filters @search="search"/>
+      </div>
+      <div class="col-md-9 col-sm-9 col-xs-12">
+        <div class="row text-center">
+          <div
+            class="col-md-3 col-sm-6 col-xs-12"
+            :key="pro.id"
+            v-for="pro in products"
+          >
+            <v-hover v-slot:default="{ hover }">
+              <v-card class="mx-auto" color="grey lighten-4" max-width="600">
+                <v-img
+                  class="white--text align-end"
+                  :aspect-ratio="16 / 9"
+                  height="200px"
+                  :src="pro.src"
+                >
+                  <v-card-title>{{ pro.type }} </v-card-title>
+                  <v-expand-transition>
+                    <div
+                      v-if="hover"
+                      class="d-flex transition-fast-in-fast-out white darken-2 v-card--reveal display-3 white--text"
+                      style="height: 100%;"
+                    >
+                      <v-btn v-if="hover" href="/detail" class="" outlined>
+                        VIEW
+                      </v-btn>
                     </div>
-                    <div>${{ pro.price }}</div>
-                  </v-card-text>
-                </v-card>
-              </v-hover>
-            </div>
+                  </v-expand-transition>
+                </v-img>
+                <v-card-text class="text--primary">
+                  <div>
+                    <a href="/detail" style="text-decoration: none">
+                      {{ pro.name }}
+                    </a>
+                  </div>
+                  <div>${{ pro.price }}</div>
+                </v-card-text>
+              </v-card>
+            </v-hover>
           </div>
-          <div class="text-center mt-12">
-            <v-pagination
-              v-model="page"
-              :length="6"
-              @input="getItemPage"
-            >
-            </v-pagination>
-          </div>
+        </div>
+        <div class="text-center mt-12">
+          <v-pagination
+            v-model="page"
+            :length="6"
+            @input="getItemPage"
+          >
+          </v-pagination>
         </div>
       </div>
-    </v-container>
-  </div>
+    </div>
+  </v-container>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
 import Filters from "../components/auction/Filters.vue";
 import PostView from "./PostView.vue";
+import { itemApi } from "../utils/axios";
+import { AxiosResponse } from "axios";
 
 export default Vue.extend({
   name: "Auction",
@@ -109,14 +92,6 @@ export default Vue.extend({
 
   data: () => ({
     page: 1,
-    select: "인기순",
-    options: [
-      "Default",
-      "인기순",
-      "신뢰도순",
-      "낮은가격순으로",
-      "높은가격순으로"
-    ],
     dialog: false,
     products: [
       {
@@ -218,9 +193,19 @@ export default Vue.extend({
         },
         ];
 
+    },
+    search(data) {
+      itemApi.search(data).then((res: AxiosResponse) => {
+        console.log(data);
+        console.log(res);
+      })
     }
   }
 });
 </script>
 
-<style></style>
+<style>
+.auction {
+  width: 60%;
+}
+</style>

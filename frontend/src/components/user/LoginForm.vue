@@ -1,11 +1,12 @@
 <template>
-  <v-row justify="center">
-    <v-col cols="10">
+  <!-- <v-row justify="center">
+    <v-col cols="10"> -->
       <v-card ref="form">
         <v-card-title>로그인</v-card-title>
         <v-card-text>
           <v-text-field
             ref="email"
+            color="orange"
             v-model="email"
             :rules="[rules.required, rules.email]"
             :error-messages="errorMessages"
@@ -15,6 +16,7 @@
           ></v-text-field>
           <v-text-field
             ref="password"
+            color="orange"
             v-model="password"
             :rules="[rules.required, rules.password]"
             :error-messages="errorMessages"
@@ -56,7 +58,12 @@
             </v-tooltip>
           </v-slide-x-reverse-transition>
           <v-btn
-            color="primary"
+            text
+            @click="close"
+          >
+            취소
+          </v-btn>
+          <v-btn
             text
             @click="submit"
           >
@@ -64,8 +71,8 @@
           </v-btn>
         </v-card-actions>
       </v-card>
-    </v-col>
-  </v-row>
+    <!-- </v-col>
+  </v-row> -->
 </template>
 
 <script lang="ts">
@@ -119,11 +126,16 @@ export default Vue.extend({
       })
       if (!this.formHasErrors) {
         // axios login
-        this.$store.dispatch('userModule/login', this.form)
+        this.$store.dispatch('userModule/login', this.form).catch((error: any) => {
+          alert(error);
+        })
       }
     },
     goToSignup (): void {
       this.$emit('goToSignup')
+    },
+    close (): void {
+      this.$emit('close')
     }
   },
 })

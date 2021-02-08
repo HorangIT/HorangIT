@@ -1,27 +1,19 @@
 <template>
-  <v-app class="myFont">
+  <v-app>
     <router-view></router-view>
   </v-app>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-// import HelloWorld from "./components/HelloWorld.vue";
 
 export default Vue.extend({
   name: "App",
-
-  components: {
-    
-  },
-
-  data: () => ({
-    //
-  })
 });
 </script>
+
 <style>
-.myFont {
-  font-family: 'Raleway', cursive; 
-}
+  .v-btn:hover {
+    color: orange !important;
+  }
 </style>

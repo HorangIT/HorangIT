@@ -1,6 +1,6 @@
 <template>
   <v-app id="inspire">
-    <v-app-bar app color="orange accent-3" dark height="90vh">
+    <v-app-bar elevate-on-scroll app color="white" height="80vh">
       <v-app-bar-nav-icon
         @click.stop="active = !active"
         class="d-flex d-md-none"
@@ -8,7 +8,7 @@
       <v-toolbar-title class="pa-0 ml-2 mr-5">
         <a
           href="/"
-          class="white--text d-flex align-center"
+          class="d-flex align-center"
           style="text-decoration: none"
         >
           <v-img
@@ -16,23 +16,26 @@
             max-width="4rem"
           >
           </v-img>
-          <p class="mb-0 mx-2 d-none d-md-inline">호랑it</p>
+          <p class="grey--text text--darken-4 mb-0 mx-2 d-none d-md-inline"><strong>호랑it</strong></p>
         </a>
       </v-toolbar-title>
-      <v-responsive max-width="150px">
+      <v-responsive max-width="30vw">
         <v-text-field
           flat
           dense
           rounded
-          solo-inverted
+          filled  
           hide-details
           prepend-inner-icon="mdi-magnify"
-          label="검색"
+          placeholder="검색"
           class="mx-2"
+          clearable
+          color="orange accent-3"
         >
         </v-text-field>
       </v-responsive>
       <v-btn
+        color=""
         class="d-none d-md-flex"
         large
         v-for="(link, idx) in links"
@@ -45,11 +48,11 @@
       <v-spacer></v-spacer>
       <!--로그인 유무-->
       <span v-if="login" class="d-flex align-center">
-        <h3 class="d-none d-md-flex">{{ nickname }}</h3>
+        <span class="d-none d-md-flex">{{ nickname }}님, 환영합니다.</span>
         <v-menu transition="scroll-y-transition">
           <template v-slot:activator="{ on }">
             <v-btn v-on="on" icon class="mx-1">
-              <v-badge content="2" value="2" color="red" overlap>
+              <v-badge content="2" value="2" color="orange" overlap>
                 <v-icon>mdi-bell</v-icon>
               </v-badge>
             </v-btn>
@@ -60,15 +63,15 @@
             </v-list-item>
           </v-list>
         </v-menu>
-        <v-btn href="/cart" icon class="mx-1 d-none d-md-flex">
-          <v-badge content="2" value="2" color="green" overlap>
+        <!-- 장바구니 삭제 -->
+        <!-- <v-btn href="/cart" icon class="mx-1 d-none d-md-flex">
+          <v-badge content="2" value="2" color="orange" overlap>
             <v-icon>mdi-cart</v-icon>
           </v-badge>
-        </v-btn>
+        </v-btn> -->
         <v-btn
-          outlined
-          rounded
           color="white"
+          depressed
           class="mx-2 d-none d-md-flex"
           @click="logout"
         >
@@ -76,31 +79,13 @@
         </v-btn>
       </span>
       <span v-else class="d-flex align-center">
-        <v-btn
-          outlined
-          rounded
-          color="white"
-          class="mx-1 ml-2 d-none d-md-flex"
-          @click="openModal(true)"
-        >
-          로그인
-        </v-btn>
-        <v-btn
-          outlined
-          rounded
-          color="white"
-          class="mx-2 d-none d-md-flex"
-          @click="openModal(false)"
-        >
-          회원가입
-        </v-btn>
+        <AuthModal :purpose="'login'" />
+        <AuthModal :purpose="'signup'" />
       </span>
     </v-app-bar>
     <v-navigation-drawer v-model="active" absolute temporary>
       <SideNavbar @loginOrSignup="openModal(loginOrSignup)"></SideNavbar>
     </v-navigation-drawer>
-    <LoginModal @close="closeModal" v-if="modal" :loginOrSignup="loginOrSignup">
-    </LoginModal>
     <div style="height:90px;"></div>
     <router-view />
 
@@ -137,41 +122,43 @@
 </template>
 <script lang="ts">
 import Vue from "vue";
-import LoginModal from "../components/user/LoginModal.vue";
+import AuthModal from "../components/user/AuthModal.vue";
 import SideNavbar from "../components/SideNavbar.vue";
 
 export default Vue.extend({
   name: "Layout",
 
   components: {
-    LoginModal,
+    AuthModal,
     SideNavbar
   },
 
   data: () => ({
     links: [
-      {
-        name: "홈",
-        href: "/"
-      },
+      // {
+      //   name: "홈",
+      //   href: "/"
+      // },
       {
         name: "경매",
         href: "/auction"
       },
-      {
-        name: "서비스 소개",
-        href: "#"
-      },
-      {
-        name: "고객센터",
-        href: "/cs"
-      }
+      // 네비게이션 메뉴 삭제
+      // {
+      //   name: "서비스 소개",
+      //   href: "#"
+      // },
+      // {
+      //   name: "고객센터",
+      //   href: "/cs"
+      // }
     ],
-    on: true,
-    active: false,
-    modal: false,
-    loginOrSignup: true,
-    nickname: ""
+    // on: true,
+    // active: false,
+    // modal: false,
+    // loginOrSignup: true,
+    nickname: "",
+    dialog: false,
   }),
   computed: {
     login() {
@@ -187,21 +174,20 @@ export default Vue.extend({
   },
   watch: {
     login() {
-      this.modal = false;
+      // this.modal = false;
     }
   },
   methods: {
-    openModal(loginOrSignup: boolean) {
-      this.loginOrSignup = loginOrSignup;
-      this.modal = true;
-    },
-    closeModal() {
-      this.modal = false;
-    },
+    // openModal(loginOrSignup: boolean) {
+    //   this.loginOrSignup = loginOrSignup;
+    //   this.modal = true;
+    // },
+    // closeModal() {
+    //   this.modal = false;
+    // },
     logout() {
       this.$store.dispatch("userModule/logout");
     }
   }
 });
 </script>
-<style></style>
