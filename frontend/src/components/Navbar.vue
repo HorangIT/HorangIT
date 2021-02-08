@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar elevate-on-scroll app color="white" height="90px">
+  <v-app-bar elevate-on-scroll app color="white" height="90px" id="header" class="px-10">
     <v-app-bar-nav-icon
       @click.stop="active = !active"
       class="d-flex d-md-none"
@@ -15,7 +15,7 @@
           max-width="4rem"
         >
         </v-img>
-        <p class="grey--text text--darken-4 mb-0 mx-2 d-none d-md-inline"><strong>호랑it</strong></p>
+        <p id="logo-font" class="grey--text text--darken-4 mb-0 mx-2 d-none d-md-inline">호랑it</p>
       </a>
     </v-toolbar-title>
     <v-btn
@@ -26,6 +26,8 @@
       :key="idx"
       text
       :to="link.to"
+      plain
+      :ripple="false"
     >
       <h2>{{ link.name }}</h2>
     </v-btn>
@@ -70,7 +72,8 @@
           </v-badge>
         </v-btn> -->
         <v-btn
-          color="white"
+          :ripple="false"
+          plain
           depressed
           class="mx-2 d-none d-md-flex"
           @click="logout"
@@ -135,10 +138,20 @@ export default Vue.extend({
 </script>
 
 <style scoped>
+  /* 현재 있는 곳 스타일 효과 */
   [aria-current] {
     color: #FF9100;
   }
+  /* 메뉴에 마우스 올렸을 때 스타일 효과 */
   .v-btn:hover {
     color: #FF9100;
+  }
+  #header {
+    border-bottom: 1px solid rgb(233, 229, 229) !important;
+  }
+
+  #logo-font {
+    font-family: 'CookieRunOTF-Bold';
+    font-size: 1.7em;
   }
 </style>

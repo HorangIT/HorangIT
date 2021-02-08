@@ -53,6 +53,8 @@
     <v-divider class="mt-12"></v-divider>
     <v-card-actions>
       <v-btn
+        :ripple="false"
+        plain
         text
         @click="goToLogin"
       >
@@ -66,6 +68,8 @@
         >
           <template v-slot:activator="{ on, attrs }">
             <v-btn
+              :ripple="false"
+              plain
               icon
               class="my-0"
               v-bind="attrs"
@@ -79,12 +83,16 @@
         </v-tooltip>
       </v-slide-x-reverse-transition>
       <v-btn
+        :ripple="false"
+        plain
         text
         @click="close"
       >
         취소
       </v-btn>
       <v-btn
+        :ripple="false"
+        plain
         text
         @click="submit"
       >
