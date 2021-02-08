@@ -2,6 +2,7 @@ package com.a101.ssafy.project.controller;
 
 import java.util.List;
 
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,11 +18,18 @@ import com.a101.ssafy.project.model.search.SearchDto;
 import com.a101.ssafy.project.model.search.SearchLocationDto;
 import com.a101.ssafy.project.model.search.SearchSpecs;
 import com.a101.ssafy.project.repository.SearchRepository;
+import com.a101.ssafy.project.service.SearchService;
 
 @RestController
 @CrossOrigin(origins = {"*"})
 @RequestMapping("/search")
 public class SearchController {
+	SearchService searchService;
+	
+	@Autowired
+	public void setSearchService(SearchService searchService) {
+		this.searchService = searchService;
+	}
 	
 	@Autowired
 	SearchRepository searchRepository;
@@ -55,6 +63,15 @@ public class SearchController {
 	@GetMapping
 	public Object getLocationNames(SearchLocationDto searchLocationDto) {
 		
+		if(searchLocationDto.getDistrictName()==null) {
+			JSONObject jobj = new JSONObject();
+			List<String> list = searchService.getDistrict();
+			jobj.put("districtList", list);
+			
+			return jobj;
+		}
+		
+		return null;
 	}
 	
 
