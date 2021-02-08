@@ -119,19 +119,27 @@ export default Vue.extend({
     dialog: false,
   }),
   computed: {
-    login() {
+    login () {
       return this.$store.state.userModule.status.loggedIn;
+    },
+  },
+  watch: {
+    login () {
+      this.getNickname();
     }
   },
   created() {
-    if (localStorage.getItem("user")) {
-      const user = JSON.parse(localStorage.getItem("user") || "{}");
-      this.nickname = user.object.user.nickname;
+    if (this.login) {
+      this.getNickname();
     }
   },
   methods: {
-    logout() {
+    logout () {
       this.$store.dispatch("userModule/logout");
+    },
+    getNickname () {
+      const user = JSON.parse(localStorage.getItem("user") || "{}");
+      this.nickname = user.object.user.nickname;
     }
   }
 });
