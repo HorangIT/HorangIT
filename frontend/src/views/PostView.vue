@@ -1,12 +1,12 @@
 <template>
   <div>
     <v-container>
-      <div class="row">
+      <div class="row container">
         <div class="col-md-12 col-sm-12 col-xs-12">
           <v-col>
-            <h4 class="mb-5">제목</h4>
+            <h4 class="mb-5">경매 물품 이름</h4>
             <v-text-field label="" solo v-model="title"></v-text-field>
-            <h4 class="mb-5">내용</h4>
+            <h4 class="mb-5">경매 물품 내용</h4>
             <v-textarea label="" solo v-model="description"></v-textarea>
             <v-select
               v-model="category"
@@ -14,8 +14,16 @@
               label="category"
               outlined
             ></v-select>
+            <v-row>
+              <v-col>
+              <h5>S: 단순변심이나 개봉만 한 새 상품과 동일한 상태</h5>
+              <h5>A: 새 상품과 구별이 어려울만큼 깨끗한 상품</h5>
+              <h5>B: 사용감이 일부 있으나 전반적으로 양호한 상태</h5>
+              <h5>C: 스크래치 등 사용흔적이 있는 상태</h5>
+              </v-col>
+            </v-row>
             <v-row class="align-center">
-              <h5>상품 상태</h5>
+              <h5 class="ml-3">상품 상태</h5>
               <v-btn-toggle
                 v-model="grade"
                 tile
@@ -40,15 +48,18 @@
                 <v-radio label="택배 & 직거래" value="2"></v-radio>
               </v-radio-group>
             </v-row>
-            <v-row>
+            <v-row class="mb-5 mr-5">
               <v-text-field
                 label="경매시작가"
                 filled
                 outlined
                 :rules="[rules.price]"
                 @blur="startPriceCheck()"
+                type="number"
                 v-model="startPrice"
               ></v-text-field>
+            </v-row>
+            <v-row class="mb-5 mr-5">
               <v-text-field
                 label="즉시구매가"
                 filled
@@ -58,7 +69,6 @@
                 v-model="happyPrice"
               ></v-text-field>
             </v-row>
-
             <v-row>
               <v-menu
                 ref="startDateCalender"
@@ -105,6 +115,8 @@
                 </v-date-picker>
               </v-menu>
               <time-select v-model="startTime"></time-select>
+            </v-row>
+            <v-row>
               <v-menu
                 ref="endDateCalender"
                 v-model="endDateCalender"
@@ -233,7 +245,11 @@
     </v-container>
   </div>
 </template>
+
+<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script lang="ts">
+/* eslint-disable */
+
 import Vue from "vue";
 import { itemApi } from "../utils/axios";
 import moment from "moment";
@@ -409,6 +425,7 @@ export default Vue.extend({
 
     startPriceCheck() {
       if (!this.startPrice.match(/^[1-9][0-9]*$/)) {
+
         this.startPrice = "";
       }
     },
