@@ -20,7 +20,7 @@
     </v-dialog>
     <div class="row">
       <div class="col-md-3 col-sm-3 col-xs-12">
-        <Filters @search="search"/>
+        <Filters @filtering="filtering"/>
       </div>
       <div class="col-md-9 col-sm-9 col-xs-12">
         <div class="row text-center">
@@ -69,6 +69,7 @@
             @input="getItemPage"
           >
           </v-pagination>
+          {{page}}
         </div>
       </div>
     </div>
@@ -92,6 +93,7 @@ export default Vue.extend({
 
   data: () => ({
     page: 1,
+    filters: {},
     dialog: false,
     products: [
       {
@@ -182,24 +184,29 @@ export default Vue.extend({
   }),
   methods: {
     getItemPage(page: number) {
-      // const { data } = itemApi.getItemPage(page);
-      this.products = [ // 12개 
-        {
-        id: 1,
-        name: "BLACK TEE",
-        type: "Jackets",
-        price: "18.00",
-        src: require("../assets/img/shop/1.jpg")
-        },
-        ];
-
+      this.page = page;
     },
-    search(data: any) {
-      itemApi.search(data).then((res: AxiosResponse) => {
-        console.log(data);
+    filtering(filters: any) {
+      this.filters = filters;
+      this.page = 1;
+    },
+    getItems(page: number, filters: any){
+      console.log(this.page, this.filters);
+      itemApi.getItemPage(page, filters).then((res: AxiosResponse) => {
         console.log(res);
       })
     }
+  },
+  watch: {
+    filters() {
+      this.getItems(this.page, this.filters);
+    },
+    page(){
+      this.getItems(this.page, this.filters);
+    }
+  },
+  created() {
+    this.getItems(1, {});
   }
 });
 </script>
