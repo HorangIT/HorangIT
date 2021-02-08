@@ -12,6 +12,7 @@ import lombok.ToString;
 public class SearchDto {
 	long minPrice;
 	long maxPrice;
+	String[] location;
 	
 	char[] grade;
 	
