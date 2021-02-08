@@ -3,17 +3,12 @@ package com.a101.ssafy.project.controller;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -109,6 +104,8 @@ public class ItemController {
 			List<Item> items = itemPage.getContent();
 			System.out.println(items.size());
 			System.out.println(items.get(0).getName());
+			
+			JSONObject jobj = new JSONObject();
 			
 			
 //			Page<Item> itemPage = itemRepository.findByCategory("전자기기", paging);
