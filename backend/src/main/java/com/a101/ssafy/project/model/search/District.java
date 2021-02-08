@@ -3,11 +3,13 @@ package com.a101.ssafy.project.model.search;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
 import lombok.Getter;
@@ -28,6 +30,8 @@ public class District {
 	@Column
 	private String name;
 	
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name="disctrict_id")
 	private Collection<SiGunGu> siGunGu = new ArrayList<>();
 	
 	private void addsiGunGu(final SiGunGu sgg) {
