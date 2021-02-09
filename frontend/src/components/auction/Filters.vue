@@ -100,7 +100,7 @@ export default Vue.extend({
     Gu: ["종로구"]
   }),
   methods: {
-    getlocation(data: String) { e86m
+    getlocation(data: String) {
       this.filters.location.push(data);
     }
   },

@@ -84,7 +84,7 @@
         <v-row align="center">
       <!-- hamburger icon -->
       <v-app-bar-nav-icon
-        @click.stop="openSideNavbar"
+        @click.stop="active = !active"
         class="d-flex d-md-none"
       />
           <!-- logo -->
@@ -168,10 +168,10 @@
 <script lang="ts">
 import Vue from "vue";
 import AuthModal from "../components/user/AuthModal.vue";
-import PostView from "@/views/PostView.vue";
-import LoginForm from "@/components/user/LoginForm.vue";
-import SignupForm from "@/components/user/SignupForm.vue";
-import SideNavbar from "@/components/SideNavbar.vue";
+import PostView from "../views/PostView.vue";
+import LoginForm from "../components/user/LoginForm.vue";
+import SignupForm from "../components/user/SignupForm.vue";
+import SideNavbar from "../components/SideNavbar.vue";
 
 export default Vue.extend({
   name: "Navbar",
