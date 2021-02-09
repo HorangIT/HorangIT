@@ -56,7 +56,11 @@ export const itemApi = {
     return request.get(`/item/${id}`);
   },
   search(data: any): any {
-    return request.get("/search", data);
+    return request.get("/item/district", {
+      params: {
+        districtName: data
+      }  
+    })
   },
   getItemPage(page: number, data: any): any {
     return request.get(`/item/page/${page}`, data);

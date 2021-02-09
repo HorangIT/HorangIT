@@ -13,7 +13,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer{
 	//SockJS ==> 웹 소켓을 지원하지 않는 브라우저에 폴백 옵션을 활성화하는 데 사용(Fallback: 기능이 동작하지 않을 때 이에 대처하는 기능)
 	@Override
 	public void registerStompEndpoints(StompEndpointRegistry registry) {
-		registry.addEndpoint("/ws").withSockJS();
+		registry.addEndpoint("/ws").setAllowedOrigins("*").withSockJS();
 	}
 	
 	@Override

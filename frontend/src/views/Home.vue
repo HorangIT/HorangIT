@@ -46,7 +46,7 @@
           :key="pro.id"
           v-for="pro in products"
         >
-        <Item :pro="pro"></Item> 
+          <Item :pro="pro"></Item> 
         </div>
       </div>
     </div>

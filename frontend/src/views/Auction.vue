@@ -29,38 +29,7 @@
             :key="pro.id"
             v-for="pro in products"
           >
-            <v-hover v-slot:default="{ hover }">
-              <v-card class="mx-auto" color="grey lighten-4" max-width="600">
-                <v-img
-                  class="white--text align-end"
-                  :aspect-ratio="16 / 9"
-                  height="200px"
-                  :src="pro.image"
-                >
-                  <v-card-title>{{ pro.type }} </v-card-title>
-                  <v-expand-transition>
-                    <div
-                      v-if="hover"
-                      class="d-flex transition-fast-in-fast-out white darken-2 v-card--reveal display-3 white--text"
-                      style="height: 100%;"
-                    >
-                      <v-btn v-if="hover" href="/detail" class="" outlined>
-                        VIEW
-                      </v-btn>
-                    </div>
-                  </v-expand-transition>
-                </v-img>
-                <v-card-text class="text--primary">
-                  <div>
-                    <a href="/detail" style="text-decoration: none">
-                      {{ pro.name }}
-                    </a>
-                  </div>
-                  <div>{{ pro.category }}</div>
-                  <div>{{ pro.startPrice }} 원</div>
-                </v-card-text>
-              </v-card>
-            </v-hover>
+            <Item :pro="pro"></Item> 
           </div>
         </div>
         <div class="text-center mt-12">
@@ -79,6 +48,7 @@
 <script lang="ts">
 import Vue from "vue";
 import Filters from "../components/auction/Filters.vue";
+import Item from "../components/Item.vue";
 import PostView from "./PostView.vue";
 import { itemApi } from "../utils/axios";
 import { AxiosResponse } from "axios";
@@ -88,7 +58,8 @@ export default Vue.extend({
 
   components: {
     Filters,
-    PostView
+    PostView,
+    Item
   },
 
   data: () => ({
@@ -182,9 +153,6 @@ export default Vue.extend({
       }
     ]
   }),
-  mounted() {
-    this.getItemPage(1);
-  },
   methods: {
     getItemPage(page: number) {
       this.page = page;
@@ -195,9 +163,14 @@ export default Vue.extend({
     },
     getItems(page: number, filters: any){
       console.log(this.page, this.filters);
-      itemApi.getItemPage(page, filters).then((res: AxiosResponse) => {
-        console.log(res);
-      })
+      
+      // itemApi.getItemPage(page, filters).then((res: AxiosResponse) => {
+      //   console.log(res);
+      // })
+
+      sessionStorage.setItem("filters", filters);
+      sessionStorage.setItem("page", page.toString());
+      
     }
   },
   watch: {
@@ -209,7 +182,9 @@ export default Vue.extend({
     }
   },
   created() {
-    this.getItems(1, {});
+    console.log(this.$store.state.auctionModule);
+    this.getItemPage(parseInt(this.$store.state.auctionModule.page));
+    // this.getItems(1, {}); -> 삭제
   }
 });
 </script>
