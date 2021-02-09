@@ -10,6 +10,7 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 public class SearchDto {
+		
 	long minPrice;
 	long maxPrice;
 	
@@ -21,5 +22,9 @@ public class SearchDto {
 	
 	long currentPrice;
 	
+	String[] category;
 	
+	// status
+	int status;
+
 }

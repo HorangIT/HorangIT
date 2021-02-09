@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -103,44 +105,55 @@ public class ItemController {
 		return response;
 	}
 	
-	// pagination + filter!
-	
-	@GetMapping("/page/{number}/")
-	public Object getAllItems(@PathVariable(name="number")int page) {
-
-		try {
-			// paging은 1~N까지 하기 때문에 기본 page에서 1을 빼준다 (0보다 큰 값이 들어올거니까)
-			Pageable paging = PageRequest.of(page-1, 12);
-			Page<Item> itemPage = itemRepository.findAll(paging);		
-			List<Item> items = itemPage.getContent();	
+	// pagination + filter!	
+	@GetMapping("/page/{pageNo}")
+	public Object searchItems(@PathVariable int pageNo, SearchDto searchDto) {
 			
-			List<JSONObject> returningItems = itemService.getAllPages(items);
-												
-			BasicResponse result = new BasicResponse();
+		BasicResponse result = new BasicResponse();
+		List<JSONObject> returningItems = new ArrayList<JSONObject>();
+		Pageable paging = PageRequest.of(pageNo-1, 9);
+
+		Page<Item> pages;
+		boolean empty = false;
+		
+		// DTO에 아무것도 안들어왔을 때 = 그냥 전체 페이지 요청
+		if (searchDto.getCategory() == null && searchDto.getGrade() == null && searchDto.getLocation() == null) {
+			System.out.println("EMPTYYYYYYYYYY");
+			
+			pages = itemRepository.findAll(paging);
+			empty = true;
+		} else {
+			Specification<Item> specify = Specification
+					.where(SearchSpecs.searchWithFilter(searchDto.getLocation(), searchDto.getGrade(), searchDto.getCategory()));
+			pages = itemRepository.findAll(specify, paging);
+			
+		}		
+		List<Item> contents = pages.getContent();
+		returningItems = itemService.getAllPages(contents);
+		
+		if (empty) {
 			result.status = true;
 			result.data = "모든 아이템 보내기!";
 			result.object = returningItems;
 						
 			return new ResponseEntity<>(result, HttpStatus.OK);
-			
-		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-	}
-	
-	@GetMapping("/search/{search}")
-	public Object searchWithFilter(@PathVariable String search) {
+		else if (returningItems.size() == 0) {
+			result.status = false;
+			result.object = null;
+			result.data = "못 찾았어요ㅠ";
+			
+			return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+		} else {
+			result.data = "이거시 네가 찾던 자료냥";
+			result.status = true;
+			result.object = returningItems;
+			
+			return new ResponseEntity<>(result, HttpStatus.OK);			
+		}
 		
-		Specification<Item> specify = Specification.where(SearchSpecs.location(search));
-		Pageable paging = PageRequest.of(0, 5);
-		Page<Item> p = itemRepository.findAll(specify, paging);
-		List<Item> test = p.getContent();
-		
-		System.out.println(test.size());
-				
-		return null;
 	}
-	
+		
 	/*
 	 * 지역 리스트 뽑아주기:
 	 * - null이 들어오면 "시" 리턴
