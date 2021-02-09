@@ -45,50 +45,52 @@
   </div>
 </template>
 
-<script>
-// import io from "socket.io-client";
-import SockJS from 'sockjs-client'
-import Stomp from 'stompjs'
-import moment from 'moment';
-moment.locale('ko')
+<script lang="ts">
+// import io from " lang="tssocket.io-client";
+import Vue from 'vue';
+import SockJS from 'sockjs-client';
+import Stomp from 'stompjs';
+import moment from 'moment';;
+moment.locale('ko');
 
-export default {
-  created() {
-    console.log(this.socket)
+export default Vue.extend({
+  created(): void {
     console.log(this.stompClient)
-    // this.stompClient.connect();
-      // onConnect => {
-      //   console.log('onConnect');
-      //   // console.log(onConnect);
-      // },
-      // onError => {
-      //   console.log('onError');
-      //   // console.log(onError);
-      // });
+    this.stompClient.connect({},
+      // onConnect callback
+      () => {
+        console.log('onConnect');
+        this.stompClient.subscribe('/topic/public', (response: any) => {
+          console.log('im subscribe response callback');
+          console.log(response);
+        });
+        this.stompClient.send("/app/chat.addUser", {}, JSON.stringify({sender: this.username, type: 'JOIN'}));
 
-    // this.chatSocket.on("chat message to client", message => {
-    //   this.chatLog.push(message);
-    // });
+      },
+      (onError: any) => {
+        console.log('onError');
+        console.log(onError);
+      });
   },
-  data() {
+  data (): Record<string, any> {
     return {
       // userId: user.id,
+      username:'testuser',
       chatInput: "",
       chatLog: [],
       // chatSocket: io("https://powerticket-socket-chat.herokuapp.com/"),
-      socket: new SockJS("http://localhost:8000/api/ws/"),
-      stompClient: Stomp.over(new SockJS("http://localhost:8000/api/ws/")),
+      stompClient: Stomp.over(new SockJS("http://localhost:8000/api/ws")),
       momentTest: moment().format('YYYY년 MMMM Do HH:mm:ss'),
     };
   },
-  updated() {
+  updated(): void {
     // Always scroll down
-    const scroll = this.$el.querySelector(".chatScroll");
-    scroll.scrollTop = scroll.scrollHeight;
+    // const scroll: any = this.$el.querySelector(".chatScroll");
+    // scroll.scrollTop = scroll.scrollHeight;
   },
   computed: {
-    user() {
-      const user = JSON.parse(localStorage.getItem("user"));
+    user(): Record<string, any> {
+      const user = JSON.parse(localStorage.getItem("user") || "{}");
       console.log("user");
       console.log(user);
       if (user) {
@@ -101,22 +103,19 @@ export default {
     }
   },
   methods: {
-    // 채팅 submit 서버 socket에 emit
-    submit(event) {
-      event.preventDefault();
-      if (this.chatInput) {
-        console.log(this.chatSocket);
-        const chatObj = {
-          userId: this.user.id,
-          nickname: this.user.nickname,
-          content: this.chatInput
+    submit (): void {
+      if (this.chatInput && this.stompClient) {
+        const chatMessage = {
+            sender: this.username,
+            content: this.chatInput,
+            type: 'CHAT'
         };
-        this.chatSocket.emit("chat message from client", chatObj);
-        this.chatInput = "";
+        this.stompClient.send("/app/chat.sendMessage", {}, JSON.stringify(chatMessage));
+        this.chatInput = '';
       }
-    }
-  }
-};
+    },
+  },
+});
 </script>
 
 <style scoped>
