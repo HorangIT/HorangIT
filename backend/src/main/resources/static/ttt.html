@@ -40,7 +40,7 @@
 
 			function connect(){
 				
-				var socket = new SockJS('/ws');
+				var socket = new SockJS('/api/ws');
 				stompClient = Stomp.over(socket);
 				
 				stompClient.connect({}, onConnected, onError);
