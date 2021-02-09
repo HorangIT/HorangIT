@@ -19,6 +19,7 @@
           outlined
           dense
           class="mr-2"
+          suffix="원"
         >
         </v-text-field>  
         <v-text-field
@@ -27,6 +28,7 @@
           outlined
           dense
           class="ml-2"
+          suffix="원"
         >
         </v-text-field>
       </div>
@@ -38,6 +40,7 @@
           outlined
           dense
           class="mr-2"
+          suffix="원"
         >
         </v-text-field>  
         <v-text-field
@@ -46,6 +49,7 @@
           outlined
           dense
           class="ml-2"
+          suffix="원"
         >
         </v-text-field>
       </div>
@@ -70,7 +74,7 @@ export default Vue.extend({
     filters: {
       check: false,
       minPrice: 0,
-      maxPrice: 10000000000,
+      maxPrice: 100000000,
       grades: [],
     }
   }),
@@ -78,7 +82,7 @@ export default Vue.extend({
     filters: {
       deep: true,
       handler() {
-          this.$emit("search", this.filters);
+          this.$emit("filtering", this.filters);
         }
       }
     }

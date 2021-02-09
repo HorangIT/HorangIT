@@ -6,10 +6,12 @@
   >
     <template v-slot:activator="{ on, attrs }">
       <v-btn
-        color="white"
+        color=""
         depressed
         v-bind="attrs"
         v-on="on"
+        :ripple="false"
+        plain
       >
         {{ purpose === 'login' ? '로그인' : '회원가입' }}
       </v-btn>
@@ -40,3 +42,9 @@ export default Vue.extend({
   },
 });
 </script>
+
+<style scoped>
+  .v-btn:hover {
+    color: #FF9100 ;
+  }
+</style>

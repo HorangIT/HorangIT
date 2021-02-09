@@ -20,7 +20,7 @@
     </v-dialog>
     <div class="row">
       <div class="col-md-3 col-sm-3 col-xs-12">
-        <Filters @search="search"/>
+        <Filters @filtering="filtering"/>
       </div>
       <div class="col-md-9 col-sm-9 col-xs-12">
         <div class="row text-center">
@@ -70,6 +70,7 @@
             @input="getItemPage"
           >
           </v-pagination>
+          {{page}}
         </div>
       </div>
     </div>
@@ -93,6 +94,7 @@ export default Vue.extend({
 
   data: () => ({
     page: 1,
+    filters: {},
     dialog: false,
     products: [
       {
@@ -185,23 +187,30 @@ export default Vue.extend({
     this.getItemPage(1);
   },
   methods: {
-    async getItemPage(page: number) {
-      try {
-      const { data } = await itemApi.getItemPage(page);
-      console.log(data);
-      this.products = data.object;
-      }
-      catch (error) {
-        console.log(error);
-      }
+    getItemPage(page: number) {
+      this.page = page;
     },
-
-    search(data: any) {
-      itemApi.search(data).then((res: AxiosResponse) => {
-        console.log(data);
+    filtering(filters: any) {
+      this.filters = filters;
+      this.page = 1;
+    },
+    getItems(page: number, filters: any){
+      console.log(this.page, this.filters);
+      itemApi.getItemPage(page, filters).then((res: AxiosResponse) => {
         console.log(res);
       })
     }
+  },
+  watch: {
+    filters() {
+      this.getItems(this.page, this.filters);
+    },
+    page(){
+      this.getItems(this.page, this.filters);
+    }
+  },
+  created() {
+    this.getItems(1, {});
   }
 });
 </script>

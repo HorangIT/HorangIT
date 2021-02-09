@@ -196,6 +196,7 @@ export default Vue.extend({
           console.log(res.data.object);
           this.nowPrice = res.data.object.nowPrice;
           this.nextPrice = res.data.object.nextPrice;
+          this.log();
         });
       } else {
         alert("로그인 해주세요!");
@@ -213,6 +214,7 @@ export default Vue.extend({
           console.log(res.data);
           this.nowPrice = this.happyPrice;
           this.isOver = true;
+          this.log();
         });
       } else {
         alert("로그인 해주세요!");
@@ -239,9 +241,9 @@ export default Vue.extend({
     this.getItem(id);
     this.log();
   },
-  updated() {
-    this.log();
-  }
+  // updated() {
+  //   this.log();
+  // }
 });
 </script>
 <style></style>

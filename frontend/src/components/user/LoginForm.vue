@@ -6,7 +6,7 @@
         <v-card-text>
           <v-text-field
             ref="email"
-            color="orange"
+            color="orange accent-3"
             v-model="email"
             :rules="[rules.required, rules.email]"
             :error-messages="errorMessages"
@@ -16,7 +16,7 @@
           ></v-text-field>
           <v-text-field
             ref="password"
-            color="orange"
+            color="orange accent-3"
             v-model="password"
             :rules="[rules.required, rules.password]"
             :error-messages="errorMessages"
@@ -32,6 +32,8 @@
         <v-divider class="mt-12"></v-divider>
         <v-card-actions>
           <v-btn
+            :ripple="false"
+            plain
             text
             @click="goToSignup"
           >
@@ -45,6 +47,8 @@
             >
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
+                  :ripple="false"
+                  plain
                   icon
                   class="my-0"
                   v-bind="attrs"
@@ -58,12 +62,16 @@
             </v-tooltip>
           </v-slide-x-reverse-transition>
           <v-btn
+            :ripple="false"
+            plain
             text
             @click="close"
           >
             취소
           </v-btn>
           <v-btn
+            :ripple="false"
+            plain
             text
             @click="submit"
           >
@@ -125,10 +133,13 @@ export default Vue.extend({
         if (!this.$refs[f].validate(true)) this.formHasErrors = true
       })
       if (!this.formHasErrors) {
+        console.log('login')
         // axios login
-        this.$store.dispatch('userModule/login', this.form).catch((error: any) => {
-          alert(error);
-        })
+        this.$store.dispatch('userModule/login', this.form)
+          // login fail
+          .catch((error: any) => {
+            alert(error);
+          })
       }
     },
     goToSignup (): void {
@@ -140,3 +151,9 @@ export default Vue.extend({
   },
 })
 </script>
+
+<style scoped>
+  .v-btn:hover {
+    color: #FF9100 ;
+  }
+</style>
