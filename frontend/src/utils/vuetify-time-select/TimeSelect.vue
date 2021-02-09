@@ -5,7 +5,7 @@
     </template>
     <v-menu offset-y>
       <template v-slot:activator="{ on }">
-        <v-btn outlined class="time-hours" :color="color" v-on="on">
+        <v-btn outlined class="time-hours mr-1" :color="color" v-on="on">
           <span>{{ value ? hour : "H" }}</span>
           <v-icon right>mdi-menu-down</v-icon>
         </v-btn>
@@ -28,7 +28,7 @@
       :close-on-content-click="false"
     >
       <template v-slot:activator="{ on: menu }">
-        <v-btn outlined class="time-minutes" :color="color" v-on="menu">
+        <v-btn outlined class="time-minutes ml-1" :color="color" v-on="menu">
           <span>{{ value ? minute : "M" }}</span>
           <v-icon right>mdi-menu-down</v-icon>
         </v-btn>
@@ -46,7 +46,7 @@
         </v-list-item>
       </v-list>
     </v-menu>
-    <v-btn-toggle v-model="isAm" class="toggle-am-pm" :color="color">
+    <v-btn-toggle v-model="isAm" class="toggle-am-pm ml-2" :color="color">
       <v-btn :value="true" class="btn-am">am</v-btn>
       <v-btn :value="false" class="btn-pm">pm</v-btn>
     </v-btn-toggle>

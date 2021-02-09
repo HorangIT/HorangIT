@@ -1,7 +1,8 @@
 <template>
-  <v-app>
-    <Navbar />
-    <div style="height:90px;"></div>
+  <v-app style="background-color: #fdfafa;">
+    <testNav />
+    <!-- <Navbar /> -->
+    <div style="height:130px;"></div>
     <v-navigation-drawer v-model="active" absolute temporary>
       <SideNavbar @loginOrSignup="openModal(loginOrSignup)"></SideNavbar>
     </v-navigation-drawer>
@@ -15,13 +16,14 @@ import Vue from "vue";
 import Navbar from "@/components/Navbar.vue";
 import SideNavbar from "@/components/SideNavbar.vue";
 import Footer from "@/components/Footer.vue";
-
+import testNav from "@/components/Navbar copy 2.vue";
 export default Vue.extend({
   name: "App",
   components: {
     Navbar,
     SideNavbar,
     Footer,
+    testNav
   },
   data: () => ({
     active: false,
@@ -48,18 +50,12 @@ export default Vue.extend({
     font-weight: normal;
     font-style: normal;
 }
-/* 
-  .v-btn:hover {
-    color: orange !important;
-  } */
-/*   
-  .v-btn::before {
-    background-color: transparent !important;
-  } */
-
-  body {
-    background-color: #fdfafa !important;
-  }
+@font-face {
+    font-family: 'ELAND_Choice_L';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts-20-12@1.0/ELAND_Choice_L.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
 
   *{
     font-family: 'ELAND_Choice_M';
