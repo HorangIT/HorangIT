@@ -182,9 +182,6 @@ export default Vue.extend({
       }
     ]
   }),
-  mounted() {
-    this.getItemPage(1);
-  },
   methods: {
     getItemPage(page: number) {
       this.page = page;
@@ -195,9 +192,14 @@ export default Vue.extend({
     },
     getItems(page: number, filters: any){
       console.log(this.page, this.filters);
-      itemApi.getItemPage(page, filters).then((res: AxiosResponse) => {
-        console.log(res);
-      })
+      
+      // itemApi.getItemPage(page, filters).then((res: AxiosResponse) => {
+      //   console.log(res);
+      // })
+
+      sessionStorage.setItem("filters", filters);
+      sessionStorage.setItem("page", page.toString());
+      
     }
   },
   watch: {
@@ -209,7 +211,9 @@ export default Vue.extend({
     }
   },
   created() {
-    this.getItems(1, {});
+    console.log(this.$store.state.auctionModule);
+    this.getItemPage(parseInt(this.$store.state.auctionModule.page));
+    // this.getItems(1, {}); -> 삭제
   }
 });
 </script>
