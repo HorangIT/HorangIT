@@ -70,7 +70,6 @@
             @input="getItemPage"
           >
           </v-pagination>
-          {{page}}
         </div>
       </div>
     </div>
