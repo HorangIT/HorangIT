@@ -12,9 +12,14 @@ import lombok.ToString;
 public class SearchDto {
 	long minPrice;
 	long maxPrice;
+	
+	// "location": ["서울특별시", "종로구"]
 	String[] location;
 	
+	// "grade":["S","C","B"]
 	char[] grade;
+	
+	long currentPrice;
 	
 	
 }

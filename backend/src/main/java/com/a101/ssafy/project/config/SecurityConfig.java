@@ -51,6 +51,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter { // 추가적�
                         ,"/webjars/**"
                         ,"/swagger/**"
                         ,"/index.html"
+                        ,"/api/**"
                         
                 );
     }

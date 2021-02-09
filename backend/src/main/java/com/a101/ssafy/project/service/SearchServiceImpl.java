@@ -15,27 +15,29 @@ import com.a101.ssafy.project.repository.SiGunGuRepository;
 
 @Service
 public class SearchServiceImpl implements SearchService{
+	
 	@Autowired
 	DistrictRepository districtRepository;
 	
+	// "시" 찾기
 	public List<String> getDistrict(){
-		List<District> list = districtRepository.findAll();
+
+		List<District> districts = districtRepository.findAll();
+		List<String> returnValue = new ArrayList<>();
 		
-		List<String> arr = new ArrayList<>();
-		for(int i=0; i<list.size(); ++i) {
-			arr.add(list.get(i).getName());
+		// 각 "시"의 이름만 뽑아서 스트링 형태로 리스트에 추가
+		for(int i=0; i<districts.size(); ++i) {
+			returnValue.add(districts.get(i).getName());
 		}
-		
-		return arr;
+		return returnValue;
 	}
 	
 	public List<String> getSiGunGu(String name){
-		District district = districtRepository.getDistrictByName(name);
 
+		District district = districtRepository.getDistrictByName(name);		
 		List<String> arr = new ArrayList<>();
-		
 		Collection<SiGunGu> col = district.getSiGunGu();
-		
+				
 		Iterator<SiGunGu> iter = col.iterator();
 		while(iter.hasNext()) {
 			arr.add(iter.next().getName());

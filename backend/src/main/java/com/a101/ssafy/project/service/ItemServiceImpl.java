@@ -20,7 +20,10 @@ import com.a101.ssafy.project.model.BasicResponse;
 import com.a101.ssafy.project.model.image.Image;
 import com.a101.ssafy.project.model.item.Item;
 import com.a101.ssafy.project.model.item.RegisterDto;
+import com.a101.ssafy.project.model.search.District;
+import com.a101.ssafy.project.model.search.SiGunGu;
 import com.a101.ssafy.project.redis.RedisUtil;
+import com.a101.ssafy.project.repository.DistrictRepository;
 import com.a101.ssafy.project.repository.ItemRepository;
 
 @Service
@@ -42,6 +45,9 @@ public class ItemServiceImpl implements ItemService{
 	
 	@Autowired
 	AuctionService auctionService;
+	
+	@Autowired
+	DistrictRepository districtRepository;
 	
 	@Override
 	public BasicResponse registerItem(RegisterDto request, MultipartFile[] multipartFiles) throws ParseException {
@@ -186,5 +192,73 @@ public class ItemServiceImpl implements ItemService{
 		
 		return jobj;
 	}
+	
+	// SEARCH & FILTER METHODS
+	@Override
+	public List<JSONObject> getAllPages(List<Item> items) {
+		/*
+		 * Items의 image가 collections 형태이기 때문에 jpa가 알아서 serialization을 해주지 못함
+		 * 따라서 직접 리턴해줄 item들의 리스트 형태를 지정해줬음
+		 * 
+		 * returningItems = [
+		 * 	{
+		 * 		"itemId": 1,
+		 * 		"image": "filePath",
+		 * 		"grade": "S",
+		 * 		"name": "1",
+		 * 		"category": "category",
+		 * 		"startDate": "datetime"
+		 * ] 
+		 * 
+		 */
+		
+		List<JSONObject> returningItems = new ArrayList<JSONObject>();
+								
+		for (int i = 0; i < items.size(); i++) {
+			JSONObject jobj = new JSONObject();
+			jobj.put("itemId",items.get(i).getId());
+			jobj.put("name",items.get(i).getName());
+			jobj.put("category",items.get(i).getCategory());
+			jobj.put("grade",items.get(i).getGrade());
+			jobj.put("startDate",items.get(i).getStartDate());
+			jobj.put("image", items.get(i).image.iterator().next().getFilePath());
+			
+			returningItems.add(jobj);
+		}
+		
+		
+		return returningItems;
+	}
+	
+	// "시" 찾기
+	@Override
+	public List<String> getDistrict() {
+		List<District> districts = districtRepository.findAll();
+		List<String> returnValue = new ArrayList<>();
+		
+		// 각 "시"의 이름만 뽑아서 스트링 형태로 리스트에 추가
+		for(int i=0; i<districts.size(); ++i) {
+			returnValue.add(districts.get(i).getName());
+		}
+		return returnValue;
+	}
+	
+	// "시-군구" 찾기
+	@Override
+	public List<String> getSiGunGu(String districtName) {
+		
+		District district = districtRepository.getDistrictByName(districtName);		
+		List<String> returnValue = new ArrayList<>();
+		Collection<SiGunGu> siGunGus = district.getSiGunGu();
+				
+		Iterator<SiGunGu> iter = siGunGus.iterator();
+		while(iter.hasNext()) {
+			returnValue.add(iter.next().getName());
+		}
+		
+		return returnValue;
+	}
+
+
 
 }
