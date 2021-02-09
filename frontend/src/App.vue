@@ -3,9 +3,6 @@
     <testNav />
     <!-- <Navbar /> -->
     <div style="height:130px;"></div>
-    <v-navigation-drawer v-model="active" absolute temporary>
-      <SideNavbar @loginOrSignup="openModal(loginOrSignup)"></SideNavbar>
-    </v-navigation-drawer>
     <router-view class="container" />
     <Footer />
   </v-app>
