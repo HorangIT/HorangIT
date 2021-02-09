@@ -73,14 +73,6 @@ export default Vue.extend({
         name: "경매",
         to: "/auction"
       },
-      {
-        name: "서비스 소개",
-        to: "#"
-      },
-      {
-        name: "고객센터",
-        to: "/cs"
-      }
     ],
     nickname: ""
   }),

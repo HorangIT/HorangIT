@@ -120,12 +120,12 @@
       </div>
     </v-container>
     <v-divider></v-divider>
-    <v-card-text tile outlined>
+    <!-- <v-card-text tile outlined>
       <v-card-title class="subheading">
         <strong>추천 경매</strong>
       </v-card-title>
       <ItemList></ItemList>
-    </v-card-text>
+    </v-card-text> -->
     <v-divider></v-divider>
     <Info />
     <br /><br /><br /><br /><br />
@@ -133,7 +133,7 @@
 </template>
 <script lang="ts">
 import Vue from "vue";
-import ItemList from "../components/ItemList.vue";
+// import ItemList from "../components/ItemList.vue";
 import Info from "../components/Info.vue";
 import Chat from "../components/detail/Chat.vue";
 import Review from "../components/detail/Review.vue";
@@ -146,7 +146,7 @@ import numberWithCommas from "../utils/numberWithCommas";
 export default Vue.extend({
   name: "Product",
   components: {
-    ItemList,
+    // ItemList,
     Chat,
     Review,
     BiddingLog,

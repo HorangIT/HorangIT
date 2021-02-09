@@ -84,7 +84,7 @@
         <v-row align="center">
       <!-- hamburger icon -->
       <v-app-bar-nav-icon
-        @click.stop="active = !active"
+        @click.stop="openSideNavbar"
         class="d-flex d-md-none"
       />
           <!-- logo -->
@@ -174,7 +174,7 @@ import SignupForm from "@/components/user/SignupForm.vue";
 import SideNavbar from "@/components/SideNavbar.vue";
 
 export default Vue.extend({
-  name: "Layout",
+  name: "Navbar",
 
   components: {
     AuthModal,
@@ -226,6 +226,9 @@ export default Vue.extend({
     getNickname () {
       const user = JSON.parse(localStorage.getItem("user") || "{}");
       this.nickname = user.object.user.nickname;
+    },
+    openSideNavbar() {
+      this.$emit("openSideNavbar")
     }
   }
 });

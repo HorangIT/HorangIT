@@ -38,21 +38,20 @@
         </v-row>
       </v-carousel-item>
     </v-carousel>
-
-    <v-card-text tile outlined>
-      <v-card-title class="subheading ">
-        <strong>오늘의 경매</strong>
-      </v-card-title>
-      <ItemList></ItemList>
-    </v-card-text>
+    <div class="container">
+      <h2 class="my-2">오늘의 경매</h2>
+      <div class="row text-center">
+        <div
+          class="col-md-3 col-sm-6 col-xs-12"
+          :key="pro.id"
+          v-for="pro in products"
+        >
+        <Item :pro="pro"></Item> 
+        </div>
+      </div>
+    </div>
     <v-divider></v-divider>
 
-    <v-card-text tile outlined>
-      <v-card-title class="subheading ">
-        <strong>추천 경매</strong>
-      </v-card-title>
-      <ItemList></ItemList>
-    </v-card-text>
     <Info></Info>
     <br /><br /><br /><br />
   </div>
@@ -60,32 +59,105 @@
 
 <script lang="ts">
 import Vue from "vue";
-import ItemList from "../components/ItemList.vue";
 import Info from "../components/Info.vue";
+import Item from "../components/Item.vue";
 
 export default Vue.extend({
   name: "Home",
 
   components: {
-    ItemList,
-    Info
+    Info,
+    Item
   },
 
   data: () => ({
-    items: [
-      { title: "Click Me" },
-      { title: "Click Me" },
-      { title: "Click Me" },
-      { title: "Click Me 2" }
+     products: [
+      {
+        id: 1,
+        name: "BLACK TEE",
+        type: "Jackets",
+        price: "18.00",
+        src: require("../assets/img/shop/1.jpg")
+      },
+      {
+        id: 2,
+        name: "WHITE TEE",
+        type: "Polo",
+        price: "40.00",
+        src: require("../assets/img/shop/2.jpg")
+      },
+      {
+        id: 3,
+        name: "Zara limited...",
+        type: "Denim",
+        price: "25.00",
+        src: require("../assets/img/shop/3.jpg")
+      },
+      {
+        id: 4,
+        name: "SKULL TEE",
+        type: "Jackets",
+        price: "30.00",
+        src: require("../assets/img/shop/4.jpg")
+      },
+      {
+        id: 5,
+        name: "MANGO WINTER",
+        type: "Sweaters",
+        price: "50.00",
+        src: require("../assets/img/shop/5.jpg")
+      },
+      {
+        id: 6,
+        name: "SHIRT",
+        type: "Denim",
+        price: "34.00",
+        src: require("../assets/img/shop/6.jpg")
+      },
+      {
+        id: 7,
+        name: "TRUCKER JACKET",
+        type: "Jackets",
+        price: "38.00",
+        src: require("../assets/img/shop/7.jpg")
+      },
+      {
+        id: 8,
+        name: "COATS",
+        type: "Jackets",
+        price: "25.00",
+        src: require("../assets/img/shop/8.jpg")
+      },
+      {
+        id: 9,
+        name: "MANGO WINTER",
+        type: "Sweaters",
+        price: "50.00",
+        src: require("../assets/img/shop/9.jpg")
+      },
+      {
+        id: 10,
+        name: "SHIRT",
+        type: "Denim",
+        price: "34.00",
+        src: require("../assets/img/shop/10.jpg")
+      },
+      {
+        id: 11,
+        name: "TRUCKER JACKET",
+        type: "Jackets",
+        price: "38.00",
+        src: require("../assets/img/shop/11.jpg")
+      },
+      {
+        id: 12,
+        name: "COATS",
+        type: "Jackets",
+        price: "25.00",
+        src: require("../assets/img/shop/12.jpg")
+      }
     ],
     activeBtn: 1,
-    colors: [
-      "indigo",
-      "warning",
-      "pink darken-2",
-      "red lighten-1",
-      "deep-purple accent-4"
-    ],
     slides: ["First", "Second", "Third", "Fourth", "Fifth"]
   })
 });
