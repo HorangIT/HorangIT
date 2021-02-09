@@ -7,7 +7,7 @@ import Home from "@/views/Home.vue";
 import Layout from "@/views/Layout.vue";
 import Auction from "@/views/Auction.vue";
 import PostView from "@/views/PostView.vue";
-import Detail from "@/views/Detail copy.vue";
+import Detail from "@/views/Detail.vue";
 import Notfound from "@/views/Notfound.vue";
 
 Vue.use(VueRouter);
