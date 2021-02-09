@@ -1,9 +1,8 @@
 <template>
-  <v-app>
+  <v-app style="background-color: #fdfafa;">
     <testNav />
     <!-- <Navbar /> -->
-    <div style="height:90px;"></div>
-    <div style="height:90px;"></div>
+    <div style="height:130px;"></div>
     <v-navigation-drawer v-model="active" absolute temporary>
       <SideNavbar @loginOrSignup="openModal(loginOrSignup)"></SideNavbar>
     </v-navigation-drawer>
@@ -58,15 +57,8 @@ export default Vue.extend({
     font-style: normal;
 }
 
-  body {
-    background-color: #fdfafa !important;
-  }
-
   *{
     font-family: 'ELAND_Choice_M';
   }
-  /* p {
-    font-family: 'ELAND_Choice_L';
-  } */
 
 </style>
