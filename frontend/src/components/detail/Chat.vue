@@ -46,22 +46,38 @@
 </template>
 
 <script>
-import io from "socket.io-client";
+// import io from "socket.io-client";
+import SockJS from 'sockjs-client'
+import Stomp from 'stompjs'
 import moment from 'moment';
 moment.locale('ko')
 
 export default {
   created() {
-    this.chatSocket.on("chat message to client", message => {
-      this.chatLog.push(message);
-    });
+    console.log(this.socket)
+    console.log(this.stompClient)
+    // this.stompClient.connect();
+      // onConnect => {
+      //   console.log('onConnect');
+      //   // console.log(onConnect);
+      // },
+      // onError => {
+      //   console.log('onError');
+      //   // console.log(onError);
+      // });
+
+    // this.chatSocket.on("chat message to client", message => {
+    //   this.chatLog.push(message);
+    // });
   },
   data() {
     return {
       // userId: user.id,
       chatInput: "",
       chatLog: [],
-      chatSocket: io("https://powerticket-socket-chat.herokuapp.com/"),
+      // chatSocket: io("https://powerticket-socket-chat.herokuapp.com/"),
+      socket: new SockJS("http://localhost:8000/api/ws/"),
+      stompClient: Stomp.over(new SockJS("http://localhost:8000/api/ws/")),
       momentTest: moment().format('YYYY년 MMMM Do HH:mm:ss'),
     };
   },
