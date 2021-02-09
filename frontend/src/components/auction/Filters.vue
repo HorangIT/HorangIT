@@ -7,7 +7,7 @@
     <v-card-text>
       <v-checkbox
         v-model="filters.check"
-        label="지난 경매 보기"
+        label="현재 진행중인 경매만 보기"
         color="orange darken-3"
         class="ma-0"
       ></v-checkbox>
@@ -15,13 +15,13 @@
       <div class="d-flex">
         <v-select
           :items="Si"
-          @input="getlocation"
+          @input="getSi"
           class="mr-1"
           label="시/도"
         ></v-select>
         <v-select
           :items="Gu"
-          @input="getlocation"
+          @input="getGu"
           class="ml-1"
           label="시/군/구"
         ></v-select>
@@ -47,7 +47,7 @@
         >
         </v-text-field>
       </div>
-      <p>현재가</p>
+      <!-- <p>현재가</p>
       <div class="d-flex">
         <v-text-field
           label="최소 금액"
@@ -67,7 +67,7 @@
           suffix="원"
         >
         </v-text-field>
-      </div>
+      </div> -->
       <p class="ma-0">물품 등급</p>
       <v-container class="pa-0 d-flex" fluid>
         <v-checkbox v-model="filters.grades" label="S" value="S" class="mx-2" color="orange darken-3"></v-checkbox>
@@ -96,26 +96,36 @@ export default Vue.extend({
       grades: [],
       location: new Array<String>()
     },
-    Si: ["서울특별시"],
-    Gu: ["종로구"]
+    Si: [],
+    Gu: []
   }),
   methods: {
-    getlocation(data: String) {
+    getSi(data: String) {
+      this.filters.location.length = 0
       this.filters.location.push(data);
+      this.$emit("filtering", this.filters);
+      // 구 찾기
+      const districtName = data;
+      itemApi.search(districtName).then((res: AxiosResponse) => {
+        this.Gu = res.data.object.gungu;
+      })
+    },
+    getGu(data: String) {
+      this.filters.location.push(data);
+      console.log(this.filters.location)
     }
   },
   watch: {
     filters: {
       deep: true,
       handler() {
-          this.$emit("filtering", this.filters);
+        this.$emit("filtering", this.filters);
       }
     },
   },
   mounted() {
-    console.log(this.Si)
-    itemApi.search(this.Si).then((res: AxiosResponse) => {
-      console.log(res);
+    itemApi.search(null).then((res: AxiosResponse) => {
+      this.Si = res.data.object.districts;
     })
   }
     

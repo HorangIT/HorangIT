@@ -15,7 +15,7 @@
             style="height: 100%;"
           >
             <v-btn v-if="hover" href="/detail" class="" outlined>
-              VIEW
+              경매 참가
             </v-btn>
           </div>
         </v-expand-transition>
@@ -45,4 +45,13 @@ export default Vue.extend({
 });
 </script>
 
-<style></style>
+<style>
+.v-card--reveal {
+  align-items: center;
+  bottom: 0;
+  justify-content: center;
+  opacity: .5;
+  position: absolute;
+  width: 100%;
+}
+</style>
