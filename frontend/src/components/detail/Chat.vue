@@ -1,29 +1,40 @@
 <template>
   <div>
-    <div class="chatScroll mt-3" style="height: 25vh; overflow: auto;">
-      <!-- 자신의 메시지는 오른쪽 정렬, user 정보 확인 필요 -->
-      <!-- 가로 길이 길어졌을 때, 글씨 깨지는 현상 고쳐야 함 -->
-      <div
-        v-for="(chat, index) in chatLog"
-        :key="index"
-        :class="{ 'text-right ': chat.userId === userId }"
+    <v-card
+      style="overflow-x: hidden; overflow-y: auto;"
+      min-height="25vh"
+      max-height="25vh"
+      elevation="0"
+    >
+      <v-list
+        two-line
       >
-        <v-chip
-          dark
-          style="height: auto; white-space: normal;"
-          class="pa-4 mb-2"
-          :class="{ primary: chat.userId === userId }"
-        >
-          <strong>{{ chat.nickname }} </strong>
-          {{ chat.content }}
-          <sub class="ml-2">
-            <!-- 서버에서 받아온 created_at으로 변경 -->
-            {{ new Date() }}
-          </sub>
-        </v-chip>
-      </div>
-    </div>
-    <v-text-field v-model="chatInput" placeholder="" @keydown.enter="submit">
+        <template v-for="(chat, index) in chatLog">
+          <!-- 날짜선 -->
+          <!-- <v-subheader
+            :key="index"
+          ></v-subheader> -->
+          <v-list-item
+            :key="index"
+          >
+            <v-list-item-avatar>
+              <v-img src="../../assets/img/avatar/avatar_male.svg"></v-img>
+            </v-list-item-avatar>
+            <v-list-item-content>
+              <v-list-item-title v-text="chat.nickname"></v-list-item-title>
+              <v-list-item-subtitle v-text="momentTest"></v-list-item-subtitle>
+              {{ chat.content }}
+            </v-list-item-content>
+          </v-list-item>
+          <!-- 경계선 -->
+          <v-divider
+            :key="index"
+            inset
+          ></v-divider>
+        </template>
+      </v-list>
+    </v-card>
+    <v-text-field class="d-flex-column justify-content-end" v-model="chatInput" placeholder="" @keydown.enter="submit">
       <v-icon slot="prepend">
         mdi-greater-than
       </v-icon>
@@ -36,6 +47,8 @@
 
 <script>
 import io from "socket.io-client";
+import moment from 'moment';
+moment.locale('ko')
 
 export default {
   created() {
@@ -48,7 +61,8 @@ export default {
       // userId: user.id,
       chatInput: "",
       chatLog: [],
-      chatSocket: io("https://powerticket-socket-chat.herokuapp.com/")
+      chatSocket: io("https://powerticket-socket-chat.herokuapp.com/"),
+      momentTest: moment().format('YYYY년 MMMM Do HH:mm:ss'),
     };
   },
   updated() {
@@ -88,3 +102,10 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+  .overflow-only-y {
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+</style>
