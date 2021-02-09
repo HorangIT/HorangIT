@@ -1,10 +1,13 @@
 <template>
   <div>
+    <v-navigation-drawer v-model="active" absolute temporary>
+      <SideNavbar @login="dialogLogin = true" @signup="dialogSignup = true"></SideNavbar>
+    </v-navigation-drawer>
     <v-app-bar elevate-on-scroll app color="white" height="130px" id="header">
       <!-- nav bar -->
       <div class="container">
         <!--로그인 유무-->
-        <v-row justify="end" class="py-2">
+        <v-row justify="end" class="py-2 d-md-flex d-none">
           <span v-if="login" class="d-flex align-center">
             <span class="d-none d-flex" id="welcome">{{ nickname }} 님, 환영합니다.</span>
             <v-menu transition="scroll-y-transition">
@@ -33,13 +36,51 @@
             </v-btn>
           </span>
           <span v-else class="d-flex align-center">
-            <AuthModal :purpose="'login'" />
-            <AuthModal :purpose="'signup'" />
+            <!-- Login dialog -->
+            <v-dialog
+              v-model="dialogLogin"
+              persistent
+              max-width="600px"
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  color=""
+                  depressed
+                  v-bind="attrs"
+                  v-on="on"
+                  :ripple="false"
+                  plain
+                >
+                  로그인
+                </v-btn>
+              </template>
+              <LoginForm @close="dialogLogin = false" @goToSignup="dialogLogin = false; dialogSignup = true;" />
+            </v-dialog>
+            <!-- Signup dialog -->
+            <v-dialog
+              v-model="dialogSignup"
+              persistent
+              max-width="600px"
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  color=""
+                  depressed
+                  v-bind="attrs"
+                  v-on="on"
+                  :ripple="false"
+                  plain
+                >
+                  회원가입
+                </v-btn>
+              </template>
+              <SignupForm @close="dialogSignup = false" @goToLogin="dialogLogin = true; dialogSignup = false;" />
+            </v-dialog>
           </span>
         </v-row>
         <!-- end of login -->
 
-        <v-divider class="orange"></v-divider>
+        <v-divider class="orange d-md-flex d-none"></v-divider>
         <v-row align="center">
       <!-- hamburger icon -->
       <v-app-bar-nav-icon
@@ -108,6 +149,7 @@
               @click="dialog = true"
               text
               plain
+              :ripple="false"
             >
               <h2>판매하기</h2>
             </v-btn>
@@ -126,7 +168,10 @@
 <script lang="ts">
 import Vue from "vue";
 import AuthModal from "../components/user/AuthModal.vue";
-import PostView from "../views/PostView.vue";
+import PostView from "@/views/PostView.vue";
+import LoginForm from "@/components/user/LoginForm.vue";
+import SignupForm from "@/components/user/SignupForm.vue";
+import SideNavbar from "@/components/SideNavbar.vue";
 
 export default Vue.extend({
   name: "Navbar",
@@ -134,6 +179,9 @@ export default Vue.extend({
   components: {
     AuthModal,
     PostView,
+    LoginForm,
+    SignupForm,
+    SideNavbar,
   },
 
   data: () => ({
@@ -153,6 +201,8 @@ export default Vue.extend({
     // loginOrSignup: true,
     nickname: "",
     dialog: false,
+    dialogLogin: false,
+    dialogSignup: false,
   }),
   computed: {
     login () {

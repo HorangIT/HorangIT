@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+	<form id="testForm" name="testForm">
+	<p id="testID">20,000</p>
+	<button type="submit">너무 졸렬하다</button>
+	
+	
+	</form>
+	
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+
+	<script>
+	var stompClient = null;
+	
+	function onError(error) {
+		console.log("오류났어요!!");
+	}
+
+	function sendMessage(event){
+		console.log("클릭했을때 발동??")
+		if(stompClient){
+			var chatMessage = {
+					sender: "english",
+					content: "12345",
+					type: 'CHAT'
+			};
+			
+			stompClient.send("/app/chat.sendMessage", {}, JSON.stringify(chatMessage));
+			
+		}
+		event.preventDefault();
+	}
+
+	
+		window.onload = function(){
+			console.log("zz");
+			
+
+			function connect(){
+				
+				var socket = new SockJS('/api/ws');
+				stompClient = Stomp.over(socket);
+				
+				stompClient.connect({}, onConnected, onError);
+			}
+			
+			function onConnected(){
+				// SubScribe to the Public Topic
+				stompClient.subscribe('/topic/public', onMessageReceived);
+				console.log("연결이 됐다......");
+			}
+
+			connect();
+
+		};
+		
+		function onMessageReceived(payload){
+			var message = JSON.parse(payload.body);
+			
+			
+			var pID = document.getElementById('testID');
+			
+			console.log(pID+"pid입니다...");
+			pID.innerText = message.content;
+			
+		}
+
+		testForm.addEventListener('submit', sendMessage, true);
+
+	</script>
+	
+</html>
+

@@ -18,7 +18,7 @@
             rounded
             color="orange"
             class="mx-2"
-            @click="openModal(true)"
+            @click="$emit('login')"
           >
             로그인
           </v-btn>
@@ -28,7 +28,7 @@
             rounded
             color="orange"
             class="mx-2"
-            @click="openModal(false)"
+            @click="$emit('signup')"
           >
             회원가입
           </v-btn>
@@ -43,7 +43,7 @@
           v-for="(link, idx) in links"
           :key="idx"
           text
-          :href="link.href"
+          :to="link.to"
         >
           <v-list-item-title>{{ link.name }}</v-list-item-title>
         </v-list-item>
@@ -67,21 +67,16 @@ export default Vue.extend({
     links: [
       {
         name: "홈",
-        href: "/"
+        to: "/"
       },
       {
         name: "경매",
-        href: "/auction"
+        to: "/auction"
       },
     ],
-    loginOrSignup: true,
     nickname: ""
   }),
   methods: {
-    openModal(loginOrSignup: boolean) {
-      this.loginOrSignup = loginOrSignup;
-      this.$emit("loginOrSignup", this.loginOrSignup);
-    },
     logout() {
       this.$store.dispatch("userModule/logout");
     }
