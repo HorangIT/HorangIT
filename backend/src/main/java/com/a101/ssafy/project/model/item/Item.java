@@ -42,8 +42,8 @@ public class Item {
 	private String location;
 	private String description;
 	
-	private int startPrice;
-	private int happyPrice;
+	private long startPrice;
+	private long happyPrice;
 	private char grade;
 	private int direct;
 	private int status;

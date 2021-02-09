@@ -11,6 +11,6 @@ import lombok.ToString;
 @ToString
 public class ChatMessage {
 	private MessageType type;
-	private String content;
+	private Object content;
 	private String sender;
 }
