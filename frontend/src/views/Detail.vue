@@ -48,18 +48,28 @@
               </div>
             </v-sheet>
             <v-divider></v-divider>
-            <h2 class="d-inline-flex mt-1 mr-5">
-              시작가 : {{ item.startPrice | comma }}원
-            </h2>
-            <h2 class="d-inline-flex mt-1" color="primary">
-              현재가 : {{ nowPrice | comma }}원
-            </h2>
-            <p class="my-3">{{ item.description }}</p>
-            <div class="mt-2">
-              <p class="subtitle-1">지역: {{ item.location }}</p>
-              <p class="subtitle-1">등급: {{ item.grade }}</p>
-              <p class="subtitle-1">배송: {{ item.direct }}</p>
+
+            <v-row>
+              <v-col>
+                <h2 class="my-3 d-inline-flex mr-10">시작가</h2>
+                <h2 class="d-inline-flex">\ {{ item.startPrice | comma }}</h2>
+                <br />
+                <h2 class="d-inline-flex mr-10">현재가</h2>
+                <h2 class="d-inline-flex">\ {{ nowPrice | comma }}</h2>
+              </v-col>
+
+              <v-col>
+            <div class="mt-4">
+              <p class="subtitles">지역: {{ item.location }}</p>
+              <p class="subtitles">등급: {{ item.grade }}</p>
+              <p class="subtitles">배송: {{ item.direct }}</p>
             </div>
+              </v-col>
+            </v-row>
+            
+
+            <p class="my-3">{{ item.description }}</p>
+
             <v-divider></v-divider>
             <p class="py-4 ma-0">나의 응찰 / 전체 응찰 :</p>
             <div>
@@ -71,9 +81,7 @@
                 height="12vh"
                 @click="bid"
               >
-                <h2 v-if="isOver">
-                  Flex!!!!!!!!!!!!
-                </h2>
+                <h2 v-if="isOver">Flex!!!!!!!!!!!!</h2>
                 <h2 v-else>
                   {{ nowPrice | comma }}원<br />응찰하기<br />
                   <small>다음 응찰가는 {{ nextPrice | comma }}원입니다.</small>
@@ -87,25 +95,19 @@
                 height="12vh"
                 @click="dialog = true"
               >
-                <h2 v-if="isOver">
-                  Flex!!!!!!!!!!!!
-                </h2>
+                <h2 v-if="isOver">Flex!!!!!!!!!!!!</h2>
                 <h2 v-else>{{ item.happyPrice | comma }}원<br />FLEX</h2>
               </v-btn>
               <v-dialog v-model="dialog" max-width="290">
                 <v-card>
-                  <h1 class="pt-4 text-center">
-                    ARE YOU SURE?
-                  </h1>
+                  <h1 class="pt-4 text-center">ARE YOU SURE?</h1>
                   <v-img src="../assets/img/layout/horangit_6.png"></v-img>
                   <v-card-actions>
                     <v-btn color="primary" @click="dialog = false">
                       한 번 더 생각해볼게요
                     </v-btn>
                     <v-spacer></v-spacer>
-                    <v-btn color="warning" @click="flex">
-                      FLEX!!!
-                    </v-btn>
+                    <v-btn color="warning" @click="flex"> FLEX!!! </v-btn>
                   </v-card-actions>
                 </v-card>
               </v-dialog>
@@ -149,7 +151,7 @@ export default Vue.extend({
     Review,
     BiddingLog,
     TimeBar,
-    Info
+    Info,
   },
 
   data: () => ({
@@ -161,28 +163,29 @@ export default Vue.extend({
     biddingLog: [],
     isOver: false,
     rating: 4.5,
-    dialog: false
+    dialog: false,
   }),
   filters: {
     comma(val: number | string) {
       return numberWithCommas(Number(val));
-    }
+    },
   },
   watch: {
     nowPrice() {
       if (this.nowPrice === this.happyPrice) {
         this.isOver = true;
       }
-    }
+    },
   },
   methods: {
-    getItem(id: number) {itemApi.getItem(id).then((res: AxiosResponse) => {
+    getItem(id: number) {
+      itemApi.getItem(id).then((res: AxiosResponse) => {
         this.item = res.data.object;
         this.itemId = res.data.object.itemId;
         this.nowPrice = res.data.object.nowPrice;
         this.nextPrice = res.data.object.nextPrice;
         this.happyPrice = res.data.object.happyPrice;
-      })
+      });
     },
     bid() {
       if (localStorage.getItem("user")) {
@@ -190,7 +193,7 @@ export default Vue.extend({
         const bidInfo = {
           userId: String(user.object.user.id),
           itemId: String(this.itemId),
-          nowPrice: String(this.nowPrice)
+          nowPrice: String(this.nowPrice),
         };
         auctionApi.bidding(bidInfo).then((res: AxiosResponse) => {
           console.log(res.data.object);
@@ -208,7 +211,7 @@ export default Vue.extend({
         const flexInfo = {
           userId: String(user.object.user.id),
           itemId: String(this.itemId),
-          nowPrice: String(this.nowPrice)
+          nowPrice: String(this.nowPrice),
         };
         auctionApi.flex(flexInfo).then((res: AxiosResponse) => {
           console.log(res.data);
@@ -233,11 +236,11 @@ export default Vue.extend({
         .catch(() => {
           this.biddingLog = [];
         });
-    }
+    },
   },
   created() {
     const id = Number(this.$route.params.id);
-    console.log(id)
+    console.log(id);
     this.getItem(id);
     this.log();
   },
