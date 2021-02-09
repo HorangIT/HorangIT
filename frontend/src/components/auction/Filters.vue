@@ -11,6 +11,21 @@
         color="orange darken-3"
         class="ma-0"
       ></v-checkbox>
+      <p>지역</p>
+      <div class="d-flex">
+        <v-select
+          :items="Si"
+          @input="getlocation"
+          class="mr-1"
+          label="시/도"
+        ></v-select>
+        <v-select
+          :items="Gu"
+          @input="getlocation"
+          class="ml-1"
+          label="시/군/구"
+        ></v-select>
+      </div>
       <p>시작가</p>
       <div class="d-flex">
         <v-text-field
@@ -61,11 +76,14 @@
         <v-checkbox v-model="filters.grades" label="C" value="C" class="mx-2" color="orange darken-3"></v-checkbox>
       </v-container>
     </v-card-text>
+    {{filters}}
   </v-card>
 </template>
 
 <script lang="ts">
+import { AxiosResponse } from "axios";
 import Vue from "vue";
+import { itemApi } from "../../utils/axios";
 
 export default Vue.extend({
   name: "Filters",
@@ -76,16 +94,31 @@ export default Vue.extend({
       minPrice: 0,
       maxPrice: 100000000,
       grades: [],
-    }
+      location: []
+    },
+    Si: ["서울특별시"],
+    Gu: ["종로구"]
   }),
+  methods: {
+    getlocation(data: String) {
+      this.filters.location.push(data);
+    }
+  },
   watch: {
     filters: {
       deep: true,
       handler() {
           this.$emit("filtering", this.filters);
-        }
       }
-    }
+    },
+  },
+  mounted() {
+    console.log(this.Si)
+    itemApi.search(this.Si).then((res: AxiosResponse) => {
+      console.log(res);
+    })
+  }
+    
 });
 </script>
 <style></style>
