@@ -24,6 +24,8 @@ import com.a101.ssafy.project.service.SearchService;
 @CrossOrigin(origins = {"*"})
 @RequestMapping("/search")
 public class SearchController {
+
+	@Autowired
 	SearchService searchService;
 	
 	@Autowired
@@ -62,17 +64,18 @@ public class SearchController {
 	
 	@GetMapping
 	public Object getLocationNames(SearchLocationDto searchLocationDto) {
-		JSONObject jobj = new JSONObject();
 		
+		JSONObject jobj = new JSONObject();
+				
+		// 지역이 비어 있으면 "시"부터 리턴
 		if(searchLocationDto.getDistrictName()==null) {
-			List<String> list = searchService.getDistrict();
-			jobj.put("list", list);
-			
-			return jobj;
-		}else {
-			List<String> list = searchService.getSiGunGu(searchLocationDto.getDistrictName());
-			jobj.put("list", list);
-			
+			List<String> districts = searchService.getDistrict();
+			jobj.put("districts", districts);					
+		}
+		// null이 아니면 이미 "시"는 있으니 군/구 리턴
+		else {
+			List<String> gunGu = searchService.getSiGunGu(searchLocationDto.getDistrictName());
+			jobj.put("gungu", gunGu);	
 		}
 		
 		return jobj;

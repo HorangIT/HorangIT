@@ -21,4 +21,15 @@ public class SearchSpecs {
 	
 	}
 	
+	public static Specification<Item> location(final String district) {
+		return new Specification<Item>() {
+
+			@Override
+			public Predicate toPredicate(Root<Item> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
+				return criteriaBuilder.like(root.get("location"), district);
+			}
+			
+		};
+	}
+	
 }

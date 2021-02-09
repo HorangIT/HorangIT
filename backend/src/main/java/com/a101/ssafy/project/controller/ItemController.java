@@ -7,12 +7,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -29,6 +32,9 @@ import com.a101.ssafy.project.model.BasicResponse;
 import com.a101.ssafy.project.model.image.Image;
 import com.a101.ssafy.project.model.item.Item;
 import com.a101.ssafy.project.model.item.RegisterDto;
+import com.a101.ssafy.project.model.search.SearchDto;
+import com.a101.ssafy.project.model.search.SearchLocationDto;
+import com.a101.ssafy.project.model.search.SearchSpecs;
 import com.a101.ssafy.project.repository.ItemRepository;
 import com.a101.ssafy.project.service.ItemService;
 import com.a101.ssafy.project.service.S3Service;
@@ -40,6 +46,7 @@ import com.google.gson.JsonObject;
 public class ItemController {
 	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm"); //날짜 맞출 포맷
 
+	@Autowired
 	ItemService itemService;
 
 	@Autowired
@@ -96,49 +103,19 @@ public class ItemController {
 		return response;
 	}
 	
+	// pagination + filter!
 	
-	@GetMapping("/page")
-	public Object getAllItems(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue ="12") int size) {
+	@GetMapping("/page/{number}/")
+	public Object getAllItems(@PathVariable(name="number")int page) {
 
 		try {
 			// paging은 1~N까지 하기 때문에 기본 page에서 1을 빼준다 (0보다 큰 값이 들어올거니까)
-			Pageable paging = PageRequest.of(page-1, size);
+			Pageable paging = PageRequest.of(page-1, 12);
 			Page<Item> itemPage = itemRepository.findAll(paging);		
-			List<Item> items = itemPage.getContent();			
+			List<Item> items = itemPage.getContent();	
 			
-			/*
-			 * Items의 image가 collections 형태이기 때문에 jpa가 알아서 serialization을 해주지 못함
-			 * 따라서 직접 리턴해줄 item들의 리스트 형태를 지정해줬음
-			 * 
-			 * returningItems = [
-			 * 	{
-			 * 		"itemId": 1,
-			 * 		"image": "filePath",
-			 * 		"grade": "S",
-			 * 		"name": "1",
-			 * 		"category": "category",
-			 * 		"startDate": "datetime"
-			 * ] 
-			 * 
-			 */
-			
-			
-			List<JSONObject> returningItems = new ArrayList<JSONObject>();
-									
-			for (int i = 0; i < items.size(); i++) {
-				JSONObject jobj = new JSONObject();
-				jobj.put("itemId",items.get(i).getId());
-				jobj.put("name",items.get(i).getName());
-				jobj.put("category",items.get(i).getCategory());
-				jobj.put("grade",items.get(i).getGrade());
-				jobj.put("startDate",items.get(i).getStartDate());
-				jobj.put("image", items.get(i).image.iterator().next().getFilePath());
-				
-				returningItems.add(jobj);
-			}
-			
-			System.out.println(returningItems.toString());
-			
+			List<JSONObject> returningItems = itemService.getAllPages(items);
+												
 			BasicResponse result = new BasicResponse();
 			result.status = true;
 			result.data = "모든 아이템 보내기!";
@@ -149,8 +126,55 @@ public class ItemController {
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-
-
 	}
+	
+	@GetMapping("/search/{search}")
+	public Object searchWithFilter(@PathVariable String search) {
+		
+		Specification<Item> specify = Specification.where(SearchSpecs.location(search));
+		Pageable paging = PageRequest.of(0, 5);
+		Page<Item> p = itemRepository.findAll(specify, paging);
+		List<Item> test = p.getContent();
+		
+		System.out.println(test.size());
+				
+		return null;
+	}
+	
+	/*
+	 * 지역 리스트 뽑아주기:
+	 * - null이 들어오면 "시" 리턴
+	 * - null이 아니면 "시-군구" 리턴
+	 */
+	@GetMapping("/district")
+	@ResponseBody
+	public Object getLocationNames(SearchLocationDto searchLocationDto) {
+		
+		try {
+						
+			JSONObject returnValue = new JSONObject();
+			BasicResponse result = new BasicResponse();
+			result.status = true;
+			
+			if(searchLocationDto.getDistrictName()==null) {
+				List<String> districts = itemService.getDistrict();
+				returnValue.put("districts", districts);	
+				result.data = "시!!!간다!!!";
+				
+			} else {
+				List<String> gunGu = itemService.getSiGunGu(searchLocationDto.getDistrictName());
+				returnValue.put("gungu", gunGu);	
+				result.data = "군구!!!간다!!!";
+			}
+			
+			result.object = returnValue;
+			
+			return new ResponseEntity<>(result, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
+		
+	}
+	
 	
 }
