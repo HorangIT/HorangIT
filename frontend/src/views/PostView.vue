@@ -62,11 +62,36 @@
                 class="mr-4"
               ></v-text-field>
             </v-row> -->
-              <v-row class="my-8 px-2">
+              <v-row class="my-8 px-2" v-if="this.location==false">
                 <h4 class="mb-5">주소</h4>
                 <DaumPostcode :on-complete="handleAddress" />
               </v-row>
-
+              <v-col class="my-8 px-2" v-else>
+                <h4 class="mb-3">주소</h4>
+                <v-row
+                  class="align-center"
+                >
+                  <v-text-field
+                    solo
+                    disabled
+                    v-model="this.location"
+                    class="mr-4 mt-5"
+                  >
+                  </v-text-field>
+                  <v-btn
+                    tile
+                    color="blue darken-4 white--text"
+                    class="mb-2"
+                    @click="locationEdit()"
+                  >
+                    <v-icon left>
+                      mdi-pencil
+                    </v-icon>
+                    수정
+                  </v-btn>
+                </v-row>
+              </v-col>
+              
               <!-- 경매 가격 -->
               <v-row>
                 <v-col>
@@ -75,8 +100,7 @@
                     filled
                     outlined
                     :rules="[rules.price]"
-                    @blur="startPriceCheck()"
-                    type="number"
+                    @keyup="startPriceCheck()"
                     v-model="startPrice"
                   ></v-text-field>
                 </v-col>
@@ -86,7 +110,7 @@
                     filled
                     outlined
                     :rules="[rules.price]"
-                    @blur="happyPriceCheck()"
+                    @keyup="happyPriceCheck()"
                     v-model="happyPrice"
                   ></v-text-field>
                 </v-col>
@@ -488,6 +512,10 @@ export default Vue.extend({
       this.location = fullAddress;
     },
 
+    locationEdit() {
+      this.location = "";
+    },
+
     testButton() {
       this.startDateTime = this.startDate + " " + this.startTime;
       this.endDateTime = this.endDate + " " + this.endTime;
@@ -649,4 +677,5 @@ export default Vue.extend({
   cursor: pointer;
   border-radius: 5px;
 }
+
 </style>
