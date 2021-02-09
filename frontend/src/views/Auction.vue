@@ -13,7 +13,7 @@
     >
       <v-icon>mdi-pencil</v-icon>
     </v-btn>
-    <v-dialog v-model="dialog" max-width="50vw">
+    <v-dialog v-model="dialog" max-width="60vw">
       <v-card>
         <PostView @close="dialog = false"/>
       </v-card>

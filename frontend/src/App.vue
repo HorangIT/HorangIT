@@ -16,7 +16,7 @@ import Vue from "vue";
 import Navbar from "@/components/Navbar.vue";
 import SideNavbar from "@/components/SideNavbar.vue";
 import Footer from "@/components/Footer.vue";
-import testNav from "@/components/Navbar copy 2.vue";
+import testNav from "@/components/Navbar.vue";
 export default Vue.extend({
   name: "App",
   components: {

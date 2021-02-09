@@ -1,252 +1,282 @@
 <template>
   <div>
     <v-container>
-      <div class="row container">
-        <div class="col-md-12 col-sm-12 col-xs-12">
-          <v-col>
-            <h4 class="mb-5">경매 물품 이름</h4>
-            <v-text-field label="" solo v-model="title"></v-text-field>
-            <h4 class="mb-5">경매 물품 내용</h4>
-            <v-textarea label="" solo v-model="description"></v-textarea>
-            <v-select
-              v-model="category"
-              :items="categories"
-              label="category"
-              outlined
-            ></v-select>
-            <v-row>
-              <v-col>
-              <h5>S: 단순변심이나 개봉만 한 새 상품과 동일한 상태</h5>
-              <h5>A: 새 상품과 구별이 어려울만큼 깨끗한 상품</h5>
-              <h5>B: 사용감이 일부 있으나 전반적으로 양호한 상태</h5>
-              <h5>C: 스크래치 등 사용흔적이 있는 상태</h5>
-              </v-col>
-            </v-row>
-            <v-row class="align-center">
-              <h5 class="ml-3">상품 상태</h5>
-              <v-btn-toggle
-                v-model="grade"
-                tile
-                color="deep-purple accent-3"
-                group
-              >
-                <v-btn value="S">S</v-btn>
-                <v-btn value="A">A</v-btn>
-                <v-btn value="B">B</v-btn>
-                <v-btn value="C">C</v-btn>
-              </v-btn-toggle>
-            </v-row>
-            <v-row class="mb-5 align-center">
+      <div class="container">
+        <v-row justify="center">
+          <div class="col-md-12 col-lg-8">
+            <!-- 제목 -->
+            <h1 class="text-center my-3">판매하기</h1>
+
+            <v-col>
+              <h4 class="mb-5">경매 물품 이름</h4>
+              <v-text-field label="" solo v-model="title"></v-text-field>
+              <h4 class="mb-5">경매 물품 내용</h4>
+              <v-textarea label="" solo v-model="description"></v-textarea>
+
+              <!-- 카테고리 -->
+              <v-select
+                v-model="category"
+                :items="categories"
+                label="category"
+                outlined
+              ></v-select>
+
+              <!-- 상품의 상태 & 택배여부 -->
+              <v-row>
+                <v-col>
+                  <h5>S: 단순변심이나 개봉만 한 새 상품과 동일한 상태</h5>
+                  <h5>A: 새 상품과 구별이 어려울만큼 깨끗한 상품</h5>
+                  <h5>B: 사용감이 일부 있으나 전반적으로 양호한 상태</h5>
+                  <h5>C: 스크래치 등 사용흔적이 있는 상태</h5>
+                </v-col>
+                <v-divider vertical></v-divider>
+                <v-col>
+                  <h4 class="ml-3">상품 상태</h4>
+                  <v-btn-toggle
+                    v-model="grade"
+                    tile
+                    color="deep-purple accent-3"
+                    group
+                  >
+                    <v-btn value="S">S</v-btn>
+                    <v-btn value="A">A</v-btn>
+                    <v-btn value="B">B</v-btn>
+                    <v-btn value="C">C</v-btn>
+                  </v-btn-toggle>
+                </v-col>
+                <v-divider vertical></v-divider>
+                <v-col>
+                  <v-radio-group v-model="direct" mandatory>
+                    <v-radio label="택배" value="0"></v-radio>
+                    <v-radio label="직거래" value="1"></v-radio>
+                    <v-radio label="택배 & 직거래" value="2"></v-radio>
+                  </v-radio-group>
+                </v-col>
+              </v-row>
+
+              <!-- 위치 -->
+              <!-- <v-row class="mb-5 align-center">
               <v-text-field
                 label="위치"
                 v-model="location"
                 class="mr-4"
               ></v-text-field>
-              <v-radio-group v-model="direct" mandatory>
-                <v-radio label="택배" value="0"></v-radio>
-                <v-radio label="직거래" value="1"></v-radio>
-                <v-radio label="택배 & 직거래" value="2"></v-radio>
-              </v-radio-group>
-            </v-row>
-            <v-row class="mb-5">
-              <DaumPostcode
-                :on-complete=handleAddress
-              />
+            </v-row> -->
+              <v-row class="my-8 px-2">
+                <h4 class="mb-5">주소</h4>
+                <DaumPostcode :on-complete="handleAddress" />
+              </v-row>
 
-            </v-row>
-            <v-row class="mb-5 mr-5">
-              <v-text-field
-                label="경매시작가"
-                filled
-                outlined
-                :rules="[rules.price]"
-                @blur="startPriceCheck()"
-                type="number"
-                v-model="startPrice"
-              ></v-text-field>
-            </v-row>
-            <v-row class="mb-5 mr-5">
-              <v-text-field
-                label="즉시구매가"
-                filled
-                outlined
-                :rules="[rules.price]"
-                @blur="happyPriceCheck()"
-                v-model="happyPrice"
-              ></v-text-field>
-            </v-row>
-            <v-row>
-              <v-menu
-                ref="startDateCalender"
-                v-model="startDateCalender"
-                :close-on-content-click="false"
-                :return-value.sync="startDate"
-                transition="scale-transition"
-                offset-y
-                min-width="auto"
-              >
-                <template v-slot:activator="{ on, attrs }">
+              <!-- 경매 가격 -->
+              <v-row>
+                <v-col>
                   <v-text-field
-                    v-model="startDate"
-                    label="경매시작일"
-                    prepend-icon="mdi-calendar"
-                    readonly
-                    v-bind="attrs"
-                    v-on="on"
-                  >
-                  </v-text-field>
-                </template>
-                <v-date-picker
-                  v-model="startDate"
-                  no-title
-                  scrollable
-                  :min="todayDate"
-                  :max="endDate"
-                >
-                  <v-spacer></v-spacer>
-                  <v-btn
-                    text
-                    color="primary"
-                    @click="startDateCalender = false"
-                  >
-                    Cancel
-                  </v-btn>
-                  <v-btn
-                    text
-                    color="primary"
-                    @click="$refs.startDateCalender.save(startDate)"
-                  >
-                    OK
-                  </v-btn>
-                </v-date-picker>
-              </v-menu>
-              <time-select v-model="startTime"></time-select>
-            </v-row>
-            <v-row>
-              <v-menu
-                ref="endDateCalender"
-                v-model="endDateCalender"
-                :close-on-content-click="false"
-                :return-value.sync="endDate"
-                transition="scale-transition"
-                offset-y
-                min-width="auto"
-              >
-                <template v-slot:activator="{ on, attrs }">
+                    label="경매시작가"
+                    filled
+                    outlined
+                    :rules="[rules.price]"
+                    @blur="startPriceCheck()"
+                    type="number"
+                    v-model="startPrice"
+                  ></v-text-field>
+                </v-col>
+                <v-col>
                   <v-text-field
-                    v-model="endDate"
-                    label="경매종료일"
-                    prepend-icon="mdi-calendar"
-                    readonly
-                    v-bind="attrs"
-                    v-on="on"
+                    label="즉시구매가"
+                    filled
+                    outlined
+                    :rules="[rules.price]"
+                    @blur="happyPriceCheck()"
+                    v-model="happyPrice"
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+
+              <!-- 시간 -->
+              <v-row>
+                <v-col>
+                  <v-menu
+                    ref="startDateCalender"
+                    v-model="startDateCalender"
+                    :close-on-content-click="false"
+                    :return-value.sync="startDate"
+                    transition="scale-transition"
+                    offset-y
+                    min-width="auto"
                   >
-                  </v-text-field>
-                </template>
-                <v-date-picker
-                  v-model="endDate"
-                  no-title
-                  scrollable
-                  :min="this.startDate"
-                >
-                  <v-spacer></v-spacer>
-                  <v-btn text color="primary" @click="endDateCalender = false">
-                    Cancel
-                  </v-btn>
-                  <v-btn
-                    text
-                    color="primary"
-                    @click="$refs.endDateCalender.save(endDate)"
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-text-field
+                        v-model="startDate"
+                        label="경매시작일"
+                        prepend-icon="mdi-calendar"
+                        readonly
+                        v-bind="attrs"
+                        v-on="on"
+                      >
+                      </v-text-field>
+                    </template>
+                    <v-date-picker
+                      v-model="startDate"
+                      no-title
+                      scrollable
+                      :min="todayDate"
+                      :max="endDate"
+                    >
+                      <v-spacer></v-spacer>
+                      <v-btn
+                        text
+                        color="primary"
+                        @click="startDateCalender = false"
+                      >
+                        Cancel
+                      </v-btn>
+                      <v-btn
+                        text
+                        color="primary"
+                        @click="$refs.startDateCalender.save(startDate)"
+                      >
+                        OK
+                      </v-btn>
+                    </v-date-picker>
+                  </v-menu>
+                </v-col>
+                <v-col>
+                  <time-select v-model="startTime"></time-select>
+                </v-col>
+
+                <v-col>
+                  <v-menu
+                    ref="endDateCalender"
+                    v-model="endDateCalender"
+                    :close-on-content-click="false"
+                    :return-value.sync="endDate"
+                    transition="scale-transition"
+                    offset-y
+                    min-width="auto"
                   >
-                    OK
-                  </v-btn>
-                </v-date-picker>
-              </v-menu>
-              <time-select v-model="endTime"></time-select>
-            </v-row>
-          </v-col>
-          <div class="shadow mt-5">
-            <div style="border: 1px solid #dddddd">
-              <div class="room-deal-information-title">사진 등록</div>
-              <div class="room-picture-notice">
-                <ul>
-                  <li>
-                    사진은 가로로 찍은 사진을 권장합니다 (가로사이즈 최소 800px)
-                  </li>
-                  <li>
-                    사진 용량은 사진 한장당 10MB까지 등록이 가능합니다.
-                  </li>
-                </ul>
-              </div>
-              <div class="room-file-upload-wrapper">
-                <div
-                  v-if="!files.length"
-                  class="room-file-upload-example-container"
-                >
-                  <div>
-                    <div class="text-center">이미지</div>
-                    <div class="room-file-notice-item">
-                      실 사진 최소 3장 이상 등록하셔야 하며. 가로사진을
-                      권장합니다.
-                    </div>
-                    <div class="room-file-notice-item" style="color: #ef4351;">
-                      로고를 제외한 불필요한 정보(워터마크, 상호, 전화번호 등)가
-                      있는 매물은 비공개 처리됩니다
-                    </div>
-                    <div class="room-file-notice-item">
-                      <div class="image-box">
-                        <label for="file">일반 사진 등록</label>
-                        <input
-                          type="file"
-                          id="file"
-                          ref="files"
-                          @change="imageUpload"
-                          multiple
-                        />
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-text-field
+                        v-model="endDate"
+                        label="경매종료일"
+                        prepend-icon="mdi-calendar"
+                        readonly
+                        v-bind="attrs"
+                        v-on="on"
+                      >
+                      </v-text-field>
+                    </template>
+                    <v-date-picker
+                      v-model="endDate"
+                      no-title
+                      scrollable
+                      :min="this.startDate"
+                    >
+                      <v-spacer></v-spacer>
+                      <v-btn
+                        text
+                        color="primary"
+                        @click="endDateCalender = false"
+                      >
+                        Cancel
+                      </v-btn>
+                      <v-btn
+                        text
+                        color="primary"
+                        @click="$refs.endDateCalender.save(endDate)"
+                      >
+                        OK
+                      </v-btn>
+                    </v-date-picker>
+                  </v-menu>
+                </v-col>
+                <v-col>
+                  <time-select v-model="endTime"></time-select>
+                </v-col>
+              </v-row>
+              <v-row> </v-row>
+            </v-col>
+            <div class="shadow mt-5">
+              <div style="border: 1px solid #dddddd">
+                <div class="room-deal-information-title">사진 등록</div>
+                <div class="room-picture-notice">
+                  <ul>
+                    <li>
+                      사진은 가로로 찍은 사진을 권장합니다 (가로사이즈 최소
+                      800px)
+                    </li>
+                    <li>사진 용량은 사진 한장당 10MB까지 등록이 가능합니다.</li>
+                  </ul>
+                </div>
+                <div class="room-file-upload-wrapper">
+                  <div
+                    v-if="!files.length"
+                    class="room-file-upload-example-container"
+                  >
+                    <div>
+                      <div class="text-center">이미지</div>
+                      <div class="room-file-notice-item">
+                        실 사진 최소 3장 이상 등록하셔야 하며. 가로사진을
+                        권장합니다.
+                      </div>
+                      <div class="room-file-notice-item" style="color: #ef4351">
+                        로고를 제외한 불필요한 정보(워터마크, 상호, 전화번호
+                        등)가 있는 매물은 비공개 처리됩니다
+                      </div>
+                      <div class="room-file-notice-item">
+                        <div class="image-box">
+                          <label for="file">일반 사진 등록</label>
+                          <input
+                            type="file"
+                            id="file"
+                            ref="files"
+                            @change="imageUpload"
+                            multiple
+                          />
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div v-else style="height: 100%;">
-                  <div class="file-preview-container">
-                    <div
-                      v-for="(file, index) in files"
-                      :key="index"
-                      class="file-preview-wrapper"
-                    >
+                  <div v-else style="height: 100%">
+                    <div class="file-preview-container">
                       <div
-                        class="file-close-button"
-                        @click="fileDeleteButton"
-                        :name="file.number"
+                        v-for="(file, index) in files"
+                        :key="index"
+                        class="file-preview-wrapper"
                       >
-                        x
+                        <div
+                          class="file-close-button"
+                          @click="fileDeleteButton"
+                          :name="file.number"
+                        >
+                          x
+                        </div>
+                        <img :src="file.preview" />
                       </div>
-                      <img :src="file.preview" />
-                    </div>
-                    <div class="file-preview-wrapper-upload">
-                      <div class="image-box">
-                        <label for="file">추가 사진 등록</label>
-                        <input
-                          type="file"
-                          id="file"
-                          ref="files"
-                          @change="imageAddUpload"
-                          multiple
-                        />
+                      <div class="file-preview-wrapper-upload">
+                        <div class="image-box">
+                          <label for="file">추가 사진 등록</label>
+                          <input
+                            type="file"
+                            id="file"
+                            ref="files"
+                            @change="imageAddUpload"
+                            multiple
+                          />
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
+            <div class="text-center mt-3">
+              <v-btn @click="writePost" color="orange" large> 작성하기 </v-btn>
+            </div>
+            <v-btn @click="testButton" block color="white" class="mt-5 w-50">
+              테스트하기
+            </v-btn>
           </div>
-          <v-btn @click="writePost" block color="primary" class="mt-5 w-100">
-            작성하기
-          </v-btn>
-          <v-btn @click="testButton" block color="white" class="mt-5 w-100">
-            테스트하기
-          </v-btn>
-        </div>
+        </v-row>
       </div>
     </v-container>
   </div>
@@ -297,8 +327,8 @@ export default Vue.extend({
     rules: {
       price: (v: string) =>
         !!(v || "").match(/^[1-9][0-9]*$/) ||
-        "잘못된 입력입니다. 가격을 입력해주세요."
-    }
+        "잘못된 입력입니다. 가격을 입력해주세요.",
+    },
   }),
   mounted() {
     const today = moment();
@@ -326,7 +356,7 @@ export default Vue.extend({
         direct,
         startDateTime,
         endDateTime,
-        files
+        files,
       } = this;
 
       if (!title) alert("제목을 입력해주세요.");
@@ -357,7 +387,7 @@ export default Vue.extend({
         // user id, image
         formData.append("uid", uid);
 
-        files.forEach(el => {
+        files.forEach((el) => {
           formData.append("files", (el as any).file);
         });
 
@@ -367,7 +397,7 @@ export default Vue.extend({
         console.log(data);
         if (data.status) {
           alert("업로드가 완료되었습니다.");
-          this.$emit("close")
+          this.$emit("close");
         } else {
           alert("업로드에 실패하였습니다.");
         }
@@ -389,8 +419,8 @@ export default Vue.extend({
             file: (this.$refs.files as any).files[i],
             // 이미지 프리뷰
             preview: URL.createObjectURL((this.$refs.files as any).files[i]),
-            number: i
-          }
+            number: i,
+          },
         ];
         num = i;
       }
@@ -412,8 +442,8 @@ export default Vue.extend({
             file: (this.$refs.files as any).files[i],
             // 이미지 프리뷰
             preview: URL.createObjectURL((this.$refs.files as any).files[i]),
-            number: i + this.uploadImageIndex
-          }
+            number: i + this.uploadImageIndex,
+          },
         ];
         num = i;
       }
@@ -424,13 +454,12 @@ export default Vue.extend({
     fileDeleteButton(e: any) {
       const name = e.target.getAttribute("name");
       this.files = this.files.filter(
-        data => (data as any).number !== Number(name)
+        (data) => (data as any).number !== Number(name)
       );
     },
 
     startPriceCheck() {
       if (!this.startPrice.match(/^[1-9][0-9]*$/)) {
-
         this.startPrice = "";
       }
     },
@@ -442,19 +471,20 @@ export default Vue.extend({
     },
 
     handleAddress(data: any) {
-      let fullAddress = data.address
-      let extraAddress = ''
-      if (data.addressType === 'R') {
-        if (data.bname !== '') {
-          extraAddress += data.bname
+      let fullAddress = data.address;
+      let extraAddress = "";
+      if (data.addressType === "R") {
+        if (data.bname !== "") {
+          extraAddress += data.bname;
         }
-        if (data.buildingName !== '') {
-          extraAddress += (extraAddress !== '' ? `, ${data.buildingName}` : data.buildingName)
+        if (data.buildingName !== "") {
+          extraAddress +=
+            extraAddress !== "" ? `, ${data.buildingName}` : data.buildingName;
         }
-        fullAddress += (extraAddress !== '' ? ` (${extraAddress})` : '')
+        fullAddress += extraAddress !== "" ? ` (${extraAddress})` : "";
       }
 
-      console.log(fullAddress) // e.g. '서울 성동구 왕십리로2길 20 (성수동1가)'
+      console.log(fullAddress); // e.g. '서울 성동구 왕십리로2길 20 (성수동1가)'
       this.location = fullAddress;
     },
 
@@ -501,8 +531,8 @@ export default Vue.extend({
       console.log("'files:file'");
       console.log(this.files);
       console.log("'--------------------------'");
-    }
-  }
+    },
+  },
 });
 </script>
 
