@@ -73,14 +73,6 @@ export default Vue.extend({
         name: "경매",
         href: "/auction"
       },
-      {
-        name: "서비스 소개",
-        href: "#"
-      },
-      {
-        name: "고객센터",
-        href: "/cs"
-      }
     ],
     loginOrSignup: true,
     nickname: ""

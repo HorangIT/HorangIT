@@ -1,6 +1,6 @@
 <template>
   <v-app style="background-color: #fdfafa;">
-    <testNav />
+    <testNav @openSideNavbar="active = !active"/>
     <!-- <Navbar /> -->
     <div style="height:130px;"></div>
     <v-navigation-drawer v-model="active" absolute temporary>
@@ -13,10 +13,10 @@
 
 <script lang="ts">
 import Vue from "vue";
-import Navbar from "@/components/Navbar.vue";
-import SideNavbar from "@/components/SideNavbar.vue";
-import Footer from "@/components/Footer.vue";
-import testNav from "@/components/Navbar.vue";
+import Navbar from "./components/Navbar.vue";
+import SideNavbar from "./components/SideNavbar.vue";
+import Footer from "./components/Footer.vue";
+import testNav from "./components/Navbar.vue";
 export default Vue.extend({
   name: "App",
   components: {

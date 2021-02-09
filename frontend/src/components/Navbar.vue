@@ -43,7 +43,7 @@
         <v-row align="center">
       <!-- hamburger icon -->
       <v-app-bar-nav-icon
-        @click.stop="active = !active"
+        @click.stop="openSideNavbar"
         class="d-flex d-md-none"
       />
           <!-- logo -->
@@ -126,10 +126,10 @@
 <script lang="ts">
 import Vue from "vue";
 import AuthModal from "../components/user/AuthModal.vue";
-import PostView from "@/views/PostView.vue";
+import PostView from "../views/PostView.vue";
 
 export default Vue.extend({
-  name: "Layout",
+  name: "Navbar",
 
   components: {
     AuthModal,
@@ -176,6 +176,9 @@ export default Vue.extend({
     getNickname () {
       const user = JSON.parse(localStorage.getItem("user") || "{}");
       this.nickname = user.object.user.nickname;
+    },
+    openSideNavbar() {
+      this.$emit("openSideNavbar")
     }
   }
 });

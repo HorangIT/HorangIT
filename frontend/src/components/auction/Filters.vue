@@ -94,13 +94,13 @@ export default Vue.extend({
       minPrice: 0,
       maxPrice: 100000000,
       grades: [],
-      location: []
+      location: new Array<String>()
     },
     Si: ["서울특별시"],
     Gu: ["종로구"]
   }),
   methods: {
-    getlocation(data: String) {
+    getlocation(data: String) { e86m
       this.filters.location.push(data);
     }
   },
