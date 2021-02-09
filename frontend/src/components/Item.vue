@@ -14,7 +14,7 @@
             class="d-flex transition-fast-in-fast-out white darken-2 v-card--reveal display-3 white--text"
             style="height: 100%;"
           >
-            <v-btn v-if="hover" href="/detail" class="" outlined>
+            <v-btn v-if="hover" to="/detail" class="" outlined>
               경매 참가
             </v-btn>
           </div>

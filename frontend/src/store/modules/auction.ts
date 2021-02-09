@@ -2,7 +2,7 @@ export const auctionModule: Record<string, any> = {
   namespaced: true,
   state: {
     page: sessionStorage.getItem("page") ? sessionStorage.getItem("page") : 1,
-    filters: sessionStorage.getItem("filters") ? sessionStorage.getItem("filters") : {},
+    filters: sessionStorage.getItem("filters") ? sessionStorage.getItem("filters") : '{}'
   },
   mutations: {
     SET_PAGE (state: any, page: any) {

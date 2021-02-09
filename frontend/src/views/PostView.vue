@@ -333,7 +333,7 @@ export default Vue.extend({
     filesPreview: [],
     uploadImageIndex: 0,
 
-    categories: ["의류", "전자기기"],
+    categories: ["전자기기","의류","미용","잡화","도서"],
 
     startDateCalender: false,
     startTime: "",

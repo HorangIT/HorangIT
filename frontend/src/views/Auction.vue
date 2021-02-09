@@ -20,7 +20,7 @@
     </v-dialog>
     <div class="row">
       <div class="col-md-3 col-sm-3 col-xs-12">
-        <Filters @filtering="filtering"/>
+        <Filters @filtering="filtering" :filters="filters" @reset="reset"/>
       </div>
       <div class="col-md-9 col-sm-9 col-xs-12">
         <div class="row text-center">
@@ -64,7 +64,15 @@ export default Vue.extend({
 
   data: () => ({
     page: 1,
-    filters: {},
+    filters: {
+      check: false,
+      minPrice: 0,
+      maxPrice: 100000000,
+      category: [],
+      grades: [],
+      si: "",
+      gu: "",
+    },
     dialog: false,
     products: [
       {
@@ -156,35 +164,35 @@ export default Vue.extend({
   methods: {
     getItemPage(page: number) {
       this.page = page;
+      this.getItems(this.page, this.filters);
     },
     filtering(filters: any) {
       this.filters = filters;
       this.page = 1;
+      this.getItems(this.page, this.filters);
     },
     getItems(page: number, filters: any){
       console.log(this.page, this.filters);
       
-      // itemApi.getItemPage(page, filters).then((res: AxiosResponse) => {
-      //   console.log(res);
-      // })
-
-      sessionStorage.setItem("filters", filters);
-      sessionStorage.setItem("page", page.toString());
+      itemApi.getItemPage(page, filters).then((res: AxiosResponse) => {
+        console.log(res);
+      })
       
-    }
-  },
-  watch: {
-    filters() {
-      this.getItems(this.page, this.filters);
+      const tmpFilter = JSON.stringify(filters)
+      sessionStorage.setItem("filters", tmpFilter);
+      sessionStorage.setItem("page", page.toString());
     },
-    page(){
-      this.getItems(this.page, this.filters);
+    reset() {
+      const tmpFilter = {check: false, minPrice: 0, maxPrice: 100000000, grades: [], si: "", gu: ""}
+      this.filters = tmpFilter;
     }
   },
   created() {
-    console.log(this.$store.state.auctionModule);
-    this.getItemPage(parseInt(this.$store.state.auctionModule.page));
-    // this.getItems(1, {}); -> 삭제
+    this.getItems(
+      parseInt(this.$store.state.auctionModule.page), 
+      JSON.parse(this.$store.state.auctionModule.filters)
+    )
+    this.filters = JSON.parse(this.$store.state.auctionModule.filters);
   }
 });
 </script>
