@@ -35,7 +35,7 @@
                   class="white--text align-end"
                   :aspect-ratio="16 / 9"
                   height="200px"
-                  :src="pro.src"
+                  :src="pro.image"
                 >
                   <v-card-title>{{ pro.type }} </v-card-title>
                   <v-expand-transition>
@@ -56,7 +56,8 @@
                       {{ pro.name }}
                     </a>
                   </div>
-                  <div>${{ pro.price }}</div>
+                  <div>{{ pro.category }}</div>
+                  <div>{{ pro.startPrice }} 원</div>
                 </v-card-text>
               </v-card>
             </v-hover>
@@ -182,6 +183,9 @@ export default Vue.extend({
       }
     ]
   }),
+  mounted() {
+    this.getItemPage(1);
+  },
   methods: {
     getItemPage(page: number) {
       this.page = page;
