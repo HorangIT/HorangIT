@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,10 @@ public class ItemServiceImpl implements ItemService{
 	final String ITEM_NAME = "item";
 	final String ITEM_EXPIRED = "Expired";
 	final String ITEM_HAPPY_PRICE = "Happy";
+	final String ITEM_CHAT_LOG_USER_ID = "itemChatUserId";
+	final String ITEM_CHAT_LOG_USER_CONTENT = "itemChatUserContent";
+	final String ITEM_CHAT_LOG_USER_TIME = "itemChatUserTime";
+	final String ITEM_CHAT_LOG_USER_NICKNAME = "itemChatUserTime";
 	
 	@Autowired
 	ItemRepository itemRepository;
@@ -248,7 +253,36 @@ public class ItemServiceImpl implements ItemService{
 		
 		return returnValue;
 	}
+	
+	@Override
+	public BasicResponse getChatLog(long itemId) {
+		BasicResponse result = new BasicResponse();
+		result.status = true;
+		result.data = "아이템 채팅 로그를 조회했습니다.";
+		
+		JSONObject jobj = new JSONObject(); 
 
-
+		List<String> userId = redisUtil.getAllLdata(ITEM_CHAT_LOG_USER_ID+itemId);
+		List<String> content = redisUtil.getAllLdata(ITEM_CHAT_LOG_USER_CONTENT+itemId);
+		List<String> time = redisUtil.getAllLdata(ITEM_CHAT_LOG_USER_TIME+itemId);
+		List<String> nickname = redisUtil.getAllLdata(ITEM_CHAT_LOG_USER_NICKNAME+itemId);
+		JSONArray jarr = new JSONArray();
+		
+		for(int i=0; i<userId.size(); ++i) {
+			JSONObject temp = new JSONObject();
+			
+			temp.put("userId", userId.get(i));
+			temp.put("userNickname", nickname.get(i));
+			temp.put("chatContent", content.get(i));
+			temp.put("chatCreatedAt", time.get(i));
+			
+			jarr.add(temp);
+		}
+		
+		jobj.put("log", jarr);
+		
+		result.object = jobj;
+		return result;
+	}
 
 }

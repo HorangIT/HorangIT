@@ -190,4 +190,11 @@ public class ItemController {
 	}
 	
 	
+	@GetMapping("/{itemId}/chat")
+	@ResponseBody
+	public Object getChatLog(@PathVariable("itemId")long itemId) {
+		BasicResponse result = itemService.getChatLog(itemId);
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	
 }

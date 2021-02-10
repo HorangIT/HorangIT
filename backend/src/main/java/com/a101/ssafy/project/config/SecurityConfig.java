@@ -57,6 +57,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter { // 추가적�
                         ,"/api/**"
                         
                 );
+        
     }
 
     @Override
