@@ -1,5 +1,8 @@
 package com.a101.ssafy.project.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -9,8 +12,11 @@ import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import com.a101.ssafy.project.model.chat.ChatMessage;
+import com.a101.ssafy.project.model.chat.MessageType;
+import com.a101.ssafy.project.redis.RedisUtil;
 
 
 //WebSocketConfig 에서 /{prefix}로  시작하는 대상이 있는 클라이언트에서 보낸 모든 메시지는 @MessageMapping 으로 라우팅됨
@@ -18,22 +24,19 @@ import com.a101.ssafy.project.model.chat.ChatMessage;
 @CrossOrigin(origins = { "*" })
 @Controller
 public class ChatController {
+	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm"); //날짜 맞출 포맷
+	
 	@Autowired
 	SimpMessagingTemplate simpMessagingTemplate; 
 	
-	final String chatPrefix = "CHAT";
+	@Autowired
+	RedisUtil redisUtil;
 	
-	static int temp = 10000;
-//	 /api/msg/requestMessage <- message 브로커로 온다는거죠!
-	@MessageMapping("/chat.sendMessage") // /prefix/cht.sendMsg 는 여기로 옴
-	@SendTo("/topic/public")
-	public ChatMessage sendMessage(@Payload ChatMessage chatMessage) {
-		temp+=10000;
-		System.out.println("야옹");
-		chatMessage.setContent(temp+"");
-		System.out.println(chatMessage.getContent());
-		return chatMessage;
-	}
+	final String ITEM_CHAT_LOG_USER_ID = "itemChatUserId";
+	final String ITEM_CHAT_LOG_USER_CONTENT = "itemChatUserContent";
+	final String ITEM_CHAT_LOG_USER_TIME = "itemChatUserTime";
+	final String ITEM_CHAT_LOG_USER_NICKNAME = "itemChatUserTime";
+
 	//////////
 	///////////
 	////////////
@@ -50,13 +53,23 @@ public class ChatController {
 	///////////
 	////////////
 	
-	@MessageMapping("/chat.sendMessage2")
-	public void sss(@Payload ChatMessage chatMessage) {
+	@MessageMapping("/chat.sendMessage/{itemId}")
+	public void sss(@Payload ChatMessage chatMessage, @PathVariable("itemId")long itemId) {
 		System.out.println("sss함수를 탔습니다...");
-		temp+=10000;
-		chatMessage.setContent(temp+"");
-		simpMessagingTemplate.convertAndSend("/topic/public"+"/3", chatMessage);
+		chatMessage.setType(MessageType.REPLY);
+		System.out.println(chatMessage.getSender());
+		System.out.println(chatMessage.getContent());
+		
+		Date date = java.util.Calendar.getInstance().getTime();
+		
+		redisUtil.setLdata(ITEM_CHAT_LOG_USER_ID+itemId, chatMessage.getSender());
+		redisUtil.setLdata(ITEM_CHAT_LOG_USER_CONTENT+itemId, chatMessage.getContent()+"");
+		redisUtil.setLdata(ITEM_CHAT_LOG_USER_TIME+itemId, format.format(date));
+		redisUtil.setLdata(ITEM_CHAT_LOG_USER_NICKNAME+itemId, redisUtil.getData("user"+chatMessage.getSender()));
+		
+		simpMessagingTemplate.convertAndSend("/topic/public"+itemId, chatMessage);
 	}
+	
 	
 	@MessageMapping("/chat.addUser")
 	@SendTo("/topic/public")

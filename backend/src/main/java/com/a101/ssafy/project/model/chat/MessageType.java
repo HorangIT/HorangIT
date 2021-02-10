@@ -9,5 +9,5 @@ public enum MessageType {
 	BLOCKED,
 	BUYER,
 	SELLER,
-	REPLY,
+	REPLY
 }

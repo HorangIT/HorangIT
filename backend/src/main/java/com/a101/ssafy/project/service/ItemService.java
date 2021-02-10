@@ -21,4 +21,6 @@ public interface ItemService {
 	List<JSONObject> getAllPages(List<Item> items);
 	List<String> getDistrict();
 	List<String> getSiGunGu(String districtName);
+	
+	BasicResponse getChatLog(long itemId);
 }
