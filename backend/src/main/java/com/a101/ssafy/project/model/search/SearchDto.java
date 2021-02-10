@@ -11,24 +11,20 @@ import lombok.ToString;
 @NoArgsConstructor
 public class SearchDto {
 		
-	long minPrice;
-	long maxPrice;
-	long currentPrice;
+//	long minPrice;
+//	long maxPrice;
+//	long currentPrice;
 	
 	String si;
 	String gu;
 	
-	// "grade":["S","C","B"]
-	char[] grade;
+	String grade;
 	
 	
-	String[] category;
+	String category;
 	
 	// status
 	boolean status;
-	
-	public Object getLocation(String si, String gu) {
-		return this.si+" "+this.gu;
-	}
+
 
 }
