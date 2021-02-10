@@ -108,6 +108,8 @@ public class ItemController {
 	// pagination + filter!	
 	@GetMapping("/page/{pageNo}")
 	public Object searchItems(@PathVariable int pageNo, SearchDto searchDto) {
+		
+		System.out.println(searchDto.toString());
 			
 		BasicResponse result = new BasicResponse();
 		List<JSONObject> returningItems = new ArrayList<JSONObject>();

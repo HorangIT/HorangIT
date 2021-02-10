@@ -3,6 +3,7 @@ package com.a101.ssafy.project.model.search;
 import java.beans.Expression;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -32,11 +33,38 @@ public class SearchSpecs {
 				
 				// and 쓸지 or 쓸지를 위한 변수
 				int cnt = 0;
+				boolean or = false;
 				
 				if (si != null && gu != null) {
 					String arrAddress = (String)si + " " + (String)gu;
 					
 					predicates.add(criteriaBuilder.like(root.get("location"), arrAddress+"%"));
+					cnt += 1;
+				}
+				if (categories != null) {
+					String[] arrCategory = (String[])categories;
+					
+					if (arrCategory.length > 1 && grades != null) {
+						or = true;
+						char[] arrGrades = (char[])grades;
+						for (int i = 0; i < arrCategory.length; i++) {
+							System.out.println(arrCategory[i]);
+							for (int j = 0; j < arrGrades.length; j++) {
+								predicates.add(criteriaBuilder.or(
+										criteriaBuilder.and(
+												criteriaBuilder.equal(root.get("category"), arrCategory[i]),
+												criteriaBuilder.equal(root.get("grade"), arrGrades[j])
+												)));
+								
+							}
+						}
+					} else {
+						for (int i = 0; i < arrCategory.length; i++) {
+							System.out.println(arrCategory[i]);
+							predicates.add(criteriaBuilder.equal(root.get("category"), arrCategory[i]));
+						}						
+					}
+					
 					cnt += 1;
 				}
 				if (grades != null) {
@@ -48,13 +76,9 @@ public class SearchSpecs {
 					}
 					cnt += 1;
 				}
-				if (categories != null) {
-					String[] arrCategory = (String[])categories;
-					for (int i = 0; i < arrCategory.length; i++) {
-						System.out.println(arrCategory[i]);
-						predicates.add(criteriaBuilder.equal(root.get("category"), arrCategory[i]));
-					}
-					cnt += 1;
+				
+				if (or) {
+					return criteriaBuilder.or(predicates.toArray(new Predicate[predicates.size()]));
 				}
 				
 				// 동시에 여러 파라미터 == and
@@ -68,6 +92,22 @@ public class SearchSpecs {
 		};
 	}
 	
+	public static Specification<Item> getGrades(char[] grades){
+		return new Specification<Item>() {
+			
+			@Override
+			public Predicate toPredicate(Root<Item> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
+
+				List<Predicate> predicates = new ArrayList<Predicate>();
+				
+				for (int i = 0; i < grades.length; i++) {
+					System.out.println(grades[i]);
+					predicates.add(criteriaBuilder.equal(root.get("grade"), grades[i]));
+				}
+				return criteriaBuilder.or(predicates.toArray(new Predicate[predicates.size()]));
+			}
+		};
+	}
 
 	public static Specification<Item> price(final long minPrice, final long maxPrice){
 		return new Specification<Item>() {
