@@ -71,7 +71,7 @@ export default Vue.extend({
       category: [],
       grades: [],
       si: "",
-      gu: "",
+      gu: ""
     },
     dialog: false,
     products: [
@@ -183,8 +183,8 @@ export default Vue.extend({
       sessionStorage.setItem("page", page.toString());
     },
     reset() {
-      const tmpFilter = {check: false, minPrice: 0, maxPrice: 100000000, grades: [], si: "", gu: ""}
-      this.filters = (tmpFilter as any);
+      const tmpFilter = {check: false, minPrice: 0, maxPrice: 100000000, category: [], grades: [], si: "", gu: ""}
+      this.filters = tmpFilter;
     }
   },
   created() {
