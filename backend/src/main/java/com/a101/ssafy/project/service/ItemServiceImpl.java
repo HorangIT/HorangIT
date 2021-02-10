@@ -36,7 +36,7 @@ public class ItemServiceImpl implements ItemService{
 	final String ITEM_CHAT_LOG_USER_ID = "itemChatUserId";
 	final String ITEM_CHAT_LOG_USER_CONTENT = "itemChatUserContent";
 	final String ITEM_CHAT_LOG_USER_TIME = "itemChatUserTime";
-	final String ITEM_CHAT_LOG_USER_NICKNAME = "itemChatUserTime";
+	final String ITEM_CHAT_LOG_USER_NICKNAME = "itemChatNickname";
 	
 	@Autowired
 	ItemRepository itemRepository;

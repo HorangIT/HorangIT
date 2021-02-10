@@ -62,7 +62,7 @@ export default Vue.extend({
       () => {
         console.log('onConnect');
         // 채팅방 구독
-        this.stompClient.subscribe(`/topic/chat/${this.itemId}`, (response: any) => {
+        this.stompClient.subscribe(`/topic/chat/${this.$route.params.id}`, (response: any) => {
           console.log('im subscribe response callback');
           console.log(response);
           // console.log(response);
@@ -78,7 +78,7 @@ export default Vue.extend({
   },
   data (): Record<string, any> {
     return {
-      userId: 5,
+      userId: 15,
       itemId: 1,
       username:'testuser',
       chatInput: "",
@@ -116,7 +116,7 @@ export default Vue.extend({
             content: this.chatInput,
             type: 'CHAT',
         };
-        this.stompClient.send(`/app/chat.sendMessage/${this.itemId}`, {}, JSON.stringify(chatMessage));
+        this.stompClient.send(`/app/chat.sendMessage/${this.$route.params.id}`, {}, JSON.stringify(chatMessage));
         this.chatInput = '';
       }
     },
