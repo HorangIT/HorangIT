@@ -8,7 +8,7 @@
     <v-divider></v-divider>
     <v-card-text>
       <v-checkbox
-        v-model="filters.check"
+        v-model="filters.status"
         label="현재 진행중인 경매만 보기"
         color="orange darken-3"
         class="ma-0"
@@ -93,10 +93,10 @@
       </v-select> 
       <h3 class="mt-2">물품 등급</h3>
       <v-container class="pa-0 d-flex" fluid>
-        <v-checkbox v-model="filters.grades" label="S" value="S" class="mx-2" color="orange darken-3"></v-checkbox>
-        <v-checkbox v-model="filters.grades" label="A" value="A" class="mx-2" color="orange darken-3"></v-checkbox>
-        <v-checkbox v-model="filters.grades" label="B" value="B" class="mx-2" color="orange darken-3"></v-checkbox>
-        <v-checkbox v-model="filters.grades" label="C" value="C" class="mx-2" color="orange darken-3"></v-checkbox>
+        <v-checkbox v-model="filters.grade" label="S" value="S" class="mx-2" color="orange darken-3"></v-checkbox>
+        <v-checkbox v-model="filters.grade" label="A" value="A" class="mx-2" color="orange darken-3"></v-checkbox>
+        <v-checkbox v-model="filters.grade" label="B" value="B" class="mx-2" color="orange darken-3"></v-checkbox>
+        <v-checkbox v-model="filters.grade" label="C" value="C" class="mx-2" color="orange darken-3"></v-checkbox>
       </v-container>
     </v-card-text>
   </v-card>

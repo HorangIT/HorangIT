@@ -65,101 +65,16 @@ export default Vue.extend({
   data: () => ({
     page: 1,
     filters: {
-      check: false,
+      status: false,
       minPrice: 0,
       maxPrice: 100000000,
       category: [],
-      grades: [],
-      si: "",
-      gu: ""
+      grade: [],
+      si: null,
+      gu: null
     },
     dialog: false,
-    products: [
-      {
-        id: 1,
-        name: "BLACK TEE",
-        type: "Jackets",
-        price: "18.00",
-        src: require("../assets/img/shop/1.jpg")
-      },
-      {
-        id: 2,
-        name: "WHITE TEE",
-        type: "Polo",
-        price: "40.00",
-        src: require("../assets/img/shop/2.jpg")
-      },
-      {
-        id: 3,
-        name: "Zara limited...",
-        type: "Denim",
-        price: "25.00",
-        src: require("../assets/img/shop/3.jpg")
-      },
-      {
-        id: 4,
-        name: "SKULL TEE",
-        type: "Jackets",
-        price: "30.00",
-        src: require("../assets/img/shop/4.jpg")
-      },
-      {
-        id: 5,
-        name: "MANGO WINTER",
-        type: "Sweaters",
-        price: "50.00",
-        src: require("../assets/img/shop/5.jpg")
-      },
-      {
-        id: 6,
-        name: "SHIRT",
-        type: "Denim",
-        price: "34.00",
-        src: require("../assets/img/shop/6.jpg")
-      },
-      {
-        id: 7,
-        name: "TRUCKER JACKET",
-        type: "Jackets",
-        price: "38.00",
-        src: require("../assets/img/shop/7.jpg")
-      },
-      {
-        id: 8,
-        name: "COATS",
-        type: "Jackets",
-        price: "25.00",
-        src: require("../assets/img/shop/8.jpg")
-      },
-      {
-        id: 9,
-        name: "MANGO WINTER",
-        type: "Sweaters",
-        price: "50.00",
-        src: require("../assets/img/shop/9.jpg")
-      },
-      {
-        id: 10,
-        name: "SHIRT",
-        type: "Denim",
-        price: "34.00",
-        src: require("../assets/img/shop/10.jpg")
-      },
-      {
-        id: 11,
-        name: "TRUCKER JACKET",
-        type: "Jackets",
-        price: "38.00",
-        src: require("../assets/img/shop/11.jpg")
-      },
-      {
-        id: 12,
-        name: "COATS",
-        type: "Jackets",
-        price: "25.00",
-        src: require("../assets/img/shop/12.jpg")
-      }
-    ]
+    products:[],
   }),
   methods: {
     getItemPage(page: number) {
@@ -175,6 +90,7 @@ export default Vue.extend({
       console.log(this.page, this.filters);
       
       itemApi.getItemPage(page, filters).then((res: AxiosResponse) => {
+        this.products = res.data.object;
         console.log(res);
       })
       
@@ -183,7 +99,7 @@ export default Vue.extend({
       sessionStorage.setItem("page", page.toString());
     },
     reset() {
-      const tmpFilter = {check: false, minPrice: 0, maxPrice: 100000000, category: [], grades: [], si: "", gu: ""}
+      const tmpFilter = {status: false, minPrice: 0, maxPrice: 100000000, category: [], grade: [], si: null, gu: null}
       this.filters = tmpFilter;
     }
   },
