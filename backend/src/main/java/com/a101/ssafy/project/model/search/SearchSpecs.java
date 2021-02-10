@@ -42,11 +42,14 @@ public class SearchSpecs {
 					cnt += 1;
 				}
 				if (categories != null) {
-					String[] arrCategory = (String[])categories;
+					String tmpCategory = (String)categories;
+					String[] arrCategory = tmpCategory.split(",");
 					
 					if (arrCategory.length > 1 && grades != null) {
 						or = true;
-						char[] arrGrades = (char[])grades;
+						String tmpGrades = (String)grades;
+						String[] arrGrades = tmpGrades.split(",");
+						
 						for (int i = 0; i < arrCategory.length; i++) {
 							System.out.println(arrCategory[i]);
 							for (int j = 0; j < arrGrades.length; j++) {
@@ -68,11 +71,12 @@ public class SearchSpecs {
 					cnt += 1;
 				}
 				if (grades != null) {
-					char[] arrGrades = (char[])grades;
+					String tmpGrades = (String)grades;
+					String[] arrGrades = tmpGrades.split(",");
 					// input 데이터의 갯수만큼 grade에 일치하는 데이터가 있다면 list에 추가해준다
 					for (int i = 0; i < arrGrades.length; i++) {
 						System.out.println(arrGrades[i]);
-						predicates.add(criteriaBuilder.equal(root.get("grade"), arrGrades[i]));
+						predicates.add(criteriaBuilder.equal(root.get("grade"), arrGrades[i].charAt(0)));
 					}
 					cnt += 1;
 				}
@@ -91,23 +95,7 @@ public class SearchSpecs {
 			}
 		};
 	}
-	
-	public static Specification<Item> getGrades(char[] grades){
-		return new Specification<Item>() {
-			
-			@Override
-			public Predicate toPredicate(Root<Item> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
 
-				List<Predicate> predicates = new ArrayList<Predicate>();
-				
-				for (int i = 0; i < grades.length; i++) {
-					System.out.println(grades[i]);
-					predicates.add(criteriaBuilder.equal(root.get("grade"), grades[i]));
-				}
-				return criteriaBuilder.or(predicates.toArray(new Predicate[predicates.size()]));
-			}
-		};
-	}
 
 	public static Specification<Item> price(final long minPrice, final long maxPrice){
 		return new Specification<Item>() {
