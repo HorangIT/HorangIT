@@ -6,6 +6,8 @@ import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.a101.ssafy.project.model.BasicResponse;
 import com.a101.ssafy.project.model.auction.AuctionInputDTO;
+import com.a101.ssafy.project.model.chat.ChatMessage;
+import com.a101.ssafy.project.model.chat.MessageType;
 import com.a101.ssafy.project.service.AuctionService;
 
 @CrossOrigin(origins = { "*" })
@@ -27,6 +31,17 @@ public class AuctionController {
 	@Autowired
 	public void setAuctionService(AuctionService auctionService) {
 		this.auctionService = auctionService;
+	}
+	
+	@MessageMapping("/auction.sendMessage")
+	public void onAuction(@Payload ChatMessage chatMessage) {
+		chatMessage.setType(MessageType.REPLY);
+		if(chatMessage.getType()==MessageType.AUCTION) {
+//			JSONObject jobj = auctionService.auction(chatMessage.getSender(), chatMessage.getContent());
+		}else if(chatMessage.getType()==MessageType.FLEX){
+//			JSONObject jobj = auctionService.auction(chatMessage.getSender(), chatMessage.getContent());			
+		}
+		
 	}
 	
 	/** 응찰을 시도했을 때  */
