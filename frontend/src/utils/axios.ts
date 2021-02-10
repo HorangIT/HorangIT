@@ -55,15 +55,36 @@ export const itemApi = {
   getItem(id: number): any {
     return request.get(`/item/${id}`);
   },
+  // 지역 필터
   search(data: any): any {
-    return request.get("/item/district", {
-      params: {
-        districtName: data
-      }  
-    })
+    if (data) {
+      return request.get("/item/district", {
+        params: {
+          districtName: data
+        }  
+      })
+    } else {
+      return request.get("/item/district", {
+        params: {
+          districtName: null
+        }  
+      })
+    }
   },
+  // 아이템 필터링 + 페이지네이션
   getItemPage(page: number, data: any): any {
-    return request.get(`/item/page/${page}`, data);
+    console.log(data);
+    return request.get(`/item/page/${page}`, {
+      params: {
+        status: data.status,
+        minPrice: data.minPrice,
+        maxPrice: data.maxPrice,
+        category: data.category,
+        grade: data.grade,
+        si: data.si,
+        gu: data.gu
+      }
+    });
   }
 };
 
