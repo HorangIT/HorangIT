@@ -10,16 +10,25 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 public class SearchDto {
+		
 	long minPrice;
 	long maxPrice;
+	long currentPrice;
 	
-	// "location": ["서울특별시", "종로구"]
-	String[] location;
+	String si;
+	String gu;
 	
 	// "grade":["S","C","B"]
 	char[] grade;
 	
-	long currentPrice;
 	
+	String[] category;
 	
+	// status
+	int status;
+	
+	public Object getLocation(String si, String gu) {
+		return this.si+" "+this.gu;
+	}
+
 }
