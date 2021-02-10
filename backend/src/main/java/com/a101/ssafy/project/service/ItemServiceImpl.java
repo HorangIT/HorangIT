@@ -31,7 +31,6 @@ public class ItemServiceImpl implements ItemService{
 	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm"); //날짜 맞출 포맷
 	final String ITEM_NAME = "item";
 	final String ITEM_EXPIRED = "Expired";
-	final String ITEM_START_PRICE = "Start";
 	final String ITEM_HAPPY_PRICE = "Happy";
 	
 	@Autowired
@@ -106,9 +105,9 @@ public class ItemServiceImpl implements ItemService{
 		long endTimeToEpochTime = item.getEndDate().getTime(); 
 		
 		long remainingTime = (endTimeToEpochTime - startTimeToEpochTime)/1000;
-		redisUtil.setData(ITEM_NAME+item.getId(), "-1"); //expired trigger 오면 삭제해주기!
+		redisUtil.setData(ITEM_NAME+item.getId(), item.getStartPrice()+""); //expired trigger 오면 삭제해주기!
 //		startPrice <- 사는거 (처음에는 삼 ㅋㅋ)
-		redisUtil.setData(ITEM_NAME+item.getId()+ITEM_START_PRICE, item.getStartPrice()+""); //expired trigger 오면 삭제해주기!
+		//expired trigger 오면 삭제해주기!
 		redisUtil.setData(ITEM_NAME+item.getId()+ITEM_HAPPY_PRICE, item.getHappyPrice()+"");
 		redisUtil.setDataExpire(ITEM_NAME+item.getId()+ITEM_EXPIRED, endTimeToEpochTime+"", remainingTime); 
 		
@@ -136,25 +135,16 @@ public class ItemServiceImpl implements ItemService{
 			jobj.put("startPrice", item.getStartPrice());
 			jobj.put("itemId", item.getId());
 			
-			String temp = redisUtil.getData(ITEM_NAME+item.getId());
-			if("-1".equals(temp)) {
-				jobj.put("nowPrice", item.getStartPrice());
-				String str = redisUtil.getData(ITEM_NAME+item.getId()+ITEM_START_PRICE);
-				
-				long nextPrice = auctionService.getAuctionUnit(str) + Long.parseLong(str);
-				jobj.put("nextPrice", nextPrice);
-				
-			}else {
-				jobj.put("nowPrice", Long.parseLong(temp));
-				String str = redisUtil.getData(ITEM_NAME+item.getId());
-				
-				long nextPrice = auctionService.getAuctionUnit(str) + Long.parseLong(str);
-				if(nextPrice >= item.getHappyPrice()) {
-					nextPrice = item.getHappyPrice();
-					jobj.put("test", "응찰 가격을 넘어섰어요! 이제 사야해요.");
-				}
-				jobj.put("nextPrice", nextPrice);
+			String str = redisUtil.getData(ITEM_NAME+item.getId()); //사람이 살가격
+			jobj.put("nowPrice", Long.parseLong(str));
+			
+			long nextPrice = auctionService.getAuctionUnit(str) + Long.parseLong(str); //다음 응찰가격은 nextPrice입니다.
+			if(nextPrice >= item.getHappyPrice()) {
+				nextPrice = item.getHappyPrice();
+				jobj.put("test", "응찰 가격을 넘어섰어요! 이제 사야해요.");
 			}
+			jobj.put("nextPrice", nextPrice);
+			
 			
 			jobj.put("nickname", redisUtil.getHdata("user", item.getUserId()+""));
 			

@@ -21,6 +21,8 @@ public class ChatController {
 	@Autowired
 	SimpMessagingTemplate simpMessagingTemplate; 
 	
+	final String chatPrefix = "CHAT";
+	
 	static int temp = 10000;
 //	 /api/msg/requestMessage <- message 브로커로 온다는거죠!
 	@MessageMapping("/chat.sendMessage") // /prefix/cht.sendMsg 는 여기로 옴
@@ -61,6 +63,7 @@ public class ChatController {
 	public ChatMessage addUser(@Payload ChatMessage chatMessage, SimpMessageHeaderAccessor headerAccessor) {
 		System.out.println(chatMessage.getType()+"???");
 		headerAccessor.getSessionAttributes().put("username", chatMessage.getSender());
+		
 		System.out.println("기얏호웅");
 		return chatMessage;
 	}
