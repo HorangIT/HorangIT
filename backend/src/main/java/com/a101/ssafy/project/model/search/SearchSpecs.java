@@ -29,45 +29,33 @@ public class SearchSpecs {
 			public Predicate toPredicate(Root<Item> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
 				
 				// 여러 데이터가 있을 수 있으니 List로 만든다
-				List<Predicate> predicates = new ArrayList<Predicate>();
+				List<Predicate> categoryList = new ArrayList<Predicate>();
+				List<Predicate> gradeList = new ArrayList<Predicate>();
+				
+				Predicate allPred = null;
+				Predicate siguPred = null;
+				Predicate categoryPred = null;
+				Predicate gradePred = null;
 				
 				// and 쓸지 or 쓸지를 위한 변수
 				int cnt = 0;
-				boolean or = false;
+				// boolean or = false;
 				
 				if (si != null && gu != null) {
 					String arrAddress = (String)si + " " + (String)gu;
 					
-					predicates.add(criteriaBuilder.like(root.get("location"), arrAddress+"%"));
+					siguPred = criteriaBuilder.like(root.get("location"), arrAddress+"%");
 					cnt += 1;
 				}
 				if (categories != null) {
 					String tmpCategory = (String)categories;
 					String[] arrCategory = tmpCategory.split(",");
 					
-					if (arrCategory.length > 1 && grades != null) {
-						or = true;
-						String tmpGrades = (String)grades;
-						String[] arrGrades = tmpGrades.split(",");
-						
-						for (int i = 0; i < arrCategory.length; i++) {
-							System.out.println(arrCategory[i]);
-							for (int j = 0; j < arrGrades.length; j++) {
-								predicates.add(criteriaBuilder.or(
-										criteriaBuilder.and(
-												criteriaBuilder.equal(root.get("category"), arrCategory[i]),
-												criteriaBuilder.equal(root.get("grade"), arrGrades[j])
-												)));
-								
-							}
-						}
-					} else {
-						for (int i = 0; i < arrCategory.length; i++) {
-							System.out.println(arrCategory[i]);
-							predicates.add(criteriaBuilder.equal(root.get("category"), arrCategory[i]));
-						}						
-					}
-					
+					for (int i = 0; i < arrCategory.length; i++) {
+						System.out.println(arrCategory[i]);
+						categoryList.add(criteriaBuilder.equal(root.get("category"), arrCategory[i]));
+					}						
+					categoryPred = criteriaBuilder.or(categoryList.toArray(new Predicate[categoryList.size()]));
 					cnt += 1;
 				}
 				if (grades != null) {
@@ -77,23 +65,27 @@ public class SearchSpecs {
 					for (int i = 0; i < arrGrades.length; i++) {
 						if (arrGrades[i] != ',') {
 							System.out.println(arrGrades[i]);
-							predicates.add(criteriaBuilder.equal(root.get("grade"), arrGrades[i]));							
+							gradeList.add(criteriaBuilder.equal(root.get("grade"), arrGrades[i]));							
 						}
 					}
+					gradePred = criteriaBuilder.or(gradeList.toArray(new Predicate[gradeList.size()]));
 					cnt += 1;
 				}
 				
-				if (or) {
-					return criteriaBuilder.or(predicates.toArray(new Predicate[predicates.size()]));
+				if (siguPred != null)
+					allPred = siguPred;
+				
+				if (categoryPred != null) {
+					if (allPred == null) allPred = categoryPred;
+					else allPred = criteriaBuilder.and(allPred, categoryPred);
 				}
 				
-				// 동시에 여러 파라미터 == and
-				if (cnt > 1) {
-					return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
+				if (gradePred != null) {
+					if (allPred == null) allPred = gradePred;
+					else allPred = criteriaBuilder.and(allPred, gradePred);
 				}
-				// 공통 카테고리안에서 == or
-				return criteriaBuilder.or(predicates.toArray(new Predicate[predicates.size()]));
-				
+
+				return allPred;
 			}
 		};
 	}

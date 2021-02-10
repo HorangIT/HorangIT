@@ -354,7 +354,7 @@ export default Vue.extend({
         "잘못된 입력입니다. 가격을 입력해주세요.",
     },
   }),
-  mounted() {
+  created() {
     const today = moment();
 
     this.startDate = this.todayDate = today.format("YYYY-MM-DD");
@@ -362,6 +362,7 @@ export default Vue.extend({
     this.startDateTime = this.startDate + " " + this.startTime;
 
     this.uid = this.$store.state.userModule.user.object.user.id;
+    
   },
   methods: {
     async writePost() {
