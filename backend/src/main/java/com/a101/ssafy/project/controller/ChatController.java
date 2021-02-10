@@ -35,7 +35,7 @@ public class ChatController {
 	final String ITEM_CHAT_LOG_USER_ID = "itemChatUserId";
 	final String ITEM_CHAT_LOG_USER_CONTENT = "itemChatUserContent";
 	final String ITEM_CHAT_LOG_USER_TIME = "itemChatUserTime";
-	final String ITEM_CHAT_LOG_USER_NICKNAME = "itemChatUserTime";
+	final String ITEM_CHAT_LOG_USER_NICKNAME = "itemChatNickname";
 
 	//////////
 	///////////
@@ -53,23 +53,21 @@ public class ChatController {
 	///////////
 	////////////
 	
-    @MessageMapping("/chat.sendMessage/{itemid}")
-    public void sss(@Payload ChatMessage chatMessage, @PathVariable("itemId")long itemid) {
-        System.out.println("sss함수를 탔습니다...");
-        chatMessage.setType(MessageType.REPLY);
-        System.out.println(chatMessage.getSender());
-        System.out.println(chatMessage.getContent());
+	@MessageMapping("/chat.sendMessage/{itemId}")
+	public void sss(@DestinationVariable("itemId")long itemId, @Payload ChatMessage chatMessage) {
+		System.out.println("sss함수를 탔습니다...");
+		chatMessage.setType(MessageType.REPLY);
+		
+		Date date = java.util.Calendar.getInstance().getTime();
+		System.out.println(format.format(date));
         
-        Date date = java.util.Calendar.getInstance().getTime();
-        String itemId = String.valueOf(itemid);
-        
-        redisUtil.setLdata(ITEM_CHAT_LOG_USER_ID+itemId, chatMessage.getSender());
-        redisUtil.setLdata(ITEM_CHAT_LOG_USER_CONTENT+itemId, chatMessage.getContent()+"");
-        redisUtil.setLdata(ITEM_CHAT_LOG_USER_TIME+itemId, format.format(date));
-        redisUtil.setLdata(ITEM_CHAT_LOG_USER_NICKNAME+itemId, redisUtil.getData("user"+chatMessage.getSender()));
-        
-        simpMessagingTemplate.convertAndSend("/topic/chat/"+itemId, chatMessage);
-    }
+		redisUtil.setLdata(ITEM_CHAT_LOG_USER_ID+itemId, chatMessage.getSender());
+		redisUtil.setLdata(ITEM_CHAT_LOG_USER_CONTENT+itemId, chatMessage.getContent()+"");
+		redisUtil.setLdata(ITEM_CHAT_LOG_USER_TIME+itemId, format.format(date));
+		redisUtil.setLdata(ITEM_CHAT_LOG_USER_NICKNAME+itemId, redisUtil.getHdata("user", chatMessage.getSender())+"");
+		
+		simpMessagingTemplate.convertAndSend("/topic/chat/"+itemId, chatMessage);
+	}
 	
 	
 	@MessageMapping("/chat.addUser")
