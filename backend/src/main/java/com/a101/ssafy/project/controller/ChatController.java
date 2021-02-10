@@ -53,22 +53,23 @@ public class ChatController {
 	///////////
 	////////////
 	
-	@MessageMapping("/chat.sendMessage/{itemId}")
-	public void sss(@Payload ChatMessage chatMessage, @PathVariable("itemId")long itemId) {
-		System.out.println("sss함수를 탔습니다...");
-		chatMessage.setType(MessageType.REPLY);
-		System.out.println(chatMessage.getSender());
-		System.out.println(chatMessage.getContent());
-		
-		Date date = java.util.Calendar.getInstance().getTime();
-		
-		redisUtil.setLdata(ITEM_CHAT_LOG_USER_ID+itemId, chatMessage.getSender());
-		redisUtil.setLdata(ITEM_CHAT_LOG_USER_CONTENT+itemId, chatMessage.getContent()+"");
-		redisUtil.setLdata(ITEM_CHAT_LOG_USER_TIME+itemId, format.format(date));
-		redisUtil.setLdata(ITEM_CHAT_LOG_USER_NICKNAME+itemId, redisUtil.getData("user"+chatMessage.getSender()));
-		
-		simpMessagingTemplate.convertAndSend("/topic/chat/"+itemId, chatMessage);
-	}
+    @MessageMapping("/chat.sendMessage/{itemid}")
+    public void sss(@Payload ChatMessage chatMessage, @PathVariable("itemId")long itemid) {
+        System.out.println("sss함수를 탔습니다...");
+        chatMessage.setType(MessageType.REPLY);
+        System.out.println(chatMessage.getSender());
+        System.out.println(chatMessage.getContent());
+        
+        Date date = java.util.Calendar.getInstance().getTime();
+        String itemId = String.valueOf(itemid);
+        
+        redisUtil.setLdata(ITEM_CHAT_LOG_USER_ID+itemId, chatMessage.getSender());
+        redisUtil.setLdata(ITEM_CHAT_LOG_USER_CONTENT+itemId, chatMessage.getContent()+"");
+        redisUtil.setLdata(ITEM_CHAT_LOG_USER_TIME+itemId, format.format(date));
+        redisUtil.setLdata(ITEM_CHAT_LOG_USER_NICKNAME+itemId, redisUtil.getData("user"+chatMessage.getSender()));
+        
+        simpMessagingTemplate.convertAndSend("/topic/chat/"+itemId, chatMessage);
+    }
 	
 	
 	@MessageMapping("/chat.addUser")
