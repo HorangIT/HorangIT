@@ -80,12 +80,16 @@ export const itemApi = {
       si: data.si,
       gu: data.gu
     }
-    console.log(data);
+    searchParams.category === "" ? searchParams.category = null : searchParams.category = data.category.join(",")
+    searchParams.grade === "" ? searchParams.grade = null : searchParams.grade = data.grade.join(",")
+   
+    console.log(searchParams);
     return request.get(`/item/page/${page}`, {
       params: searchParams
     });
   }
 };
+
 
 export const auctionApi = {
   bidding(data: any): any {
