@@ -25,7 +25,7 @@ public class SearchDto {
 	String[] category;
 	
 	// status
-	int status;
+	boolean status;
 	
 	public Object getLocation(String si, String gu) {
 		return this.si+" "+this.gu;
