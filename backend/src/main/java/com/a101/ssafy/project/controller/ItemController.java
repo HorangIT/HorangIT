@@ -124,7 +124,7 @@ public class ItemController {
 			empty = true;
 		} else {
 			Specification<Item> specify = Specification
-					.where(SearchSpecs.searchWithFilter(searchDto.getLocation(searchDto.getSi(), searchDto.getGu()), searchDto.getGrade(), searchDto.getCategory()));
+					.where(SearchSpecs.searchWithFilter(searchDto.getSi(), searchDto.getGu(), searchDto.getGrade(), searchDto.getCategory()));
 			pages = itemRepository.findAll(specify, paging);
 			
 		}		

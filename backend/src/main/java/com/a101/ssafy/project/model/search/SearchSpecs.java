@@ -21,7 +21,7 @@ import io.swagger.models.Path;
 
 public class SearchSpecs {
 		
-	public static Specification<Item> searchWithFilter(Object address, Object grades, Object categories) {
+	public static Specification<Item> searchWithFilter(Object si, Object gu, Object grades, Object categories) {
 		return new Specification<Item>() {
 
 			@Override
@@ -33,9 +33,10 @@ public class SearchSpecs {
 				// and 쓸지 or 쓸지를 위한 변수
 				int cnt = 0;
 				
-				if (address != null) {
-					String arrAddress = (String)address;
-					predicates.add(criteriaBuilder.equal(root.get("location"), arrAddress));
+				if (si != null && gu != null) {
+					String arrAddress = (String)si + " " + (String)gu;
+					
+					predicates.add(criteriaBuilder.like(root.get("location"), arrAddress+"%"));
 					cnt += 1;
 				}
 				if (grades != null) {
