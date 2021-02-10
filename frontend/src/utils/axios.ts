@@ -73,15 +73,16 @@ export const itemApi = {
   },
   // 아이템 필터링 + 페이지네이션
   getItemPage(page: number, data: any): any {
+    const searchParams = {
+      status: data.status,
+      category: data.category.join(","),
+      grade: data.grade.join(","),
+      si: data.si,
+      gu: data.gu
+    }
     console.log(data);
     return request.get(`/item/page/${page}`, {
-      params: {
-        status: data.status,
-        category: data.category,
-        grade: data.grade,
-        si: data.si,
-        gu: data.gu
-      }
+      params: searchParams
     });
   }
 };
