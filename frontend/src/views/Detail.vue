@@ -35,16 +35,7 @@
                   <v-img src="https://cdn.vuetifyjs.com/images/lists/1.jpg">
                   </v-img>
                 </v-avatar>
-                <p class="ma-0 ml-2">{{ item.nickname }}</p>
-                <v-rating
-                  v-model="rating"
-                  class=""
-                  background-color="warning lighten-3"
-                  color="warning"
-                  dense
-                  readonly
-                >
-                </v-rating>
+                <p class="ma-0 mx-2">{{ item.nickname }}</p>
               </div>
             </v-sheet>
             <v-divider></v-divider>

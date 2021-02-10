@@ -75,15 +75,11 @@ export const itemApi = {
   getItemPage(page: number, data: any): any {
     const searchParams = {
       status: data.status,
-      category: data.category.join(","),
-      grade: data.grade.join(","),
+      category: data.category == "" ? null : data.category.join(","),
+      grade: data.grade == "" ? null: data.grade.join(","),
       si: data.si,
       gu: data.gu
     }
-    searchParams.category === "" ? searchParams.category = null : searchParams.category = data.category.join(",")
-    searchParams.grade === "" ? searchParams.grade = null : searchParams.grade = data.grade.join(",")
-   
-    console.log(searchParams);
     return request.get(`/item/page/${page}`, {
       params: searchParams
     });
