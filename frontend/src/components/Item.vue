@@ -1,47 +1,49 @@
 <template>
   <v-hover v-slot:default="{ hover }">
-    <v-card class="mx-auto" color="grey lighten-4" max-width="600">
+    <v-card
+      class="mx-auto"
+      color="grey lighten-4"
+      max-width="600"
+      :elevation="hover ? 12 : 2"
+      :class="{ 'on-hover': hover }"
+      @click="goDetail(item.itemId)"
+      >
       <v-img
-        class="white--text align-end"
         :aspect-ratio="16 / 9"
         height="200px"
-        :src="pro.image"
+        :src="item.image"
       >
-        <v-card-title>{{ pro.type }} </v-card-title>
-        <v-expand-transition>
-          <div
-            v-if="hover"
-            class="d-flex transition-fast-in-fast-out white darken-2 v-card--reveal display-3 white--text"
-            style="height: 100%;"
-          >
-            <v-btn v-if="hover" to="/detail" class="" outlined>
-              경매 참가
-            </v-btn>
-          </div>
-        </v-expand-transition>
       </v-img>
-      <v-card-text class="text--primary">
-        <div>
-          <a href="/detail" style="text-decoration: none">
-            {{ pro.name }}
-          </a>
-        </div>
-        <div>{{ pro.category }}</div>
-        <div>{{ pro.startPrice }} 원</div>
-      </v-card-text>
+      <div>
+        <h2 class="my-1">{{ item.name }}</h2>
+        <p class="text-left mx-2 mb-0">경매: {{ startDate }}</p>
+        <p class="text-left mx-2 mb-0">등급: {{ item.grade }}</p>
+        <p class="text-left mx-2 mb-0">카테고리: {{ item.category }}</p>
+      </div>
     </v-card>
   </v-hover>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
+import moment from "moment";
 
 export default Vue.extend({
   name: "Item",
   props: {
-    pro: Object
+    item: Object
   },
-  data: () => ({})
+  data: () => ({
+    startDate: "",
+  }),
+  methods: {
+    goDetail(id: any) {
+      this.$router.push({ name: 'Detail', params: { id: id} });
+    }
+  },
+  created() {
+    this.startDate = moment(this.item.startDate).format('YY[/]MM[/]DD HH:mm');
+  }
 });
 </script>
 

@@ -26,17 +26,17 @@
         <div class="row text-center">
           <div
             class="col-md-3 col-sm-6 col-xs-12"
-            :key="pro.id"
-            v-for="pro in products"
+            :key="item.itemId"
+            v-for="item in items"
           >
-            <Item :pro="pro"></Item> 
+            <Item :item="item"></Item> 
           </div>
         </div>
         <div class="text-center mt-12">
           <v-pagination
             v-model="page"
             :length="6"
-            @input="getItemPage"
+            @input="getPage"
           >
           </v-pagination>
         </div>
@@ -72,10 +72,10 @@ export default Vue.extend({
       gu: null
     },
     dialog: false,
-    products:[],
+    items:[],
   }),
   methods: {
-    getItemPage(page: number) {
+    getPage(page: number) {
       this.page = page;
       this.getItems(this.page, this.filters);
     },
@@ -84,18 +84,19 @@ export default Vue.extend({
       this.page = 1;
       this.getItems(this.page, this.filters);
     },
+    // page번호와 filter 데이터가 바뀔때마다 item을 요청합니다.
     getItems(page: number, filters: any){
-      console.log(this.page, this.filters);
-      
-      itemApi.getItemPage(page, filters).then((res: AxiosResponse) => {
-        this.products = res.data.object;
-        console.log(res);
-      })
-      
+      // 현재 페이지와 필터데이터를 세션스토리지에 저장합니다.
       const tmpFilter = JSON.stringify(filters)
       sessionStorage.setItem("filters", tmpFilter);
       sessionStorage.setItem("page", page.toString());
+      
+      itemApi.getItemPage(page, filters).then((res: AxiosResponse) => {
+        this.items = res.data.object;
+        console.log(res);
+      })
     },
+    // reset버튼을 누르면 기본 필터값으로 적용됩니다.
     reset() {
       const tmpFilter = {status: false, category: [], grade: [], si: null, gu: null}
       this.filters = tmpFilter;

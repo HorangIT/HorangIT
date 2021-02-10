@@ -8,7 +8,7 @@
       >
         <v-row class="fill-height" align="center" justify="center">
           <div class="display-2 white--text pl-5 pr-5 hidden-sm-only">
-            <strong>대충 경매 참여하라는 멘트</strong>
+            <strong>경매로 누구보다 빠르게 내 아이템을 겟하세요!</strong>
           </div>
           <br />
         </v-row>
@@ -43,24 +43,25 @@
       <div class="row text-center">
         <div
           class="col-md-3 col-sm-6 col-xs-12"
-          :key="pro.id"
-          v-for="pro in products"
+          :key="item.id"
+          v-for="item in items"
         >
-          <Item :pro="pro"></Item> 
+          <Item :item="item"></Item> 
         </div>
       </div>
     </div>
-    <v-divider></v-divider>
-
+    <br />
     <Info></Info>
     <br /><br /><br /><br />
   </div>
 </template>
 
 <script lang="ts">
+import { AxiosResponse } from "axios";
 import Vue from "vue";
 import Info from "../components/Info.vue";
 import Item from "../components/Item.vue";
+import { itemApi } from "../utils/axios";
 
 export default Vue.extend({
   name: "Home",
@@ -69,97 +70,19 @@ export default Vue.extend({
     Info,
     Item
   },
-
   data: () => ({
-     products: [
-      {
-        id: 1,
-        name: "BLACK TEE",
-        type: "Jackets",
-        price: "18.00",
-        src: require("../assets/img/shop/1.jpg")
-      },
-      {
-        id: 2,
-        name: "WHITE TEE",
-        type: "Polo",
-        price: "40.00",
-        src: require("../assets/img/shop/2.jpg")
-      },
-      {
-        id: 3,
-        name: "Zara limited...",
-        type: "Denim",
-        price: "25.00",
-        src: require("../assets/img/shop/3.jpg")
-      },
-      {
-        id: 4,
-        name: "SKULL TEE",
-        type: "Jackets",
-        price: "30.00",
-        src: require("../assets/img/shop/4.jpg")
-      },
-      {
-        id: 5,
-        name: "MANGO WINTER",
-        type: "Sweaters",
-        price: "50.00",
-        src: require("../assets/img/shop/5.jpg")
-      },
-      {
-        id: 6,
-        name: "SHIRT",
-        type: "Denim",
-        price: "34.00",
-        src: require("../assets/img/shop/6.jpg")
-      },
-      {
-        id: 7,
-        name: "TRUCKER JACKET",
-        type: "Jackets",
-        price: "38.00",
-        src: require("../assets/img/shop/7.jpg")
-      },
-      {
-        id: 8,
-        name: "COATS",
-        type: "Jackets",
-        price: "25.00",
-        src: require("../assets/img/shop/8.jpg")
-      },
-      {
-        id: 9,
-        name: "MANGO WINTER",
-        type: "Sweaters",
-        price: "50.00",
-        src: require("../assets/img/shop/9.jpg")
-      },
-      {
-        id: 10,
-        name: "SHIRT",
-        type: "Denim",
-        price: "34.00",
-        src: require("../assets/img/shop/10.jpg")
-      },
-      {
-        id: 11,
-        name: "TRUCKER JACKET",
-        type: "Jackets",
-        price: "38.00",
-        src: require("../assets/img/shop/11.jpg")
-      },
-      {
-        id: 12,
-        name: "COATS",
-        type: "Jackets",
-        price: "25.00",
-        src: require("../assets/img/shop/12.jpg")
-      }
-    ],
+    items: [],
     activeBtn: 1,
     slides: ["First", "Second", "Third", "Fourth", "Fifth"]
-  })
+  }),
+  mounted() {
+    const tmpFilter = {status: false, category: [], grade: [], si: null, gu: null}
+    sessionStorage.setItem("filters", JSON.stringify(tmpFilter));
+    sessionStorage.setItem("page", String(1));
+    itemApi.getItemPage(1,tmpFilter).then((res:AxiosResponse) => {
+      this.items = res.data.object
+    })
+  },
 });
 </script>
 
