@@ -35,50 +35,6 @@
         >
         </v-select>
       </div>
-      <h3 class="mb-5">시작가</h3>
-      <div class="d-flex">
-        <v-text-field
-          label="최소 금액"
-          v-model="filters.minPrice"
-          outlined
-          dense
-          class="mr-2"
-          suffix="원"
-          color="orange"
-        >
-        </v-text-field>  
-        <v-text-field
-          label="최대 금액"
-          v-model="filters.maxPrice"
-          outlined
-          dense
-          class="ml-2"
-          suffix="원"
-          color="orange"
-        >
-        </v-text-field>
-      </div>
-      <!-- <p>현재가</p>
-      <div class="d-flex">
-        <v-text-field
-          label="최소 금액"
-          v-model="filters.minPrice"
-          outlined
-          dense
-          class="mr-2"
-          suffix="원"
-        >
-        </v-text-field>  
-        <v-text-field
-          label="최대 금액"
-          v-model="filters.maxPrice"
-          outlined
-          dense
-          class="ml-2"
-          suffix="원"
-        >
-        </v-text-field>
-      </div> -->
       <h3 class="mb-3">카테고리</h3>
       <v-select
         v-model="filters.category"
