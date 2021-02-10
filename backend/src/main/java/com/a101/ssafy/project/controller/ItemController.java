@@ -117,7 +117,7 @@ public class ItemController {
 		boolean empty = false;
 		
 		// DTO에 아무것도 안들어왔을 때 = 그냥 전체 페이지 요청
-		if (searchDto.getCategory() == null && searchDto.getGrade() == null && searchDto.getLocation(searchDto.getSi(), searchDto.getGu()) == null) {
+		if (searchDto.getCategory() == null && searchDto.getGrade() == null && searchDto.getSi() == null && searchDto.getGu() == null) {
 			System.out.println("EMPTYYYYYYYYYY");
 			
 			pages = itemRepository.findAll(paging);
