@@ -67,7 +67,7 @@ public class ChatController {
 		redisUtil.setLdata(ITEM_CHAT_LOG_USER_TIME+itemId, format.format(date));
 		redisUtil.setLdata(ITEM_CHAT_LOG_USER_NICKNAME+itemId, redisUtil.getData("user"+chatMessage.getSender()));
 		
-		simpMessagingTemplate.convertAndSend("/topic/public"+itemId, chatMessage);
+		simpMessagingTemplate.convertAndSend("/topic/chat/"+itemId, chatMessage);
 	}
 	
 	
