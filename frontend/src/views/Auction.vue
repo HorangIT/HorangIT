@@ -20,7 +20,7 @@
     </v-dialog>
     <div class="row">
       <div class="col-md-3 col-sm-3 col-xs-12">
-        <Filters @filtering="filtering" :filters="filters" @reset="reset"/>
+        <Filters @filtering="getItems" :filters="filters" @reset="reset"/>
       </div>
       <div class="col-md-9 col-sm-9 col-xs-12">
         <div class="row text-center">
@@ -61,7 +61,6 @@ export default Vue.extend({
     PostView,
     Item
   },
-
   data: () => ({
     page: 1,
     filters: {
@@ -76,24 +75,16 @@ export default Vue.extend({
   }),
   methods: {
     getPage(page: number) {
-      this.page = page;
-      this.getItems(this.page, this.filters);
+      this.$store.dispatch("auctionModule/setPage", page);
+      this.getItems();
     },
-    filtering(filters: any) {
-      this.filters = filters;
-      this.page = 1;
-      this.getItems(this.page, this.filters);
-    },
-    // page번호와 filter 데이터가 바뀔때마다 item을 요청합니다.
-    getItems(page: number, filters: any){
-      // 현재 페이지와 필터데이터를 세션스토리지에 저장합니다.
-      const tmpFilter = JSON.stringify(filters)
-      sessionStorage.setItem("filters", tmpFilter);
-      sessionStorage.setItem("page", page.toString());
+    getItems(){ // page번호와 filter 데이터가 바뀔때마다 item을 요청합니다.
+      // store에 저장된 page와 필터데이터로 아이템을 조회합니다.
+      const page = this.$store.state.auctionModule.page;
+      const filters = this.$store.state.auctionModule.filters;
       
       itemApi.getItemPage(page, filters).then((res: AxiosResponse) => {
         this.items = res.data.object;
-        console.log(res);
       })
     },
     // reset버튼을 누르면 기본 필터값으로 적용됩니다.
@@ -103,11 +94,8 @@ export default Vue.extend({
     }
   },
   created() {
-    this.getItems(
-      parseInt(this.$store.state.auctionModule.page), 
-      JSON.parse(this.$store.state.auctionModule.filters)
-    )
-    this.filters = JSON.parse(this.$store.state.auctionModule.filters);
+    this.getItems();
+    this.filters = this.$store.state.auctionModule.filters;
   }
 });
 </script>

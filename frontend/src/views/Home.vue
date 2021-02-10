@@ -76,10 +76,12 @@ export default Vue.extend({
     slides: ["First", "Second", "Third", "Fourth", "Fifth"]
   }),
   mounted() {
-    const tmpFilter = {status: false, category: [], grade: [], si: null, gu: null}
-    sessionStorage.setItem("filters", JSON.stringify(tmpFilter));
+    // 초기 페이지 값과 필터 데이터를 저장합니다.
+    const InitialFilter = {status: false, category: [], grade: [], si: null, gu: null}
     sessionStorage.setItem("page", String(1));
-    itemApi.getItemPage(1,tmpFilter).then((res:AxiosResponse) => {
+    sessionStorage.setItem("filters", JSON.stringify(InitialFilter));
+
+    itemApi.getItemPage(1, InitialFilter).then((res:AxiosResponse) => {
       this.items = res.data.object
     })
   },

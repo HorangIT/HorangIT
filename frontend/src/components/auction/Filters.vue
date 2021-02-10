@@ -86,10 +86,13 @@ export default Vue.extend({
     },
   },
   watch: {
+    //필터의 값이 바뀌면 바뀐값을 store에 저장하고 필터링액션을 상위컴포넌트에 전달합니다.
     filters: {
       deep: true,
       handler() {
-        this.$emit("filtering", this.filters);
+        this.$store.dispatch("auctionModule/setFilter", this.filters);
+        this.$store.dispatch("auctionModule/setPage", 1);
+        this.$emit("filtering");
       }
     },
   },
@@ -98,11 +101,10 @@ export default Vue.extend({
     itemApi.search(null).then((res: AxiosResponse) => {
       this.Si = res.data.object.districts;
     })
+    // 구 정보 가져오기
     itemApi.search(this.filters.si).then((res: AxiosResponse) => {
       this.Gu = res.data.object.gungu;
     })
-    // 초기 필터정보 세션스토리지에 저장
-    sessionStorage.setItem("filters", JSON.stringify(this.filters));
   }
 });
 </script>
