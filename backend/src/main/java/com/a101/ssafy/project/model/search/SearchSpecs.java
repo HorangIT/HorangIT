@@ -72,11 +72,13 @@ public class SearchSpecs {
 				}
 				if (grades != null) {
 					String tmpGrades = (String)grades;
-					String[] arrGrades = tmpGrades.split(",");
+					char[] arrGrades = tmpGrades.toCharArray();
 					// input 데이터의 갯수만큼 grade에 일치하는 데이터가 있다면 list에 추가해준다
 					for (int i = 0; i < arrGrades.length; i++) {
-						System.out.println(arrGrades[i]);
-						predicates.add(criteriaBuilder.equal(root.get("grade"), arrGrades[i].charAt(0)));
+						if (arrGrades[i] != ',') {
+							System.out.println(arrGrades[i]);
+							predicates.add(criteriaBuilder.equal(root.get("grade"), arrGrades[i]));							
+						}
 					}
 					cnt += 1;
 				}
