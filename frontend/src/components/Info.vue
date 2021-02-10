@@ -10,7 +10,7 @@
         >
           <h1 class="text-center font-size">경매 참여 방법</h1>
           <div class="text-center">
-            <v-btn href="#" class="white--text" outlined>Go</v-btn>
+            <v-btn to="/" class="white--text" outlined>Go</v-btn>
           </div>
         </v-img>
       </v-card>
@@ -25,7 +25,7 @@
         >
           <h1 class="text-center font-size">FAQs</h1>
           <div class="text-center">
-            <v-btn href="/cs" class="white--text" outlined>Go</v-btn>
+            <v-btn to="/" class="white--text" outlined>Go</v-btn>
           </div>
         </v-img>
       </v-card>
