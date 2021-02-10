@@ -184,7 +184,7 @@ export default Vue.extend({
     },
     reset() {
       const tmpFilter = {check: false, minPrice: 0, maxPrice: 100000000, grades: [], si: "", gu: ""}
-      this.filters = tmpFilter;
+      this.filters = (tmpFilter as any);
     }
   },
   created() {
