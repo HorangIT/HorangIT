@@ -77,8 +77,6 @@ export const itemApi = {
     return request.get(`/item/page/${page}`, {
       params: {
         status: data.status,
-        minPrice: data.minPrice,
-        maxPrice: data.maxPrice,
         category: data.category,
         grade: data.grade,
         si: data.si,

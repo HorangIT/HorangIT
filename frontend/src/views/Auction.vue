@@ -66,8 +66,6 @@ export default Vue.extend({
     page: 1,
     filters: {
       status: false,
-      minPrice: 0,
-      maxPrice: 100000000,
       category: [],
       grade: [],
       si: null,
@@ -99,7 +97,7 @@ export default Vue.extend({
       sessionStorage.setItem("page", page.toString());
     },
     reset() {
-      const tmpFilter = {status: false, minPrice: 0, maxPrice: 100000000, category: [], grade: [], si: null, gu: null}
+      const tmpFilter = {status: false, category: [], grade: [], si: null, gu: null}
       this.filters = tmpFilter;
     }
   },
