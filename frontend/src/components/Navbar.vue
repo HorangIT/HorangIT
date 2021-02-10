@@ -146,7 +146,7 @@
           <!-- 판매하기 -->
           <v-col cols="2" class="d-none d-md-flex">
             <v-btn
-              @click="dialog = true"
+              @click="login ? dialog = true : dialogLogin = true"
               text
               plain
               :ripple="false"
@@ -167,7 +167,6 @@
 
 <script lang="ts">
 import Vue from "vue";
-import AuthModal from "../components/user/AuthModal.vue";
 import PostView from "../views/PostView.vue";
 import LoginForm from "../components/user/LoginForm.vue";
 import SignupForm from "../components/user/SignupForm.vue";
@@ -177,7 +176,6 @@ export default Vue.extend({
   name: "Navbar",
 
   components: {
-    AuthModal,
     PostView,
     LoginForm,
     SignupForm,
@@ -195,8 +193,9 @@ export default Vue.extend({
         to: "/auction"
       },
     ],
-    on: true,
+    // Sidebar active
     active: false,
+    // on: true,
     // modal: false,
     // loginOrSignup: true,
     nickname: "",
@@ -205,31 +204,31 @@ export default Vue.extend({
     dialogSignup: false,
   }),
   computed: {
-    login () {
+    login (): string {
       return this.$store.state.userModule.status.loggedIn;
     },
   },
   watch: {
     login () {
-      this.getNickname();
+      if (this.login) {
+        this.getNickname();
+        this.dialogLogin = false;
+      }
     }
   },
-  created() {
+  mounted (): void {
     if (this.login) {
       this.getNickname();
     }
   },
   methods: {
-    logout () {
+    logout (): void {
       this.$store.dispatch("userModule/logout");
     },
-    getNickname () {
+    getNickname (): void {
       const user = JSON.parse(localStorage.getItem("user") || "{}");
       this.nickname = user.object.user.nickname;
     },
-    openSideNavbar() {
-      this.$emit("openSideNavbar")
-    }
   }
 });
 </script>

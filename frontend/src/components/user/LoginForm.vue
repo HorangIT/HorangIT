@@ -133,7 +133,6 @@ export default Vue.extend({
         if (!this.$refs[f].validate(true)) this.formHasErrors = true
       })
       if (!this.formHasErrors) {
-        console.log('login')
         // axios login
         this.$store.dispatch('userModule/login', this.form)
           // login fail
