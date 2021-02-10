@@ -55,26 +55,31 @@ moment.locale('ko');
 
 export default Vue.extend({
   created(): void {
-    console.log(this.stompClient)
+    // console.log(this.stompClient)
+    // WebSocket connect
     this.stompClient.connect({},
       // onConnect callback
       () => {
         console.log('onConnect');
-        this.stompClient.subscribe('/topic/public', (response: any) => {
+        // 채팅방 구독
+        this.stompClient.subscribe(`/topic/chat/${this.itemId}`, (response: any) => {
           console.log('im subscribe response callback');
           console.log(response);
+          // console.log(response);
+          // console.log(typeof response);
         });
         this.stompClient.send("/app/chat.addUser", {}, JSON.stringify({sender: this.username, type: 'JOIN'}));
 
       },
       (onError: any) => {
         console.log('onError');
-        console.log(onError);
+        // console.log(onError);
       });
   },
   data (): Record<string, any> {
     return {
-      // userId: user.id,
+      userId: 5,
+      itemId: 1,
       username:'testuser',
       chatInput: "",
       chatLog: [],
@@ -91,8 +96,8 @@ export default Vue.extend({
   computed: {
     user(): Record<string, any> {
       const user = JSON.parse(localStorage.getItem("user") || "{}");
-      console.log("user");
-      console.log(user);
+      // console.log("user");
+      // console.log(user);
       if (user) {
         return user.object.user;
       }
@@ -103,14 +108,15 @@ export default Vue.extend({
     }
   },
   methods: {
+    // Chat send
     submit (): void {
       if (this.chatInput && this.stompClient) {
         const chatMessage = {
-            sender: this.username,
+            sender: this.userId,
             content: this.chatInput,
-            type: 'CHAT'
+            type: 'CHAT',
         };
-        this.stompClient.send("/app/chat.sendMessage", {}, JSON.stringify(chatMessage));
+        this.stompClient.send(`/app/chat.sendMessage/${this.itemId}`, {}, JSON.stringify(chatMessage));
         this.chatInput = '';
       }
     },
