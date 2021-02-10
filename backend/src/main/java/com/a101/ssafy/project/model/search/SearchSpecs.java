@@ -34,9 +34,8 @@ public class SearchSpecs {
 				int cnt = 0;
 				
 				if (address != null) {
-					String[] arrAddress = (String[])address;
-					String searchAddress = arrAddress[0] + " " + arrAddress[1];
-					predicates.add(criteriaBuilder.equal(root.get("location"), searchAddress));
+					String arrAddress = (String)address;
+					predicates.add(criteriaBuilder.equal(root.get("location"), arrAddress));
 					cnt += 1;
 				}
 				if (grades != null) {

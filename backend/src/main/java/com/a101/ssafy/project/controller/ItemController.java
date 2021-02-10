@@ -111,20 +111,20 @@ public class ItemController {
 			
 		BasicResponse result = new BasicResponse();
 		List<JSONObject> returningItems = new ArrayList<JSONObject>();
-		Pageable paging = PageRequest.of(pageNo-1, 9);
+		Pageable paging = PageRequest.of(pageNo-1, 12);
 
 		Page<Item> pages;
 		boolean empty = false;
 		
 		// DTO에 아무것도 안들어왔을 때 = 그냥 전체 페이지 요청
-		if (searchDto.getCategory() == null && searchDto.getGrade() == null && searchDto.getLocation() == null) {
+		if (searchDto.getCategory() == null && searchDto.getGrade() == null && searchDto.getLocation(searchDto.getSi(), searchDto.getGu()) == null) {
 			System.out.println("EMPTYYYYYYYYYY");
 			
 			pages = itemRepository.findAll(paging);
 			empty = true;
 		} else {
 			Specification<Item> specify = Specification
-					.where(SearchSpecs.searchWithFilter(searchDto.getLocation(), searchDto.getGrade(), searchDto.getCategory()));
+					.where(SearchSpecs.searchWithFilter(searchDto.getLocation(searchDto.getSi(), searchDto.getGu()), searchDto.getGrade(), searchDto.getCategory()));
 			pages = itemRepository.findAll(specify, paging);
 			
 		}		
