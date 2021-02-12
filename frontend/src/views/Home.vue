@@ -8,7 +8,7 @@
       >
         <v-row class="fill-height" align="center" justify="center">
           <div class="display-2 white--text pl-5 pr-5 hidden-sm-only">
-            <strong>경매로 누구보다 빠르게 내 아이템을 겟하세요!</strong>
+            <strong>경매로 누구보다 빠르게 내 아이템을 겟!</strong>
           </div>
           <br />
         </v-row>
@@ -77,9 +77,10 @@ export default Vue.extend({
   }),
   mounted() {
     // 초기 페이지 값과 필터 데이터를 저장합니다.
-    const InitialFilter = {status: false, category: [], grade: [], si: null, gu: null}
+    const InitialFilter = {status: false, category: [], grade: [], si: null, gu: null, name:""}
     sessionStorage.setItem("page", String(1));
     sessionStorage.setItem("filters", JSON.stringify(InitialFilter));
+    this.$store.state.auctionModule.filters = InitialFilter;
 
     itemApi.getItemPage(1, InitialFilter).then((res:AxiosResponse) => {
       this.items = res.data.object

@@ -14,6 +14,9 @@ export const auctionModule: Record<string, any> = {
     SET_FILTER (state: any, filters: any) {
       state.filters = filters;
       sessionStorage.setItem("filters", JSON.stringify(filters));
+    },
+    SEARCH (state: any, data: String) {
+      state.filters.name = data;
     }
   },
   actions: {
@@ -22,6 +25,9 @@ export const auctionModule: Record<string, any> = {
     },
     setFilter ({commit}: any, filters: any) {
       commit('SET_FILTER', filters)
+    },
+    search ({commit}: any, data: String) {
+      commit('SEARCH', data)
     }
   }
 }

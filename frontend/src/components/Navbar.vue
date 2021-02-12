@@ -121,6 +121,8 @@
                 placeholder="검색"
                 clearable
                 color="orange lighten-1"
+                v-model="searchData"
+                @change="search"
               >
               </v-text-field>
             </v-responsive>
@@ -184,10 +186,6 @@ export default Vue.extend({
 
   data: () => ({
     links: [
-      // {
-      //   name: "홈",
-      //   to: "/"
-      // },
       {
         name: "경매",
         to: "/auction"
@@ -195,13 +193,11 @@ export default Vue.extend({
     ],
     // Sidebar active
     active: false,
-    // on: true,
-    // modal: false,
-    // loginOrSignup: true,
     nickname: "",
     dialog: false,
     dialogLogin: false,
     dialogSignup: false,
+    searchData: ""
   }),
   computed: {
     login (): string {
@@ -219,7 +215,7 @@ export default Vue.extend({
   mounted (): void {
     if (this.login) {
       this.getNickname();
-    }
+    };
   },
   methods: {
     logout (): void {
@@ -229,6 +225,11 @@ export default Vue.extend({
       const user = JSON.parse(localStorage.getItem("user") || "{}");
       this.nickname = user.object.user.nickname;
     },
+    search () {
+      this.$store.dispatch("auctionModule/search", this.searchData);
+      this.searchData = "";
+      this.$router.push({ name: "Auction" });
+    }
   }
 });
 </script>
