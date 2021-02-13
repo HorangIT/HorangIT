@@ -118,6 +118,8 @@
 </template>
 <script lang="ts">
 import Vue from "vue";
+import SockJS from 'sockjs-client';
+import Stomp from 'stompjs';
 import Info from "../components/Info.vue";
 import Chat from "../components/detail/Chat.vue";
 import Review from "../components/detail/Review.vue";
@@ -145,8 +147,8 @@ export default Vue.extend({
     happyPrice: 0,
     biddingLog: [],
     isOver: false,
-    rating: 4.5,
     dialog: false,
+    stompClient: Stomp.over(new SockJS("http://localhost:8000/api/ws")),
   }),
   filters: {
     comma(val: number | string) {
@@ -170,14 +172,33 @@ export default Vue.extend({
         this.happyPrice = res.data.object.happyPrice;
       });
     },
+    connect () {
+      this.stompClient.connect(
+        {},
+        // socket 연결 성공
+        () => {
+          console.log('응찰 소켓 연결 성공');
+          // server 옥션 메세지 전송 endpoint 구독하기
+          this.stompClient.subscribe("#", res => {
+            console.log('응찰 구독 성공!', res);
+          });
+        },
+        // socket 연결 실패
+        err => {
+          console.log(err);
+        })
+    },
     bid() {
-      if (localStorage.getItem("user")) {
+      if (localStorage.getItem("user") && this.stompClient) {
         const user = JSON.parse(localStorage.getItem("user") || "{}");
         const bidInfo = {
           userId: String(user.object.user.id),
           itemId: String(this.itemId),
           nowPrice: String(this.nowPrice),
         };
+        // socket으로 전송
+        this.stompClient.send("#",{}, JSON.stringify(bidInfo));
+        // 기존 api로 전송
         auctionApi.bidding(bidInfo).then((res: AxiosResponse) => {
           console.log(res.data.object);
           this.nowPrice = res.data.object.nowPrice;
@@ -219,17 +240,17 @@ export default Vue.extend({
         .catch(() => {
           this.biddingLog = [];
         });
+      },
     },
-  },
   created() {
+    // id번 detail정보 가져오기
     const id = Number(this.$route.params.id);
-    console.log(id);
     this.getItem(id);
+    // socket 연결
+    this.connect();
+    // 응찰 내역
     this.log();
   },
-  // updated() {
-  //   this.log();
-  // }
 });
 </script>
 <style></style>

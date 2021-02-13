@@ -1,6 +1,7 @@
 <template>
   <v-container id="auction">
     <p class="text-center" style="font-size:3rem;">Auction</p>
+    <!--로그인 O : 판매하기 // 로그인 X : 로그인-->
     <v-btn
       color="orange accent-3"
       fab
@@ -9,19 +10,27 @@
       fixed
       bottom
       right
-      @click="dialog = true"
+      @click="login? dialog = true : pleaseLogin = true"
     >
-      <v-icon>mdi-pencil</v-icon>
+      <v-icon color="black">mdi-pencil</v-icon>
     </v-btn>
     <v-dialog v-model="dialog" max-width="60vw">
       <v-card>
         <PostView @close="dialog = false"/>
       </v-card>
     </v-dialog>
+    <v-dialog v-model="pleaseLogin" max-width="30vw">
+      <v-card>
+        <LoginForm @close="pleaseLogin = false" :message="message"/>
+      </v-card>
+    </v-dialog>
+
     <div class="row">
+      <!--필터-->
       <div class="col-md-3 col-sm-3 col-xs-12">
         <Filters @filtering="getItems" :filters="filters" @reset="reset"/>
       </div>
+      <!--필터링한 아이템들-->
       <div class="col-md-9 col-sm-9 col-xs-12">
         <div class="row text-center">
           <div
@@ -32,6 +41,7 @@
             <Item :item="item"></Item> 
           </div>
         </div>
+        <!--페이지네이션-->
         <div class="text-center mt-12">
           <v-pagination
             v-model="page"
@@ -50,6 +60,7 @@
 import Vue from "vue";
 import Filters from "../components/auction/Filters.vue";
 import Item from "../components/Item.vue";
+import LoginForm from "../components/user/LoginForm.vue";
 import PostView from "./PostView.vue";
 import { itemApi } from "../utils/axios";
 import { AxiosResponse } from "axios";
@@ -60,7 +71,8 @@ export default Vue.extend({
   components: {
     Filters,
     PostView,
-    Item
+    Item,
+    LoginForm
   },
   data: () => ({
     page: 1,
@@ -72,8 +84,15 @@ export default Vue.extend({
       gu: null
     },
     dialog: false,
+    pleaseLogin: false,
+    message: "이 필요한 서비스입니다.🐯",
     items:[],
   }),
+  computed: {
+    login (): string {
+      return this.$store.state.userModule.status.loggedIn;
+    },
+  },
   methods: {
     getPage(page: number) {
       this.$store.dispatch("auctionModule/setPage", page);
@@ -93,11 +112,10 @@ export default Vue.extend({
       const tmpFilter = {status: false, category: [], grade: [], si: null, gu: null, name: data}
       this.$store.dispatch("auctionModule/setFilter", tmpFilter);
       this.filters = tmpFilter;
-    }
+    },
   },
   mounted() {
     const data = this.$store.state.auctionModule.filters.name;
-    console.log(data);
     this.reset(data);
     this.getItems();
     this.filters = this.$store.state.auctionModule.filters;
@@ -106,8 +124,8 @@ export default Vue.extend({
 });
 </script>
 
-<style>
-.auction {
-  width: 60%;
+<style scoped>
+#app > div.v-dialog__content.v-dialog__content--active {
+  background-color: rgba(0, 0, 0, 0.767);
 }
 </style>

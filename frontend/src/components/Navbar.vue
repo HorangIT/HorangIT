@@ -54,7 +54,7 @@
                   로그인
                 </v-btn>
               </template>
-              <LoginForm @close="dialogLogin = false" @goToSignup="dialogLogin = false; dialogSignup = true;" />
+              <LoginForm @close="dialogLogin = false" @goToSignup="dialogLogin = false; dialogSignup = true;"/>
             </v-dialog>
             <!-- Signup dialog -->
             <v-dialog
@@ -148,7 +148,7 @@
           <!-- 판매하기 -->
           <v-col cols="2" class="d-none d-md-flex">
             <v-btn
-              @click="login ? dialog = true : dialogLogin = true"
+              @click="login ? dialog = true : pleaseLogin = true"
               text
               plain
               :ripple="false"
@@ -158,6 +158,11 @@
             <v-dialog v-model="dialog" max-width="60vw">
               <v-card>
                 <PostView @close="dialog = false" />
+              </v-card>
+            </v-dialog>
+            <v-dialog v-model="pleaseLogin" max-width="30vw">
+              <v-card>
+                <LoginForm @close="pleaseLogin = false" :message="message"/>
               </v-card>
             </v-dialog>
           </v-col>
@@ -183,7 +188,6 @@ export default Vue.extend({
     SignupForm,
     SideNavbar,
   },
-
   data: () => ({
     links: [
       {
@@ -196,7 +200,9 @@ export default Vue.extend({
     nickname: "",
     dialog: false,
     dialogLogin: false,
+    pleaseLogin: false,
     dialogSignup: false,
+    message: "이 필요한 서비스입니다.🐯",
     searchData: ""
   }),
   computed: {
