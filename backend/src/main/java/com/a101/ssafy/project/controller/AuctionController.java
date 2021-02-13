@@ -6,8 +6,10 @@ import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,6 +28,9 @@ import com.a101.ssafy.project.service.AuctionService;
 @RestController
 @RequestMapping("/auction")
 public class AuctionController {
+	@Autowired
+	SimpMessagingTemplate simpMessagingTemplate; 
+	
 	AuctionService auctionService;
 	
 	@Autowired
@@ -33,16 +38,30 @@ public class AuctionController {
 		this.auctionService = auctionService;
 	}
 	
-	@MessageMapping("/auction.sendMessage")
-	public void onAuction(@Payload ChatMessage chatMessage) {
+	@MessageMapping("/auction.sendMessage/{itemId}")
+	public void onAuction(@DestinationVariable("itemId")long itemId, @Payload ChatMessage chatMessage) {
+		String getCurrentExpiredValue = auctionService.getCurrentExpiredValue(itemId+"");
 		chatMessage.setType(MessageType.REPLY);
-		if(chatMessage.getType()==MessageType.AUCTION) {
-//			JSONObject jobj = auctionService.auction(chatMessage.getSender(), chatMessage.getContent());
-		}else if(chatMessage.getType()==MessageType.FLEX){
-//			JSONObject jobj = auctionService.auction(chatMessage.getSender(), chatMessage.getContent());			
+		
+		if("null".equals(getCurrentExpiredValue)) {
+			chatMessage.setContent((String)"이미 끝난 경매입니다.");
+			simpMessagingTemplate.convertAndSend("/topic/auction/"+itemId, chatMessage);
+			return;
 		}
 		
-	}
+		if(chatMessage.getType()==MessageType.AUCTION) {
+			JSONObject jobj = auctionService.auction(chatMessage.getSender(), itemId+"");
+			chatMessage.setContent(jobj);
+			simpMessagingTemplate.convertAndSend("/topic/auction/"+itemId, chatMessage);
+			return;
+		}else if(chatMessage.getType()==MessageType.FLEX){
+			JSONObject jobj = auctionService.flex(chatMessage.getSender(), itemId+"");			
+			chatMessage.setContent(jobj);
+			simpMessagingTemplate.convertAndSend("/topic/auction/"+itemId, chatMessage);
+			return;
+		}
+		
+	} 	
 	
 	/** 응찰을 시도했을 때  */
 	@PostMapping
@@ -110,29 +129,29 @@ public class AuctionController {
 //		return responseEntity;
 	}
 	
-	/** flex 해버렸을 때(즉시낙찰) */
-	@PostMapping("/flex")
-	public Object flex(@RequestBody AuctionInputDTO auctionInputDto) {
-		ResponseEntity responseEntity = null;
-		BasicResponse result = new BasicResponse();
-		
-		String getCurrentExpiredValue = auctionService.getCurrentExpiredValue(auctionInputDto.getItemId());
-
-		//auctionService.addAuctionLog(auctionInputDto.getUserId(), auctionInputDto.getItemId(), auctionInputDto.getNowPrice());		
-		if("null".equals(getCurrentExpiredValue)) {
-			result = new BasicResponse();
-			result.status = false;
-			result.data = "이미 끝난 경매입니당.";
-			
-			responseEntity = new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
-		}else {
-			result = auctionService.flex(auctionInputDto.getItemId(), auctionInputDto.getUserId());
-			responseEntity = new ResponseEntity<>(result, HttpStatus.OK);
-		}
-		
-		
-		return responseEntity;
-	}
+//	/** flex 해버렸을 때(즉시낙찰) */
+//	@PostMapping("/flex")
+//	public Object flex(@RequestBody AuctionInputDTO auctionInputDto) {
+//		ResponseEntity responseEntity = null;
+//		BasicResponse result = new BasicResponse();
+//		
+//		String getCurrentExpiredValue = auctionService.getCurrentExpiredValue(auctionInputDto.getItemId());
+//
+//		//auctionService.addAuctionLog(auctionInputDto.getUserId(), auctionInputDto.getItemId(), auctionInputDto.getNowPrice());		
+//		if("null".equals(getCurrentExpiredValue)) {
+//			result = new BasicResponse();
+//			result.status = false;
+//			result.data = "이미 끝난 경매입니당.";
+//			
+//			responseEntity = new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+//		}else {
+//			result = auctionService.flex(auctionInputDto.getItemId(), auctionInputDto.getUserId());
+//			responseEntity = new ResponseEntity<>(result, HttpStatus.OK);
+//		}
+//		
+//		
+//		return responseEntity;
+//	}
 	
 	// /action/log/{id} 응찰 내역을 가져옵니다ㅎㅎ
 	@GetMapping("/log/{id}")

@@ -64,10 +64,6 @@ public class AuctionServiceImpl implements AuctionService{
 
 	@Override
 	public JSONObject getPriceAfterAuction(String oldPrice, String itemId) {
-		if("-1".equals(oldPrice)) {
-			oldPrice = redisUtil.getData(ITEM_NAME+itemId+ITEM_START_PRICE);
-		}
-		
 		JSONObject jobj = new JSONObject();
 		System.out.println(oldPrice+"옛날 가격");
 		long newPrice = Long.parseLong(oldPrice)+getAuctionUnit(oldPrice);
@@ -91,37 +87,13 @@ public class AuctionServiceImpl implements AuctionService{
 		
 		redisUtil.setData(ITEM_NAME+itemId, newPrice+""); //레디스 값 갱신 
 		
+		jobj.put("log", getAuctionLog(itemId)); //log까지 넣어줌
 		jobj.put("nowPrice", newPrice);
 		jobj.put("nextPrice", nextPrice);
 		
 		return jobj;
 	}
 
-	
-	@Override
-	public BasicResponse flex(String itemId, String userId) {
-		BasicResponse result = new BasicResponse();
-		
-		result.status = true;
-		result.data = "flex에 성공하셨습니다!";
-		
-		redisUtil.setData(ITEM_NAME+itemId, redisUtil.getData(ITEM_NAME+itemId+ITEM_HAPPY_PRICE));
-		JSONObject jobj = new JSONObject();
-		jobj = getPriceAfterAuction(redisUtil.getData(ITEM_NAME+itemId), itemId);
-		
-		addAuctionLog(userId, itemId, redisUtil.getData(ITEM_NAME+itemId));
-		
-		jobj.put("log", getAuctionLog(itemId));
-		
-		jobj.put("test", "응찰 가격을 넘어섰네요, 이제 사야해요 (FLEX!)");
-		
-		result.object = jobj;
-		
-//		done(itemId, userId);
-		
-		return result;
-	}
-	
 	public void done() {
 		System.out.println("결제하고");
 		System.out.println("채팅창 서로 만들어주고(없으면안만듬)");
@@ -131,7 +103,6 @@ public class AuctionServiceImpl implements AuctionService{
 
 	@Override
 	public List<String> getAuctionLog(String itemId) {
-		//list 구조로 바꺼야댐
 		return redisUtil.getAllLdata(AUCTION+itemId);
 	}
 
@@ -147,6 +118,27 @@ public class AuctionServiceImpl implements AuctionService{
 		Date date = java.util.Calendar.getInstance().getTime();
 		
 		redisUtil.setLdata(AUCTION+itemId, nickname+";"+nowPrice+";"+format.format(date)); //닉네임 제약에 대해서 이야기를 좀 해봐야겠다.
+	}
+
+	@Override
+	public JSONObject auction(String userId, String itemId) {
+		String getCurrentPrice = getCurrentAuctionValue(itemId);
+		addAuctionLog(userId, itemId, getCurrentPrice); 
+	
+		return getPriceAfterAuction(getCurrentPrice, itemId);
+	}
+
+	@Override
+	public JSONObject flex(String userId, String itemId) {
+		redisUtil.setData(ITEM_NAME+itemId, redisUtil.getData(ITEM_NAME+itemId+ITEM_HAPPY_PRICE));
+		JSONObject jobj = new JSONObject();
+		jobj = getPriceAfterAuction(redisUtil.getData(ITEM_NAME+itemId), itemId);
+		
+		addAuctionLog(userId, itemId, redisUtil.getData(ITEM_NAME+itemId));
+		jobj.put("test", "응찰 가격을 넘어섰네요, 이제 사야해요 (FLEX!)");	
+		
+		//done();
+		return jobj;
 	}
 	
 	
