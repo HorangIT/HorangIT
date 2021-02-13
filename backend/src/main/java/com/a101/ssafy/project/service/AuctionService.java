@@ -11,8 +11,9 @@ public interface AuctionService {
 	String getCurrentExpiredValue(String itemId);
 	long getAuctionUnit(String price);
 	JSONObject getPriceAfterAuction(String oldPrice, String itemId);
-	BasicResponse flex(String itemId, String userId);
 	List<String> getAuctionLog(String itemId); //item Id를 받으면 해당 아이템에 대한 응찰 내역을 JSONObject 타입으로 돌려준다.
 	String getNicknameById(String userId);
 	void addAuctionLog(String userId, String itemId, String nowPrice);
+	JSONObject auction(String userId, String itemId);
+	JSONObject flex(String userId, String itemId);
 }
