@@ -159,6 +159,9 @@ export default Vue.extend({
         this.isOver = true;
       }
     },
+    item() {
+      console.log(this.item)
+    }
   },
   methods: {
     getItem(id: number) {
