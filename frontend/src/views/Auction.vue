@@ -37,6 +37,7 @@
             v-model="page"
             :length="6"
             @input="getPage"
+            color="orange"
           >
           </v-pagination>
         </div>
@@ -88,14 +89,19 @@ export default Vue.extend({
       })
     },
     // reset버튼을 누르면 기본 필터값으로 적용됩니다.
-    reset() {
-      const tmpFilter = {status: false, category: [], grade: [], si: null, gu: null}
+    reset(data: string) {
+      const tmpFilter = {status: false, category: [], grade: [], si: null, gu: null, name: data}
+      this.$store.dispatch("auctionModule/setFilter", tmpFilter);
       this.filters = tmpFilter;
     }
   },
-  created() {
+  mounted() {
+    const data = this.$store.state.auctionModule.filters.name;
+    console.log(data);
+    this.reset(data);
     this.getItems();
     this.filters = this.$store.state.auctionModule.filters;
+    this.page = this.$store.state.auctionModule.page;
   }
 });
 </script>
