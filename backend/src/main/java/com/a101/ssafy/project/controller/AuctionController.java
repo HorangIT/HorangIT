@@ -41,20 +41,22 @@ public class AuctionController {
 	@MessageMapping("/auction.sendMessage/{itemId}")
 	public void onAuction(@DestinationVariable("itemId")long itemId, @Payload ChatMessage chatMessage) {
 		String getCurrentExpiredValue = auctionService.getCurrentExpiredValue(itemId+"");
-		chatMessage.setType(MessageType.REPLY);
 		
 		if("null".equals(getCurrentExpiredValue)) {
 			chatMessage.setContent((String)"이미 끝난 경매입니다.");
 			simpMessagingTemplate.convertAndSend("/topic/auction/"+itemId, chatMessage);
 			return;
 		}
-		
 		if(chatMessage.getType()==MessageType.AUCTION) {
+			chatMessage.setType(MessageType.REPLY);
 			JSONObject jobj = auctionService.auction(chatMessage.getSender(), itemId+"");
 			chatMessage.setContent(jobj);
 			simpMessagingTemplate.convertAndSend("/topic/auction/"+itemId, chatMessage);
 			return;
-		}else if(chatMessage.getType()==MessageType.FLEX){
+		}
+		
+		if(chatMessage.getType()==MessageType.FLEX){
+			chatMessage.setType(MessageType.REPLY);
 			JSONObject jobj = auctionService.flex(chatMessage.getSender(), itemId+"");			
 			chatMessage.setContent(jobj);
 			simpMessagingTemplate.convertAndSend("/topic/auction/"+itemId, chatMessage);
