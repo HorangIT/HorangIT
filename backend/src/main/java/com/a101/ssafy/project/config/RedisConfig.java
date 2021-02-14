@@ -47,8 +47,10 @@ public class RedisConfig {
 		
 		//put in redis connection
 		container.setConnectionFactory(lettuceConnectionFactory());
-		Topic topic = new PatternTopic("__keyevent@0__:expired");
-		container.addMessageListener(new KeyExpiredListener(), topic);
+		Topic topicExpired = new PatternTopic("__keyevent@0__:expired");
+		Topic topicDel = new PatternTopic("__keyevent@0__:del");
+		container.addMessageListener(new KeyExpiredListener(), topicExpired);
+		container.addMessageListener(new KeyExpiredListener(), topicDel);
 		return container;
 	}
 }
