@@ -84,6 +84,9 @@ export const itemApi = {
     return request.get(`/item/page/${page}`, {
       params: searchParams
     });
+  },
+  getChatLog (page: number): any {
+    return request.get(`/item/${page}/chat`)
   }
 };
 

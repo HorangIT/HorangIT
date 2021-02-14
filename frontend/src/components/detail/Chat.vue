@@ -5,6 +5,7 @@
       min-height="25vh"
       max-height="25vh"
       elevation="0"
+      class="chatScroll"
     >
       <v-list
         two-line
@@ -15,20 +16,21 @@
             :key="index"
           ></v-subheader> -->
           <v-list-item
-            :key="index"
+            
+            :key="index+'a'"
           >
             <v-list-item-avatar>
               <v-img src="../../assets/img/avatar/avatar_male.svg"></v-img>
             </v-list-item-avatar>
             <v-list-item-content>
-              <v-list-item-title v-text="chat.nickname"></v-list-item-title>
-              <v-list-item-subtitle v-text="momentTest"></v-list-item-subtitle>
-              {{ chat.content }}
+              <v-list-item-title v-text="chat.userNickname"></v-list-item-title>
+              <v-list-item-subtitle v-text="chat.chatCreatedAt"></v-list-item-subtitle>
+              {{ chat.chatContent }}
             </v-list-item-content>
           </v-list-item>
           <!-- 경계선 -->
           <v-divider
-            :key="index"
+            :key="index+'b'"
             inset
           ></v-divider>
         </template>
@@ -50,83 +52,80 @@
 import Vue from 'vue';
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
-import moment from 'moment';;
+import moment from 'moment';
+import { itemApi } from "../../utils/axios";
 moment.locale('ko');
 
 export default Vue.extend({
   created(): void {
-    // console.log(this.stompClient)
-    // WebSocket connect
-    this.stompClient.connect({},
-      // onConnect callback
-      () => {
-        console.log('onConnect');
-        // 채팅방 구독
-        this.stompClient.subscribe(`/topic/chat/${this.$route.params.id}`, (response: any) => {
-          console.log('im subscribe response callback');
-          console.log(response);
-          // console.log(response);
-          // console.log(typeof response);
+    // 유저 로그인 확인
+    if (this.user !== null) {
+      // 채팅로그 확인
+      itemApi.getChatLog(this.itemId)
+        .then((response: any) => {
+          this.chatLog = response.data.object.log
+          this.chatLog.forEach((chat: any) => {
+            chat.chatCreatedAt = moment(chat.chatCreatedAt).calendar()
+            if (Number(chat.userId) === this.user.id) {
+              chat.userNickname += ' (본인)'
+            }
+          })
+        })
+        .catch((error: any) => console.log(error))
+  
+      // WebSocket connect
+      this.stompClient.connect({},
+        // onConnect callback
+        () => {
+          console.log('onConnect');
+          // 채팅방 구독
+          this.stompClient.subscribe(`/topic/chat/${this.itemId}`, (message: any) => {
+            console.log('im subscribe response callback');
+            // chatLog의 낱개로 된 똑같은 dataset의 응답이 필요
+            console.log(message.body);
+          });
+          this.stompClient.send("/app/chat.addUser", {}, JSON.stringify({sender: this.user.nickname, type: 'JOIN'}));
+        },
+        (onError: any) => {
+          alert(onError);
         });
-        this.stompClient.send("/app/chat.addUser", {}, JSON.stringify({sender: this.username, type: 'JOIN'}));
-
-      },
-      (onError: any) => {
-        console.log('onError');
-        // console.log(onError);
-      });
+    }
   },
   data (): Record<string, any> {
     return {
-      userId: 15,
-      itemId: 1,
-      username:'testuser',
+      itemId: this.$route.params.id,
       chatInput: "",
       chatLog: [],
-      // chatSocket: io("https://powerticket-socket-chat.herokuapp.com/"),
       stompClient: Stomp.over(new SockJS("http://localhost:8000/api/ws")),
       momentTest: moment().format('YYYY년 MMMM Do HH:mm:ss'),
     };
   },
+  computed: {
+    user (): any {
+      if (this.$store.state.userModule.user !== null) {
+        return this.$store.state.userModule.user.object.user;
+      }
+      return null;
+    }
+  },
   updated(): void {
     // Always scroll down
-    // const scroll: any = this.$el.querySelector(".chatScroll");
-    // scroll.scrollTop = scroll.scrollHeight;
-  },
-  computed: {
-    user(): Record<string, any> {
-      const user = JSON.parse(localStorage.getItem("user") || "{}");
-      // console.log("user");
-      // console.log(user);
-      if (user) {
-        return user.object.user;
-      }
-      return {
-        id: "anonymous",
-        nickname: "익명"
-      };
-    }
+    const scroll: any = this.$el.querySelector(".chatScroll");
+    scroll.scrollTop = scroll.scrollHeight;
   },
   methods: {
     // Chat send
     submit (): void {
       if (this.chatInput && this.stompClient) {
         const chatMessage = {
-            sender: this.userId,
+            sender: this.user.id,
             content: this.chatInput,
             type: 'CHAT',
         };
-        this.stompClient.send(`/app/chat.sendMessage/${this.$route.params.id}`, {}, JSON.stringify(chatMessage));
+        this.stompClient.send(`/app/chat.sendMessage/${this.itemId}`, {}, JSON.stringify(chatMessage));
         this.chatInput = '';
       }
     },
   },
 });
 </script>
-
-<style scoped>
-  .overflow-only-y {
-    overflow-y: auto;
-    overflow-x: hidden;
-  }
-</style>
