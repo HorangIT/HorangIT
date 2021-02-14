@@ -13,7 +13,9 @@ import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceClientConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.listener.ChannelTopic;
+import org.springframework.data.redis.listener.PatternTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
+import org.springframework.data.redis.listener.Topic;
 
 import com.a101.ssafy.project.eventlistener.KeyExpiredListener;
 
@@ -36,5 +38,17 @@ public class RedisConfig {
 		//redisStandaloneConfiguration.setPassword({password});
 		
 		return new LettuceConnectionFactory(redisStandaloneConfiguration, lettuceClientConfiguration);
+	}
+	
+	@Bean
+	public RedisMessageListenerContainer getListenerContainer() {
+		//create connection container
+		RedisMessageListenerContainer container = new RedisMessageListenerContainer();
+		
+		//put in redis connection
+		container.setConnectionFactory(lettuceConnectionFactory());
+		Topic topic = new PatternTopic("__keyevent@0__:expired");
+		container.addMessageListener(new KeyExpiredListener(), topic);
+		return container;
 	}
 }
