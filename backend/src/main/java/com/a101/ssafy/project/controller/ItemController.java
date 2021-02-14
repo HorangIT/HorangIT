@@ -108,9 +108,7 @@ public class ItemController {
 	// pagination + filter!	
 	@GetMapping("/page/{pageNo}")
 	public Object searchItems(@PathVariable int pageNo, SearchDto searchDto) {
-		
-//		System.out.println(searchDto.toString());
-			
+					
 		BasicResponse result = new BasicResponse();
 		List<JSONObject> returningItems = new ArrayList<JSONObject>();
 		Pageable paging = PageRequest.of(pageNo-1, 12);
@@ -119,14 +117,17 @@ public class ItemController {
 		boolean empty = false;
 		
 		// DTO에 아무것도 안들어왔을 때 = 그냥 전체 페이지 요청
-		if (searchDto.getCategory() == null && searchDto.getGrade() == null && searchDto.getSi() == null && searchDto.getGu() == null) {
+		if (searchDto.getCategory() == null && searchDto.getGrade() == null 
+				&& searchDto.getSi() == null && searchDto.getGu() == null
+				&& searchDto.getName() == null) {
 			System.out.println("EMPTYYYYYYYYYY");
-			
 			pages = itemRepository.findAll(paging);
 			empty = true;
-		} else {
+		} 
+		// 특정 이름/분야별로 찾을 때
+		else {
 			Specification<Item> specify = Specification
-					.where(SearchSpecs.searchWithFilter(searchDto.getSi(), searchDto.getGu(), searchDto.getGrade(), searchDto.getCategory()));
+					.where(SearchSpecs.searchWithFilter(searchDto.getSi(), searchDto.getGu(), searchDto.getGrade(), searchDto.getCategory(), searchDto.getName()));
 			pages = itemRepository.findAll(specify, paging);
 			
 		}		

@@ -12,7 +12,7 @@ import com.a101.ssafy.project.model.item.Item;
 @Repository
 public interface ItemRepository extends JpaRepository<Item, Long>{
 	
-	Page<Item> findByCategory(String category, Pageable pageable);
 	Page<Item>findAll(Specification<Item> spec, Pageable pageable);
 	List<Item>findAll(Specification<Item> spec);
+	Page<Item> findByName(String name, Pageable pageable);
 }
