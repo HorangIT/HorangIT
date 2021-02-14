@@ -59,7 +59,6 @@ public class ChatController {
 		chatMessage.setType(MessageType.REPLY);
 		
 		Date date = java.util.Calendar.getInstance().getTime();
-		System.out.println(format.format(date));
         
 		redisUtil.setLdata(ITEM_CHAT_LOG_USER_ID+itemId, chatMessage.getSender());
 		redisUtil.setLdata(ITEM_CHAT_LOG_USER_CONTENT+itemId, chatMessage.getContent()+"");

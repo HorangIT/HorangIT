@@ -24,10 +24,10 @@
 			var chatMessage = {
 					sender: "english",
 					content: "12345",
-					type: 'CHAT'
+					type: 'FLEX'
 			};
 			
-			stompClient.send("/app/chat.sendMessage2", {}, JSON.stringify(chatMessage));
+			stompClient.send("/app/auction.sendMessage/21", {}, JSON.stringify(chatMessage));
 			
 		}
 		event.preventDefault();
@@ -48,7 +48,7 @@
 			
 			function onConnected(){
 				// SubScribe to the Public Topic
-				stompClient.subscribe('/topic/public/3', onMessageReceived);
+				stompClient.subscribe('/topic/auction/21', onMessageReceived);
 				console.log("ø¨∞·¿Ã µ∆¥Ÿ......");
 			}
 
