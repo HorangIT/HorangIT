@@ -145,7 +145,7 @@ export default Vue.extend({
     nowPrice: 0,
     nextPrice: 0,
     happyPrice: 0,
-    biddingLog: [],
+    biddingLog: new Array<String>(),
     isOver: false,
     dialog: false,
     stompClient: Stomp.over(new SockJS("http://localhost:8000/api/ws")),
@@ -168,9 +168,6 @@ export default Vue.extend({
       if (this.nowPrice === this.happyPrice) {
         this.isOver = true;
       }
-    },
-    item() {
-      console.log(this.item)
     }
   },
   methods: {
@@ -190,9 +187,12 @@ export default Vue.extend({
         () => {
           // server 옥션 메세지 전송 endpoint 구독하기
           this.stompClient.subscribe(`/topic/auction/${this.itemId}`, res => {
+            // nowPrice, nextPrice 업데이트
             const info = JSON.parse(res.body).content
             this.nowPrice = info.nowPrice;
             this.nextPrice = info.nextPrice;
+            // log 업데이트
+            this.biddingLog.unshift(info.log);
           });
         },
         // socket 연결 실패
@@ -228,12 +228,9 @@ export default Vue.extend({
     },
     log() {
       // 응찰 내역 불러오기
-      auctionApi
-        .log(Number(this.$route.params.id))
-        .then((res: AxiosResponse) => {
+      auctionApi.log(Number(this.$route.params.id)).then((res: AxiosResponse) => {
           this.biddingLog = res.data.object.log.reverse();
-          // console.log('this.biddingLog')
-          // console.log(this.biddingLog)
+          console.log(this.biddingLog);
         })
         .catch(() => {
           this.biddingLog = [];
