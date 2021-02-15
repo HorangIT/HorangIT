@@ -136,6 +136,7 @@
                         readonly
                         v-bind="attrs"
                         v-on="on"
+                        disabled
                       >
                       </v-text-field>
                     </template>
@@ -426,6 +427,7 @@ export default Vue.extend({
         if (data.status) {
           alert("업로드가 완료되었습니다.");
           this.$emit("close");
+          window.location.reload();
           // 업로드 후 자동 라우팅 -> 아이템 번호 필요
           this.$router.push({ name: 'Detail', params: { id: '12' }})
         } else {
