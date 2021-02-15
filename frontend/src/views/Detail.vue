@@ -155,6 +155,14 @@ export default Vue.extend({
       return numberWithCommas(Number(val));
     },
   },
+  computed: {
+    user (): any {
+      if (this.$store.state.userModule.user !== null) {
+        return this.$store.state.userModule.user.object.user;
+      }
+      return null;
+    }
+  },
   watch: {
     nowPrice() {
       if (this.nowPrice === this.happyPrice) {
@@ -176,14 +184,15 @@ export default Vue.extend({
       });
     },
     connect () {
+      // socket 연결
       this.stompClient.connect(
         {},
-        // socket 연결 성공
         () => {
-          console.log('응찰 소켓 연결 성공');
           // server 옥션 메세지 전송 endpoint 구독하기
-          this.stompClient.subscribe("#", res => {
-            console.log('응찰 구독 성공!', res);
+          this.stompClient.subscribe(`/topic/auction/${this.itemId}`, res => {
+            const info = JSON.parse(res.body).content
+            this.nowPrice = info.nowPrice;
+            this.nextPrice = info.nextPrice;
           });
         },
         // socket 연결 실패
@@ -193,39 +202,25 @@ export default Vue.extend({
     },
     bid() {
       if (localStorage.getItem("user") && this.stompClient) {
-        const user = JSON.parse(localStorage.getItem("user") || "{}");
         const bidInfo = {
-          userId: String(user.object.user.id),
-          itemId: String(this.itemId),
-          nowPrice: String(this.nowPrice),
+          sender: this.user.id,
+          content: this.itemId,
+          type: "AUCTION"
         };
         // socket으로 전송
-        this.stompClient.send("#",{}, JSON.stringify(bidInfo));
-        // 기존 api로 전송
-        auctionApi.bidding(bidInfo).then((res: AxiosResponse) => {
-          console.log(res.data.object);
-          this.nowPrice = res.data.object.nowPrice;
-          this.nextPrice = res.data.object.nextPrice;
-          this.log();
-        });
+        this.stompClient.send(`/app/auction.sendMessage/${this.itemId}`, {}, JSON.stringify(bidInfo));
       } else {
         alert("로그인 해주세요!");
       }
     },
     flex() {
-      if (localStorage.getItem("user")) {
-        const user = JSON.parse(localStorage.getItem("user") || "{}");
+      if (localStorage.getItem("user") && this.stompClient) {
         const flexInfo = {
-          userId: String(user.object.user.id),
-          itemId: String(this.itemId),
-          nowPrice: String(this.nowPrice),
+          sender: this.user.id,
+          content: this.itemId,
+          type: "FLEX"
         };
-        auctionApi.flex(flexInfo).then((res: AxiosResponse) => {
-          console.log(res.data);
-          this.nowPrice = this.happyPrice;
-          this.isOver = true;
-          this.log();
-        });
+        this.stompClient.send(`/app/auction.sendMessage/${this.itemId}`, {}, JSON.stringify(flexInfo));
       } else {
         alert("로그인 해주세요!");
       }

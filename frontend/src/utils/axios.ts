@@ -91,8 +91,9 @@ export const itemApi = {
 };
 
 
+// 잘가라 코드얌
 export const auctionApi = {
-  bidding(data: any): any {
+  bidding(itemId: number, data: any): any {
     return request.post("/auction", data);
   },
   flex(data: any): any {

@@ -234,7 +234,9 @@ export default Vue.extend({
     search () {
       this.$store.dispatch("auctionModule/search", this.searchData);
       this.searchData = "";
-      this.$router.push({ name: "Auction" });
+      if (this.$router.currentRoute.name !== "Auction") {
+        this.$router.push({ name: "Auction" });
+      };
     }
   }
 });
