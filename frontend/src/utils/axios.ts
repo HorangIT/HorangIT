@@ -106,6 +106,6 @@ export const auctionApi = {
 
 export const myAuctionapi = {
   pay (data: any): any {
-    return request.post('#', data);
+    return request.post('/payment', data);
   }
 };

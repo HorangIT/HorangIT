@@ -27,8 +27,11 @@
         ></v-divider>
       </template>
     </v-list-item-group>
-    <PayButton @url="showURL"/>
-    <a href="this.payURL">결제링크</a>
+    <PayButton @showQR="showQR"/>
+    <v-modal>
+      
+    </v-modal>
+    <a :href="this.payURL">결제링크</a>
   </v-list>
 </template>
 
@@ -57,12 +60,13 @@ export default Vue.extend({
         message: '축하합니다. 낙찰에 성공했습니다.'
       }
     ],
-    payURL: ""
+    payQR: "",
+    is_pay: false
   }),
   methods: {
-    showURL(data: string) {
-      console.log("데이터 받음!")
-      this.payURL = data;
+    showQR(data: string) {
+      this.payQR = data;
+      this.is_pay = true;
     }
   }
 });
