@@ -136,6 +136,7 @@
                         readonly
                         v-bind="attrs"
                         v-on="on"
+                        disabled
                       >
                       </v-text-field>
                     </template>
@@ -423,6 +424,7 @@ export default Vue.extend({
         if (data.status) {
           alert("업로드가 완료되었습니다.");
           this.$emit("close");
+          window.location.reload();
         } else {
           alert("업로드에 실패하였습니다.");
         }
