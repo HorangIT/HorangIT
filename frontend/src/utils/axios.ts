@@ -110,4 +110,7 @@ export const myAuctionApi = {
   seller(userId: any): any {
     return request.get(`/auction/seller/${userId}`);
   },
+  pay (data: any): any {
+    return request.post('/payment', data);
+  },
 };

@@ -53,14 +53,27 @@
         :key="'buyDiv' + index"
       ></v-divider>
     </template>
+
+    <PayButton @showQR="showQR"/>
+    <v-modal>
+      
+    </v-modal>
+    <a :href="this.payURL">결제링크</a>
+
   </v-list>
   </v-container>
 </template>
 
 <script lang="ts">
+import Vue from "vue";
 import { myAuctionApi } from "../utils/axios";
+import PayButton from "../components/myauction/PayButton.vue";
 
-export default {
+export default Vue.extend({
+  name:"Myauction",
+  components: {
+    PayButton,
+  },
   data: () => ({
     sellItemPage: 1,
     buyItemPage: 1,
@@ -107,6 +120,8 @@ export default {
         status: 3
       },
     ],
+    payQR: "",
+    is_pay: false,
   }),
   async created() {
     const uid = (this as any).$store.state.userModule.user.object.user.id;
@@ -125,14 +140,10 @@ export default {
     }
   },
   methods: {
-    range: function (start: number, end: number){
-      let list = [];
-      for (let i = start; i <= end ; i++) list.push(i);
-      return list;
-    },
+    showQR(data: string) {
+      (this as any).payQR = data;
+      (this as any).is_pay = true;
+    }
   },
-  watch: {
-    buyItemPage() {}
-  }
-}
+})
 </script>
