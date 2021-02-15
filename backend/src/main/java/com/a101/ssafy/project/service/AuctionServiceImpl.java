@@ -121,7 +121,7 @@ public class AuctionServiceImpl implements AuctionService{
 		
 		Date date = java.util.Calendar.getInstance().getTime();
 		
-		redisUtil.setLdata(AUCTION+itemId, nickname+";"+nowPrice+";"+format.format(date)); //닉네임 제약에 대해서 이야기를 좀 해봐야겠다.
+		redisUtil.setLdata(AUCTION+itemId, nickname+";"+nowPrice+";"+format.format(date)+";"+userId); //닉네임 제약에 대해서 이야기를 좀 해봐야겠다.
 //		return redisUtil.getLastLdata(AUCTION+itemId).get(0);
 	}
 

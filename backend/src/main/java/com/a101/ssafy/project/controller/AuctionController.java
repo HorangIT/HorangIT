@@ -93,7 +93,8 @@ public class AuctionController {
 	}
 	
 	@GetMapping("/alert/{userId}")
-	public Object hhh() {
+	public Object hhh(@PathVariable("userId")String userId) {
+		
 		return null;
 	}
 }
