@@ -11,7 +11,7 @@ import com.a101.ssafy.project.model.item.Item;
 
 public class SearchSpecs {
 		
-	public static Specification<Item> searchWithFilter(Object si, Object gu, Object grades, Object categories, Object name, Object status) {
+	public static Specification<Item> searchWithFilter(Object si, Object gu, Object grades, Object categories, Object name, boolean status) {
 		return new Specification<Item>() {
 
 			@Override
@@ -42,7 +42,7 @@ public class SearchSpecs {
 
 				}
 				// 경매 마감 여부
-				if (status != null) {
+				if (status != false) {
 					statusPred = criteriaBuilder.equal(root.get("status"), 1);
 				}
 				
@@ -77,7 +77,7 @@ public class SearchSpecs {
 				if (namePred != null) allPredicates = namePred;
 				
 				if (siguPred != null) {
-					if (allPredicates == null) allPredicates = categoryPred;
+					if (allPredicates == null) allPredicates = siguPred;
 					else allPredicates = criteriaBuilder.and(allPredicates, siguPred);
 				}
 				

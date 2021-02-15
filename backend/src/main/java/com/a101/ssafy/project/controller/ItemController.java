@@ -108,7 +108,9 @@ public class ItemController {
 	// pagination + filter!	
 	@GetMapping("/page/{pageNo}")
 	public Object searchItems(@PathVariable int pageNo, SearchDto searchDto) {
-					
+		
+		System.out.println("\n***************\nSEARCHDTO\n"+searchDto.toString()+"\n***************");
+		
 		BasicResponse result = new BasicResponse();
 		List<JSONObject> returningItems = new ArrayList<JSONObject>();
 		Pageable paging = PageRequest.of(pageNo-1, 12);
