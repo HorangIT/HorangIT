@@ -19,16 +19,16 @@ import com.a101.ssafy.project.service.ReviewService;
 @RequestMapping("/review")
 public class ReviewController {
 	
-	@Autowired
-	ReviewService reviewService;
-	
-	
-	@PostMapping
-	public Object createReview(@RequestBody ReviewDto reviewRequest) {
-				
-		System.out.println("\n*******\nreviewRequest: "+reviewRequest.toString());
-		
-		return reviewService.createReview(reviewRequest);
-	}
-	
+//	@Autowired
+//	ReviewService reviewService;
+//	
+//	
+//	@PostMapping
+//	public Object createReview(@RequestBody ReviewDto reviewRequest) {
+//				
+//		System.out.println("\n*******\nreviewRequest: "+reviewRequest.toString());
+//		
+//		return reviewService.createReview(reviewRequest);
+//	}
+//	
 }
