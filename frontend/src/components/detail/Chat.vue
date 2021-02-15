@@ -58,21 +58,10 @@ moment.locale('ko');
 
 export default Vue.extend({
   created(): void {
+    // 채팅로그 확인
+    this.getChatLog();
     // 유저 로그인 확인
-    if (this.user !== null) {
-      // 채팅로그 확인
-      itemApi.getChatLog(this.itemId)
-        .then((response: any) => {
-          this.chatLog = response.data.object.log
-          this.chatLog.forEach((chat: any) => {
-            chat.chatCreatedAt = moment(chat.chatCreatedAt).calendar()
-            if (Number(chat.userId) === this.user.id) {
-              chat.userNickname += ' (본인)'
-            }
-          })
-        })
-        .catch((error: any) => console.log(error))
-  
+    if (this.user !== null) {  
       // WebSocket connect
       this.stompClient.connect({},
         // onConnect callback
@@ -82,7 +71,16 @@ export default Vue.extend({
           this.stompClient.subscribe(`/topic/chat/${this.itemId}`, (message: any) => {
             console.log('im subscribe response callback');
             // chatLog의 낱개로 된 똑같은 dataset의 응답이 필요
-            console.log(message.body);
+            const subscribedMessageBody = JSON.parse(message.body)
+            const subscribedMessage = {
+              ...subscribedMessageBody.content,
+              userId: subscribedMessageBody.sender,
+              chatCreatedAt: moment(subscribedMessageBody.content.chatCreatedAt).calendar(),
+              userNickname: Number(subscribedMessageBody.sender) === this.user.id ? subscribedMessageBody.content.userNickname + ' (본인)' : subscribedMessageBody.content.userNickname,
+            }
+            console.log(Number(subscribedMessageBody.sender), this.user.id)
+            this.chatLog.push(subscribedMessage)
+            // console.log(JSON.parse(message.body).content);
           });
           this.stompClient.send("/app/chat.addUser", {}, JSON.stringify({sender: this.user.nickname, type: 'JOIN'}));
         },
@@ -113,7 +111,25 @@ export default Vue.extend({
     const scroll: any = this.$el.querySelector(".chatScroll");
     scroll.scrollTop = scroll.scrollHeight;
   },
+  watch: {
+    user (): any {
+      this.getChatLog();
+    }    
+  },
   methods: {
+    // 채팅로그 확인
+    getChatLog (): void {
+      itemApi.getChatLog(this.itemId)
+        .then((response: any) => {
+          this.chatLog = response.data.object.log
+          this.chatLog.forEach((chat: any) => {
+            chat.chatCreatedAt = moment(chat.chatCreatedAt).calendar()
+            if (this.user !== null && Number(chat.userId) === this.user.id) {
+              chat.userNickname += ' (본인)'
+            }
+          })
+        })
+    },
     // Chat send
     submit (): void {
       if (this.chatInput && this.stompClient) {

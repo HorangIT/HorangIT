@@ -1,6 +1,7 @@
 package com.a101.ssafy.project.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,4 +16,5 @@ public interface ItemRepository extends JpaRepository<Item, Long>{
 	Page<Item>findAll(Specification<Item> spec, Pageable pageable);
 	List<Item>findAll(Specification<Item> spec);
 	Page<Item> findByName(String name, Pageable pageable);
+	Optional<Item> findById(Long id);
 }

@@ -41,13 +41,16 @@ public class Receipt {
 	private Long sellerId;
 	
 	@Column
-	private int finalPrice;
+	private long finalPrice;
 	
 	@Column
-	private int deliveryType;
+	private int status;
 	
-	@OneToOne(mappedBy = "receipt", cascade = CascadeType.ALL)
-	@PrimaryKeyJoinColumn	//review를 pk로 묶기 위한 annotation
-	private Review review;
+	@Column
+	private String itemTitle;
+	
+//	@OneToOne(mappedBy = "receipt", cascade = CascadeType.ALL)
+//	@PrimaryKeyJoinColumn	//review를 pk로 묶기 위한 annotation
+//	private Review review;
 		
 }

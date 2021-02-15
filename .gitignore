@@ -151,4 +151,8 @@ $RECYCLE.BIN/
 ### application.yml file
 /backend/src/main/resources/application.yml
 
+
+### payment key
+/backend/src/main/resources/paymentKey.txt
+
 # End of https://www.toptal.com/developers/gitignore/api/windows,macos,eclipse,vue,java-web,vuejs

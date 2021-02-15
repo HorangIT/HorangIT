@@ -1,4 +1,4 @@
-package com.a101.ssafy.project.model.receipt;
+package com.a101.ssafy.project.model.payment;
 
 import javax.validation.Valid;
 
@@ -11,23 +11,16 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
-public class ReceiptDto {
+public class PaymentDto {
 	
 	@ApiModelProperty(required = true)
-	Long itemId;
+	String name;
+	
+	@ApiModelProperty(required = true)
+	Long price;
 	
 	@ApiModelProperty(required = true)
 	Long buyerId;
 	
-	@ApiModelProperty(required = true)
-	Long sellerId;
 	
-	@ApiModelProperty(required = true)
-	long finalPrice;
-	
-	@ApiModelProperty(required = true)
-	int status;
-	
-	@ApiModelProperty(required = true)
-	String itemTitle;
 }

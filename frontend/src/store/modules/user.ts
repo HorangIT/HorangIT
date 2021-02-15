@@ -53,6 +53,7 @@ export const userModule: Record<string, any> = {
     },
     LOGOUT (state: any) {
       state.status.loggedIn = false;
+      state.user = null;
     },
     SIGNUP (state: any) {
       console.log('signup mutations')

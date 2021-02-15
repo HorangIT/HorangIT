@@ -110,11 +110,12 @@ public class ItemServiceImpl implements ItemService{
 		long endTimeToEpochTime = item.getEndDate().getTime(); 
 		
 		long remainingTime = (endTimeToEpochTime - startTimeToEpochTime)/1000;
+		System.out.println(remainingTime+"남았다고 가정");
 		redisUtil.setData(ITEM_NAME+item.getId(), item.getStartPrice()+""); //expired trigger 오면 삭제해주기!
 //		startPrice <- 사는거 (처음에는 삼 ㅋㅋ)
 		//expired trigger 오면 삭제해주기!
-		redisUtil.setData(ITEM_NAME+item.getId()+ITEM_HAPPY_PRICE, item.getHappyPrice()+"");
-		redisUtil.setDataExpire(ITEM_NAME+item.getId()+ITEM_EXPIRED, endTimeToEpochTime+"", remainingTime); 
+		redisUtil.setData(ITEM_HAPPY_PRICE+item.getId(), item.getHappyPrice()+"");
+		redisUtil.setDataExpire(ITEM_EXPIRED+item.getId(), endTimeToEpochTime+"", remainingTime); 
 		
 		return result;
 	}
@@ -229,6 +230,8 @@ public class ItemServiceImpl implements ItemService{
 			jobj.put("category",items.get(i).getCategory());
 			jobj.put("grade",items.get(i).getGrade());
 			jobj.put("startDate",items.get(i).getStartDate());
+			jobj.put("endDate",items.get(i).getEndDate());
+			jobj.put("status",items.get(i).getStatus());
 			jobj.put("image", items.get(i).image.iterator().next().getFilePath());
 			
 			returningItems.add(jobj);
@@ -296,6 +299,17 @@ public class ItemServiceImpl implements ItemService{
 		
 		result.object = jobj;
 		return result;
+	}
+	
+	@Override
+	public void setStatusById(long itemId, int status) {
+		Optional<Item> opt = itemRepository.findById(itemId);
+		if(opt.isPresent()) {
+			Item item = opt.get();
+			
+			item.setStatus(status);
+			itemRepository.save(item);
+		}
 	}
 
 }

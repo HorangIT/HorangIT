@@ -82,7 +82,6 @@ public class ChatController {
 		System.out.println(chatMessage.getType()+"???");
 		headerAccessor.getSessionAttributes().put("username", chatMessage.getSender());
 		
-		System.out.println("기얏호웅");
 		return chatMessage;
 	}
 	

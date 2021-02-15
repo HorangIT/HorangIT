@@ -23,4 +23,6 @@ public interface ItemService {
 	List<String> getSiGunGu(String districtName);
 	
 	BasicResponse getChatLog(long itemId);
+	
+	void setStatusById(long itemId, int status);
 }
