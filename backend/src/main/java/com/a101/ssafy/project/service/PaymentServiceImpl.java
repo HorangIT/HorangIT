@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -36,8 +37,8 @@ public class PaymentServiceImpl implements PaymentService {
 	
 	KakaopayResponse kakaopayResponse;
 	
-	
-	
+	@Value("${kakao.secret}") String key;
+
 	
 	@Override
 	public Object createPaymentRequest(PaymentDto paymentDto) {
@@ -56,7 +57,7 @@ public class PaymentServiceImpl implements PaymentService {
 		HttpHeaders headers = new HttpHeaders();
 		
 		// 권한: 발급 받은 admin 키 포함시키기
-		headers.add("Authorization", "KakaoAK " + "ADMIN");
+		headers.add("Authorization", "KakaoAK " + key);
         headers.add("Accept", MediaType.APPLICATION_JSON_VALUE);
         headers.add("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE + ";charset=UTF-8");
         
