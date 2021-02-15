@@ -91,14 +91,13 @@ export const itemApi = {
 };
 
 
-// 잘가라 코드얌
 export const auctionApi = {
-  bidding(itemId: number, data: any): any {
-    return request.post("/auction", data);
-  },
-  flex(data: any): any {
-    return request.post("/auction/flex", data);
-  },
+  // bidding(itemId: number, data: any): any {
+  //   return request.post("/auction", data);
+  // },
+  // flex(data: any): any {
+  //   return request.post("/auction/flex", data);
+  // },
   log (itemId: number): any {
     return request.get(`/auction/log/${itemId}`);
   }
