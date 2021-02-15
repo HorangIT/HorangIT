@@ -360,6 +360,9 @@ export default Vue.extend({
     this.startDate = this.todayDate = today.format("YYYY-MM-DD");
     this.startTime = this.todayTime = today.format("HH:mm");
     this.startDateTime = this.startDate + " " + this.startTime;
+    this.endDate = today.add(1, 'd').endOf('day').format("YYYY-MM-DD")
+    this.endTime = today.format("HH:mm")
+    this.endDateTime = this.endDate + " " + this.endTime;
 
     this.uid = this.$store.state.userModule.user.object.user.id;
     
@@ -423,6 +426,8 @@ export default Vue.extend({
         if (data.status) {
           alert("업로드가 완료되었습니다.");
           this.$emit("close");
+          // 업로드 후 자동 라우팅 -> 아이템 번호 필요
+          this.$router.push({ name: 'Detail', params: { id: '12' }})
         } else {
           alert("업로드에 실패하였습니다.");
         }
