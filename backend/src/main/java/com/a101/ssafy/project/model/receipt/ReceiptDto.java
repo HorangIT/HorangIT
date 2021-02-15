@@ -23,8 +23,11 @@ public class ReceiptDto {
 	Long sellerId;
 	
 	@ApiModelProperty(required = true)
-	int finalPrice;
+	long finalPrice;
 	
 	@ApiModelProperty(required = true)
-	int deliveryType;
+	int status;
+	
+	@ApiModelProperty(required = true)
+	String itemTitle;
 }
