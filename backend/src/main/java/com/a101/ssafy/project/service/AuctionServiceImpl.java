@@ -87,7 +87,7 @@ public class AuctionServiceImpl implements AuctionService{
 		
 		redisUtil.setData(ITEM_NAME+itemId, newPrice+""); //레디스 값 갱신 
 		
-		jobj.put("log", getAuctionLog(itemId)); //log까지 넣어줌
+		jobj.put("log", getLastAuctionLog(itemId)); //log까지 넣어줌
 		jobj.put("nowPrice", newPrice);
 		jobj.put("nextPrice", nextPrice);
 		
@@ -105,6 +105,11 @@ public class AuctionServiceImpl implements AuctionService{
 	public List<String> getAuctionLog(String itemId) {
 		return redisUtil.getAllLdata(AUCTION+itemId);
 	}
+	
+	@Override
+	public String getLastAuctionLog(String itemId) {
+		return redisUtil.getLastLdata(AUCTION+itemId).get(0);		
+	}
 
 	@Override
 	public String getNicknameById(String userId) {
@@ -118,6 +123,7 @@ public class AuctionServiceImpl implements AuctionService{
 		Date date = java.util.Calendar.getInstance().getTime();
 		
 		redisUtil.setLdata(AUCTION+itemId, nickname+";"+nowPrice+";"+format.format(date)); //닉네임 제약에 대해서 이야기를 좀 해봐야겠다.
+//		return redisUtil.getLastLdata(AUCTION+itemId).get(0);
 	}
 
 	@Override
