@@ -15,10 +15,10 @@ import com.a101.ssafy.project.repository.UserRepository;
 @Service
 public class AuctionServiceImpl implements AuctionService{
 	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm"); //날짜 맞출 포맷
-	final String ITEM_NAME = "item";
-	final String ITEM_EXPIRED = "Expired";
-	final String ITEM_START_PRICE = "Start";
-	final String ITEM_HAPPY_PRICE = "Happy";
+	final String ITEM_NAME = "item"; //현재 가격 관리해주는애
+	final String ITEM_EXPIRED = "Expired"; //만료
+	final String ITEM_START_PRICE = "Start"; //시작가격
+	final String ITEM_HAPPY_PRICE = "Happy"; //flex가격
 
 	final String AUCTION = "auction";
 	@Autowired
@@ -84,10 +84,14 @@ public class AuctionServiceImpl implements AuctionService{
 		}
 //		String now = redisUtil.getData(ITEM_NAME+itemId);
 		
+		if(newPrice!=happyPrice) {
+			redisUtil.setData(ITEM_NAME+itemId, newPrice+""); //레디스 값 갱신 
+		}
 		
-		redisUtil.setData(ITEM_NAME+itemId, newPrice+""); //레디스 값 갱신 
-		
-		jobj.put("log", getLastAuctionLog(itemId)); //log까지 넣어줌
+		String str = getLastAuctionLog(itemId);
+		if(str!=null) {
+			jobj.put("log", getLastAuctionLog(itemId)); //log까지 넣어줌			
+		}
 		jobj.put("nowPrice", newPrice);
 		jobj.put("nextPrice", nextPrice);
 		
@@ -95,7 +99,6 @@ public class AuctionServiceImpl implements AuctionService{
 	}
 
 	public void done() {
-		System.out.println("결제하고");
 		System.out.println("채팅창 서로 만들어주고(없으면안만듬)");
 		System.out.println("영수증 발행하고");
 		System.out.println("레디스 값 지우고(happy price/start price/ expired되지 않았다면 expired 지우고");	
@@ -108,7 +111,12 @@ public class AuctionServiceImpl implements AuctionService{
 	
 	@Override
 	public String getLastAuctionLog(String itemId) {
-		return redisUtil.getLastLdata(AUCTION+itemId).get(0);		
+		List<String> str = redisUtil.getLastLdata(AUCTION+itemId);
+		if(str==null) {
+			return null;
+		}else {
+			return str.get(0);		
+		}
 	}
 
 	@Override
@@ -122,7 +130,7 @@ public class AuctionServiceImpl implements AuctionService{
 		
 		Date date = java.util.Calendar.getInstance().getTime();
 		
-		redisUtil.setLdata(AUCTION+itemId, nickname+";"+nowPrice+";"+format.format(date)); //닉네임 제약에 대해서 이야기를 좀 해봐야겠다.
+		redisUtil.setLdata(AUCTION+itemId, nickname+";"+nowPrice+";"+format.format(date)+";"+userId); //닉네임 제약에 대해서 이야기를 좀 해봐야겠다.
 //		return redisUtil.getLastLdata(AUCTION+itemId).get(0);
 	}
 
@@ -137,10 +145,11 @@ public class AuctionServiceImpl implements AuctionService{
 	@Override
 	public JSONObject flex(String userId, String itemId) {
 		redisUtil.setData(ITEM_NAME+itemId, redisUtil.getData(ITEM_NAME+itemId+ITEM_HAPPY_PRICE));
+		addAuctionLog(userId, itemId, redisUtil.getData(ITEM_NAME+itemId));
 		JSONObject jobj = new JSONObject();
+		System.out.println(redisUtil.getData(ITEM_NAME+itemId));
 		jobj = getPriceAfterAuction(redisUtil.getData(ITEM_NAME+itemId), itemId);
 		
-		addAuctionLog(userId, itemId, redisUtil.getData(ITEM_NAME+itemId));
 		jobj.put("test", "응찰 가격을 넘어섰네요, 이제 사야해요 (FLEX!)");	
 		
 		//done();

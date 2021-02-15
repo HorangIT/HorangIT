@@ -27,6 +27,9 @@ public class RedisConfig {
 	@Value("${redis.port}")
 	private int port;
 	
+	@Autowired
+	KeyExpiredListener keyExpiredListener;
+	
 	@Bean
 	public LettuceConnectionFactory lettuceConnectionFactory() {
 		LettuceClientConfiguration lettuceClientConfiguration = LettuceClientConfiguration.builder()
@@ -49,8 +52,8 @@ public class RedisConfig {
 		container.setConnectionFactory(lettuceConnectionFactory());
 		Topic topicExpired = new PatternTopic("__keyevent@0__:expired");
 		Topic topicDel = new PatternTopic("__keyevent@0__:del");
-		container.addMessageListener(new KeyExpiredListener(), topicExpired);
-		container.addMessageListener(new KeyExpiredListener(), topicDel);
+		container.addMessageListener(keyExpiredListener, topicExpired);
+		container.addMessageListener(keyExpiredListener, topicDel);
 		return container;
 	}
 }
