@@ -21,34 +21,49 @@
             </v-list-item-action>
           </template>
         </v-list-item>
-
         <v-divider
           v-if="index < items.length - 1"
           :key="index"
         ></v-divider>
       </template>
     </v-list-item-group>
+    <PayButton @url="showURL"/>
+    <a href="this.payURL">결제링크</a>
   </v-list>
 </template>
 
 <script lang="ts">
-  export default {
-    data: () => ({
-      selected: [0, 1, 2],
-      items: [
-        {
-          itemTitle: '전자기기1',
-          message: '등록하신 상품이 낙찰되었습니다.'
-        },
-        {
-          itemTitle: '의류1',
-          message: '축하합니다. 낙찰에 성공했습니다.'
-        },
-        {
-          itemTitle: '전자기기2',
-          message: '축하합니다. 낙찰에 성공했습니다.'
-        }
-      ],
-    }),
+import Vue from "vue";
+import PayButton from "../components/myauction/PayButton.vue";
+
+export default Vue.extend({
+  name : "Myauction",
+  components: {
+    PayButton,
+  },
+  data: () => ({
+    selected: [0, 1, 2],
+    items: [
+      {
+        itemTitle: '전자기기1',
+        message: '등록하신 상품이 낙찰되었습니다.'
+      },
+      {
+        itemTitle: '의류1',
+        message: '축하합니다. 낙찰에 성공했습니다.'
+      },
+      {
+        itemTitle: '전자기기2',
+        message: '축하합니다. 낙찰에 성공했습니다.'
+      }
+    ],
+    payURL: ""
+  }),
+  methods: {
+    showURL(data: string) {
+      console.log("데이터 받음!")
+      this.payURL = data;
+    }
   }
+});
 </script>
