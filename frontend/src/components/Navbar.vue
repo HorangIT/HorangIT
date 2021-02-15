@@ -13,7 +13,7 @@
             <v-menu transition="scroll-y-transition">
               <template v-slot:activator="{ on }">
                 <v-btn v-on="on" icon class="mx-1">
-                  <v-badge content="2" value="2" color="orange" overlap>
+                  <v-badge content="5" value="5" color="orange" overlap>
                     <v-icon>mdi-bell</v-icon>
                   </v-badge>
                 </v-btn>
@@ -203,7 +203,9 @@ export default Vue.extend({
     pleaseLogin: false,
     dialogSignup: false,
     message: "이 필요한 서비스입니다.🐯",
-    searchData: ""
+    searchData: "",
+    
+    alarmCount: 5,
   }),
   computed: {
     login (): string {

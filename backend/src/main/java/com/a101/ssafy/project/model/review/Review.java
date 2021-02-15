@@ -43,9 +43,9 @@ public class Review {
 	@Column
 	private Date createdAt;
 
-	@OneToOne
-	@MapsId		//mapsId를 통해 receipt의 id가 review의 id로 자동 매핑된다 (이름도 알아서 receipt_id로 생성됨)
-	@JoinColumn
-	private Receipt receipt;
+//	@OneToOne
+//	@MapsId		//mapsId를 통해 receipt의 id가 review의 id로 자동 매핑된다 (이름도 알아서 receipt_id로 생성됨)
+//	@JoinColumn
+//	private Receipt receipt;
 
 }
