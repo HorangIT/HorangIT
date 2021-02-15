@@ -92,8 +92,13 @@ public class AuctionController {
 		return responseEntity;
 	}
 	
-	@GetMapping("/alert/{userId}")
-	public Object hhh(@PathVariable("userId")String userId) {
+	@GetMapping("/buyer/{userId}")
+	public Object getReceiptBuyer(@PathVariable("userId")String userId) {
+		
+		return null;
+	}
+	@GetMapping("/seller/{userId}")
+	public Object getReceiptSeller(@PathVariable("userId")String userId) {
 		
 		return null;
 	}
