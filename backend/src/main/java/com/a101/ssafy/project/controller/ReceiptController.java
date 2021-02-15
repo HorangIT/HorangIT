@@ -16,15 +16,15 @@ import com.a101.ssafy.project.service.ReceiptService;
 @RequestMapping("/receipt")
 public class ReceiptController {
 	
-	@Autowired
-	ReceiptService receiptService;
-	
-	@PostMapping
-	public Object createReceipt(@RequestBody ReceiptDto receiptRequest) {
-		
-		System.out.println("receiptRequest: "+receiptRequest.toString());
-				
-		return receiptService.createReceipt();
-	}
+//	@Autowired
+//	ReceiptService receiptService;
+//	
+//	@PostMapping
+//	public Object createReceipt(@RequestBody ReceiptDto receiptRequest) {
+//		
+//		System.out.println("receiptRequest: "+receiptRequest.toString());
+//				
+//		return receiptService.createReceipt();
+//	}
 	
 }

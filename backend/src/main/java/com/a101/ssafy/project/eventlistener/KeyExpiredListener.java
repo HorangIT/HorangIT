@@ -29,6 +29,7 @@ public class KeyExpiredListener implements MessageListener{
 	}
 	
 	final String ITEM_HAPPY_PRICE = "Happy";
+	final String ITEM_EXPIRED = "Expired";
 
 	//message: redis 에서 반환 한 알림
 	//body: timeout 키의 이름
@@ -40,16 +41,23 @@ public class KeyExpiredListener implements MessageListener{
 		String msg = new String(message.getBody());
 		String channel = new String(message.getChannel());
 		
+		String itemId = "";
 		switch(channel) {
 		case "__keyevent@0__:expired":
 			System.out.println("expiredEvent ?");
+			itemId = msg.substring(7);
+			System.out.println(itemId);
+			itemService.setStatusById(Long.parseLong(itemId), 1);
+			receiptService.createReceipt(itemId);
 			
 			break;
 		case "__keyevent@0__:del":
 			System.out.println("delEvent ?");
 
 			if(msg.startsWith(ITEM_HAPPY_PRICE)) {
-				//영수증 발행
+				itemId = msg.substring(5);
+				itemService.setStatusById(Long.parseLong(itemId), 1);
+				receiptService.createReceipt(itemId);
 				
 			}
 			break;
