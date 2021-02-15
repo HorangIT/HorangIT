@@ -2,6 +2,7 @@ package com.a101.ssafy.project.controller;
 
 import java.util.List;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,7 +23,9 @@ import com.a101.ssafy.project.model.BasicResponse;
 import com.a101.ssafy.project.model.auction.AuctionInputDTO;
 import com.a101.ssafy.project.model.chat.ChatMessage;
 import com.a101.ssafy.project.model.chat.MessageType;
+import com.a101.ssafy.project.model.receipt.Receipt;
 import com.a101.ssafy.project.service.AuctionService;
+import com.a101.ssafy.project.service.ReceiptService;
 
 @CrossOrigin(origins = { "*" })
 @RestController
@@ -32,10 +35,16 @@ public class AuctionController {
 	SimpMessagingTemplate simpMessagingTemplate; 
 	
 	AuctionService auctionService;
+	ReceiptService receiptService;
 	
 	@Autowired
 	public void setAuctionService(AuctionService auctionService) {
 		this.auctionService = auctionService;
+	}
+	
+	@Autowired
+	public void setReceiptService(ReceiptService receiptService) {
+		this.receiptService = receiptService;
 	}
 	
 	@MessageMapping("/auction.sendMessage/{itemId}")
@@ -93,13 +102,64 @@ public class AuctionController {
 	}
 	
 	@GetMapping("/buyer/{userId}")
-	public Object getReceiptBuyer(@PathVariable("userId")String userId) {
+	public Object getReceiptBuyer(@PathVariable("userId")long userId) {
+		List<Receipt> list = receiptService.getReceiptByBuyerId(userId);
 		
-		return null;
+		BasicResponse result = new BasicResponse();
+		
+		JSONArray jarr = new JSONArray();
+		result.status = true;
+		
+		if(list==null) {
+			result.data = "조회된 데이터가 없습니다.";
+		}else {
+			result.data = "데이터 조회에 성공했습니다.";
+			for(int i=0; i<list.size(); ++i) {
+				Receipt receipt = list.get(i);
+				JSONObject jobj = new JSONObject();
+				
+				jobj.put("itemId", receipt.getItemId());
+				jobj.put("sellerId", receipt.getSellerId());
+				jobj.put("buyerId", receipt.getBuyerId());
+				jobj.put("itemTitle", receipt.getItemTitle());
+				jobj.put("status", receipt.getStatus());
+				
+				jarr.add(jobj);
+				
+			}
+		}
+		result.object = jarr;
+		return new ResponseEntity(result, HttpStatus.OK);
 	}
 	@GetMapping("/seller/{userId}")
-	public Object getReceiptSeller(@PathVariable("userId")String userId) {
+	public Object getReceiptSeller(@PathVariable("userId")long userId) {
+		List<Receipt> list = receiptService.getReceiptBySellerId(userId);
 		
-		return null;
+		BasicResponse result = new BasicResponse();
+		
+		JSONArray jarr = new JSONArray();
+		result.status = true;
+		
+		if(list==null) {
+			result.data = "조회된 데이터가 없습니다.";
+		}else {
+			result.data = "데이터 조회에 성공했습니다.";
+			for(int i=0; i<list.size(); ++i) {
+				Receipt receipt = list.get(i);
+				JSONObject jobj = new JSONObject();
+				
+				jobj.put("itemId", receipt.getItemId());
+				jobj.put("sellerId", receipt.getSellerId());
+				jobj.put("buyerId", receipt.getBuyerId());
+				jobj.put("itemTitle", receipt.getItemTitle());
+				jobj.put("status", receipt.getStatus());
+				
+				jarr.add(jobj);
+				
+			}
+		}
+		result.object = jarr;
+		return new ResponseEntity(result, HttpStatus.OK);
+		
 	}
 }

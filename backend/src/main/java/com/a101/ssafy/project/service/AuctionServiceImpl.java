@@ -36,7 +36,7 @@ public class AuctionServiceImpl implements AuctionService{
 	
 	@Override
 	public String getCurrentExpiredValue(String itemId) {
-		String value = redisUtil.getData(ITEM_NAME+itemId+ITEM_EXPIRED);
+		String value = redisUtil.getData(ITEM_EXPIRED+itemId);
 		
 		return value==null?"null":value;
 	}
@@ -71,7 +71,7 @@ public class AuctionServiceImpl implements AuctionService{
 		long nextPrice = newPrice+getAuctionUnit(newPrice+"");
 		
 		//happy price 보다 값이 커지는 경우
-		long happyPrice = Long.parseLong(redisUtil.getData(ITEM_NAME+itemId+ITEM_HAPPY_PRICE));
+		long happyPrice = Long.parseLong(redisUtil.getData(ITEM_HAPPY_PRICE+itemId));
 		if(happyPrice <= newPrice) {
 			newPrice = happyPrice;
 			jobj.put("test", "응찰 가격을 넘어섰어요! 이제 사야해요.");
@@ -98,7 +98,10 @@ public class AuctionServiceImpl implements AuctionService{
 		return jobj;
 	}
 
-	public void done() {
+	public void done(String itemId) {
+		redisUtil.deleteData(ITEM_NAME+itemId);
+		redisUtil.deleteData(ITEM_EXPIRED+itemId);
+		redisUtil.deleteData(ITEM_HAPPY_PRICE+itemId);
 		System.out.println("채팅창 서로 만들어주고(없으면안만듬)");
 		System.out.println("영수증 발행하고");
 		System.out.println("레디스 값 지우고(happy price/start price/ expired되지 않았다면 expired 지우고");	
@@ -144,7 +147,7 @@ public class AuctionServiceImpl implements AuctionService{
 
 	@Override
 	public JSONObject flex(String userId, String itemId) {
-		redisUtil.setData(ITEM_NAME+itemId, redisUtil.getData(ITEM_NAME+itemId+ITEM_HAPPY_PRICE));
+		redisUtil.setData(ITEM_NAME+itemId, redisUtil.getData(ITEM_HAPPY_PRICE+itemId));
 		addAuctionLog(userId, itemId, redisUtil.getData(ITEM_NAME+itemId));
 		JSONObject jobj = new JSONObject();
 		System.out.println(redisUtil.getData(ITEM_NAME+itemId));
@@ -152,7 +155,7 @@ public class AuctionServiceImpl implements AuctionService{
 		
 		jobj.put("test", "응찰 가격을 넘어섰네요, 이제 사야해요 (FLEX!)");	
 		
-		//done();
+		done(itemId);
 		return jobj;
 	}
 	

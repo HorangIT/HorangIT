@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.a101.ssafy.project.model.BasicResponse;
+import com.a101.ssafy.project.model.item.Item;
 import com.a101.ssafy.project.model.receipt.Receipt;
 import com.a101.ssafy.project.model.receipt.ReceiptDto;
 import com.a101.ssafy.project.redis.RedisUtil;
@@ -30,37 +31,41 @@ public class ReceiptServiceImpl implements ReceiptService {
 	RedisUtil redisUtil;
 	
 	@Autowired
-	ItemService itemService;
+	ItemRepository ItemRepository;
 	
 	@Autowired
-	AuctionService AuctionService;
+	AuctionService auctionService;
 	
 	@Override
-	public Object createReceipt(String itemId) {
+	public Receipt createReceipt(String itemId) {
 		ReceiptDto receiptDto = new ReceiptDto();
 		
 		receiptDto.setItemId(Long.parseLong(itemId));
+		String str = auctionService.getLastAuctionLog(itemId);
 		
+		Optional<Item> opt = ItemRepository.findById(Long.parseLong(itemId));
+		if(opt.isPresent()) {
+			Item item = opt.get();
+			receiptDto.setSellerId(item.getUserId());
+			receiptDto.setStatus(item.getStatus());
+			receiptDto.setItemTitle(item.getName());
+		}
 		
+		if(str==null) { //널인 경우는 아무도 이 물건을 살 생각을 안 했다는 뜻
+			receiptDto.setBuyerId(-1L);
+			receiptDto.setFinalPrice(-1L);
+		}else { //널이 아닌 경우는 누군가 한 번이라도 낙찰을 시도했다는 뜻
+			String[] temp = str.split(";"); //닉네임;가격;시간;아이디
+			receiptDto.setBuyerId(Long.parseLong(temp[3]));
+			receiptDto.setFinalPrice(Long.parseLong(temp[1]));
+		}
 		
+		Receipt receipt = new Receipt();
+		BeanUtils.copyProperties(receiptDto, receipt);
 		
-		return null;
+		receiptRepository.save(receipt);
+		return receipt;
 		
-		
-////		ReceiptDto recipDto
-//
-//		Receipt createdReceipt = new Receipt();
-////		BeanUtils.copyProperties(receiptDto, createdReceipt);
-//		
-//		System.out.println("\n*******\ncreatedReceipt: "+createdReceipt.toString());
-//		
-//		receiptRepository.save(createdReceipt);
-//		
-//		BasicResponse result = new BasicResponse();
-//		result.status = true;
-//		result.data = "최종거래정보 등록";	
-//		
-//		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
 	
@@ -77,5 +82,14 @@ public class ReceiptServiceImpl implements ReceiptService {
 		}else {
 			return null;
 		}
+	}
+	
+	@Override
+	public List<Receipt> getReceiptByBuyerId(long buyerId) {
+		return receiptRepository.findAllByBuyerId(buyerId);
+	}
+	@Override
+	public List<Receipt> getReceiptBySellerId(long sellerId) {
+		return receiptRepository.findAllBySellerId(sellerId);
 	}
 }
