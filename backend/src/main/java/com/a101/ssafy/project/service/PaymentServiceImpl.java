@@ -55,7 +55,7 @@ public class PaymentServiceImpl implements PaymentService {
 		HttpHeaders headers = new HttpHeaders();
 		
 		// 권한: 발급 받은 admin 키 포함시키기
-		headers.add("Authorization", "KakaoAK " + "b72064f93d9c3b3279646385be48d02d");
+		headers.add("Authorization", "KakaoAK " + "3e4d2ea6d7863f42efc8e7307887c191");
         headers.add("Accept", MediaType.APPLICATION_JSON_VALUE);
         headers.add("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE + ";charset=UTF-8");
         

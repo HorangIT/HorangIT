@@ -24,12 +24,15 @@ export default Vue.extend({
 
   methods: {
     pay() {
-      console.log("데이터전송!")
-      this.$emit('url', "https://mockup-pg-web.kakao.com/v1/022a663167e0bfa6cb8338a2c66217250152299654b13b1cfc7b28b44bd23db7/info");
-      const data = ""
-      // myAuctionapi.pay(data).then((res: AxiosResponse) => {
-      //   console.log(res);
-      // });
+      const data = {
+        buyerId: 1,
+        itemName: "컴퓨터",
+        price: 10000
+      }
+      this.$emit('showQR', "https://mockup-pg-web.kakao.com/v1/68db61b490ad0808438d7cd34c555b938cd4fb9c3a5b1a644f79ebeab3939b0d/info")
+      myAuctionapi.pay(data).then((res: AxiosResponse) => {
+        console.log(res);
+      });
     },
   }
 });
