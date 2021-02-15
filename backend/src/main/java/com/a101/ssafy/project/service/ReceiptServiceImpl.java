@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.a101.ssafy.project.model.BasicResponse;
 import com.a101.ssafy.project.model.receipt.Receipt;
 import com.a101.ssafy.project.model.receipt.ReceiptDto;
+import com.a101.ssafy.project.repository.AlertRepository;
 import com.a101.ssafy.project.repository.ReceiptRepository;
 
 @Service
@@ -17,11 +18,18 @@ public class ReceiptServiceImpl implements ReceiptService {
 	@Autowired
 	ReceiptRepository receiptRepository;
 	
+	@Autowired
+	AlertRepository alertRepository;
+	
+	@Autowired
+	AuctionService AuctionService;
+	
 	@Override
-	public Object createReceipt(ReceiptDto receiptDto) {
-		
+	public Object createReceipt() {
+//		ReceiptDto recipDto
+
 		Receipt createdReceipt = new Receipt();
-		BeanUtils.copyProperties(receiptDto, createdReceipt);
+//		BeanUtils.copyProperties(receiptDto, createdReceipt);
 		
 		System.out.println("\n*******\ncreatedReceipt: "+createdReceipt.toString());
 		

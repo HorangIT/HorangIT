@@ -78,6 +78,11 @@ public class RedisUtil {
     
     public List<String> getLastLdata(String key) {
     	ListOperations<String, String> valueOperations = stringRedisTemplate.opsForList();
-    	return valueOperations.range(key, -1, -1);
+    	if(getLSize(key)==0) {
+    		return null;
+    	}
+    	else {
+    		return valueOperations.range(key, -1, -1);
+    	}
     }
 }

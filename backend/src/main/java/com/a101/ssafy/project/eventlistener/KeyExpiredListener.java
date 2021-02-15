@@ -9,12 +9,17 @@ import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.stereotype.Component;
 
 import com.a101.ssafy.project.redis.RedisUtil;
+import com.a101.ssafy.project.service.AuctionService;
 import com.a101.ssafy.project.service.ReceiptService;
 
 @Component
 public class KeyExpiredListener implements MessageListener{
+	ReceiptService receiptService;
+	
 	@Autowired
-	RedisUtil redisUtil;
+	public void setReceiptService(ReceiptService receiptService) {
+		this.receiptService = receiptService;
+	}
 	
 	final String ITEM_HAPPY_PRICE = "Happy";
 
@@ -28,12 +33,9 @@ public class KeyExpiredListener implements MessageListener{
 		String msg = new String(message.getBody());
 		String channel = new String(message.getChannel());
 		
-		System.out.println(redisUtil==null?"null입니다...":"null 아님");
-
 		switch(channel) {
 		case "__keyevent@0__:expired":
 			System.out.println("expiredEvent ?");
-			
 			
 			break;
 		case "__keyevent@0__:del":
