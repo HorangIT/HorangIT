@@ -1,5 +1,6 @@
 <template>
   <v-sheet
+    v-if="!auctionOver && !timeOver"
     height="10vh"
     class="lighten-4 d-flex align-center justify-center"
     :class="{ primary: open, warning: !open }"
@@ -12,9 +13,10 @@
 export default {
   data: () => ({
     open: false,
-    leftTime: ""
+    leftTime: "",
+    timeOver: false,
   }),
-  props: ["start", "end"],
+  props: ["start", "end", "auctionOver"],
   mounted() {
     setInterval(() => {
       const start = new Date(this.start);
@@ -27,8 +29,7 @@ export default {
         this.open = true;
         this.leftTime = `경매 마감까지 ${this.getLeftTimeFromNow(end)} 남았습니다.`
       } else {
-        this.open = false;
-        this.leftTime = "마감되었습니다.";
+        this.timeOver = true;
       }
     }, 1000);
   },

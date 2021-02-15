@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-container>
-      <TimeBar :start="item.startDate" :end="item.endDate"></TimeBar>
+      <TimeBar :start="item.startDate" :end="item.endDate" :auctionOver="isOver"></TimeBar>
       <div class="row">
         <div class="col-md-5 col-sm-5 col-xs-12">
           <v-carousel>
@@ -63,7 +63,21 @@
 
             <v-divider></v-divider>
             <p class="py-4 ma-0">나의 응찰 / 전체 응찰 :</p>
-            <div>
+            <div v-if="isOver">
+              <v-btn
+                class="blue-grey"
+                outlined
+                tile
+                width="100%"
+                height="12vh"
+                disabled
+              >
+                <h2 class="blue-grey--text text--lighten-5">
+                  마감되었습니다.
+                </h2>
+              </v-btn>              
+            </div>
+            <div v-else>
               <v-btn
                 class="primary white--text"
                 outlined
@@ -72,8 +86,7 @@
                 height="12vh"
                 @click="bid"
               >
-                <h2 v-if="isOver">Flex!!!!!!!!!!!!</h2>
-                <h2 v-else>
+                <h2>
                   {{ nowPrice | comma }}원<br />응찰하기<br />
                   <small>다음 응찰가는 {{ nextPrice | comma }}원입니다.</small>
                 </h2>
@@ -86,8 +99,7 @@
                 height="12vh"
                 @click="dialog = true"
               >
-                <h2 v-if="isOver">Flex!!!!!!!!!!!!</h2>
-                <h2 v-else>{{ item.happyPrice | comma }}원<br />FLEX</h2>
+                <h2>{{ item.happyPrice | comma }}원<br />FLEX</h2>
               </v-btn>
               <v-dialog v-model="dialog" max-width="290">
                 <v-card>
@@ -164,8 +176,9 @@ export default Vue.extend({
     }
   },
   watch: {
-    nowPrice() {
-      if (this.nowPrice === this.happyPrice) {
+    biddingLog() {
+      console.log('watched!')
+      if (this.nowPrice === Number(this.biddingLog[0].split(';')[1])) {
         this.isOver = true;
       }
     }
@@ -175,9 +188,9 @@ export default Vue.extend({
       itemApi.getItem(id).then((res: AxiosResponse) => {
         this.item = res.data.object;
         this.itemId = res.data.object.itemId;
-        this.nowPrice = res.data.object.nowPrice;
-        this.nextPrice = res.data.object.nextPrice;
         this.happyPrice = res.data.object.happyPrice;
+        this.nextPrice = res.data.object.nextPrice;
+        this.nowPrice = res.data.object.nowPrice;
       });
     },
     connect () {
@@ -189,10 +202,14 @@ export default Vue.extend({
           this.stompClient.subscribe(`/topic/auction/${this.itemId}`, res => {
             // nowPrice, nextPrice 업데이트
             const info = JSON.parse(res.body).content
-            this.nowPrice = info.nowPrice;
-            this.nextPrice = info.nextPrice;
             // log 업데이트
             this.biddingLog.unshift(info.log);
+            this.nowPrice = info.nowPrice;
+            this.nextPrice = info.nextPrice;
+            console.log(info)
+            if (info.test !== undefined) {
+              this.log()
+            }
           });
         },
         // socket 연결 실패
@@ -201,30 +218,40 @@ export default Vue.extend({
         })
     },
     bid() {
-      if (localStorage.getItem("user") && this.stompClient) {
-        const bidInfo = {
-          sender: this.user.id,
-          content: this.itemId,
-          type: "AUCTION"
-        };
-        // socket으로 전송
-        this.stompClient.send(`/app/auction.sendMessage/${this.itemId}`, {}, JSON.stringify(bidInfo));
+      // 마감 확인
+      if (!this.isOver) {
+        if (localStorage.getItem("user") && this.stompClient) {
+          const bidInfo = {
+            sender: this.user.id,
+            content: this.itemId,
+            type: "AUCTION"
+          };
+          // socket으로 전송
+          this.stompClient.send(`/app/auction.sendMessage/${this.itemId}`, {}, JSON.stringify(bidInfo));
+        } else {
+          alert("로그인 해주세요!");
+        }
       } else {
-        alert("로그인 해주세요!");
+        alert("마감되었습니다.")
       }
     },
     flex() {
-      if (localStorage.getItem("user") && this.stompClient) {
-        const flexInfo = {
-          sender: this.user.id,
-          content: this.itemId,
-          type: "FLEX"
-        };
-        this.stompClient.send(`/app/auction.sendMessage/${this.itemId}`, {}, JSON.stringify(flexInfo));
+      // 마감 확인
+      if (!this.isOver) {
+        if (localStorage.getItem("user") && this.stompClient) {
+          const flexInfo = {
+            sender: this.user.id,
+            content: this.itemId,
+            type: "FLEX"
+          };
+          this.stompClient.send(`/app/auction.sendMessage/${this.itemId}`, {}, JSON.stringify(flexInfo));
+        } else {
+          alert("로그인 해주세요!");
+        }
+        this.dialog = false;
       } else {
-        alert("로그인 해주세요!");
+        alert("마감되었습니다.")
       }
-      this.dialog = false;
     },
     log() {
       // 응찰 내역 불러오기
