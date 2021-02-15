@@ -3,6 +3,7 @@ package com.a101.ssafy.project.controller;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -55,16 +56,22 @@ public class ChatController {
 	
 	@MessageMapping("/chat.sendMessage/{itemId}")
 	public void sss(@DestinationVariable("itemId")long itemId, @Payload ChatMessage chatMessage) {
-		System.out.println("sss함수를 탔습니다...");
 		chatMessage.setType(MessageType.REPLY);
 		
 		Date date = java.util.Calendar.getInstance().getTime();
         
+		JSONObject jobj = new JSONObject();
+		
 		redisUtil.setLdata(ITEM_CHAT_LOG_USER_ID+itemId, chatMessage.getSender());
 		redisUtil.setLdata(ITEM_CHAT_LOG_USER_CONTENT+itemId, chatMessage.getContent()+"");
 		redisUtil.setLdata(ITEM_CHAT_LOG_USER_TIME+itemId, format.format(date));
 		redisUtil.setLdata(ITEM_CHAT_LOG_USER_NICKNAME+itemId, redisUtil.getHdata("user", chatMessage.getSender())+"");
 		
+		jobj.put("userNickname", redisUtil.getLastLdata(ITEM_CHAT_LOG_USER_NICKNAME+itemId).get(0));
+		jobj.put("chatContent" ,redisUtil.getLastLdata(ITEM_CHAT_LOG_USER_CONTENT+itemId).get(0));
+		jobj.put("chatCreatedAt", redisUtil.getLastLdata(ITEM_CHAT_LOG_USER_TIME+itemId).get(0));
+		
+		chatMessage.setContent(jobj);
 		simpMessagingTemplate.convertAndSend("/topic/chat/"+itemId, chatMessage);
 	}
 	

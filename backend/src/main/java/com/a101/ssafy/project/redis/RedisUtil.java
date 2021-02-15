@@ -75,5 +75,9 @@ public class RedisUtil {
     	ListOperations<String, String> valueOperations = stringRedisTemplate.opsForList();
     	return valueOperations.size(key);
     }
-
+    
+    public List<String> getLastLdata(String key) {
+    	ListOperations<String, String> valueOperations = stringRedisTemplate.opsForList();
+    	return valueOperations.range(key, -1, -1);
+    }
 }

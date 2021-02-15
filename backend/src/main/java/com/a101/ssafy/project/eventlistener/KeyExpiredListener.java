@@ -11,10 +11,10 @@ public class KeyExpiredListener implements MessageListener{
 	@Override
 	public void onMessage(Message message, byte[] pattern) {
 		byte[] body = message.getBody();
-		byte[] channel = message.getChannel();
+//		byte[] channel = message.getChannel();
 		System.out.println("Message>>>>>>>");
 		System.out.println(new String(body));
-		System.out.println(new String(channel));
+//		System.out.println(new String(channel));
 	
 		System.out.println("<<<<<<<<<<<<<<");
 	}
