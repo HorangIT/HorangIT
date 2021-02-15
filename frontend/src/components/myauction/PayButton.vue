@@ -14,7 +14,7 @@
 <script lang="ts">
 import Vue from "vue";
 import { AxiosResponse } from "axios";
-import { myAuctionapi } from "../../utils/axios";
+import { myAuctionApi } from "../../utils/axios";
 
 export default Vue.extend({
   name: "PayButton",
@@ -30,7 +30,7 @@ export default Vue.extend({
         price: 10000
       }
       this.$emit('showQR', "https://mockup-pg-web.kakao.com/v1/68db61b490ad0808438d7cd34c555b938cd4fb9c3a5b1a644f79ebeab3939b0d/info")
-      myAuctionapi.pay(data).then((res: AxiosResponse) => {
+      myAuctionApi.pay(data).then((res: AxiosResponse) => {
         console.log(res);
       });
     },
