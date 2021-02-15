@@ -39,7 +39,7 @@ const routes: Array<RouteConfig> = [
         name: "Auction"
       },
       {
-        path: "/alarm",
+        path: "/myauction",
         component: Myauction,
         name: "Myauction"
       }
