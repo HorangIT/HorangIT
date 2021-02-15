@@ -11,7 +11,7 @@ import com.a101.ssafy.project.model.item.Item;
 
 public class SearchSpecs {
 		
-	public static Specification<Item> searchWithFilter(Object si, Object gu, Object grades, Object categories, Object name) {
+	public static Specification<Item> searchWithFilter(Object si, Object gu, Object grades, Object categories, Object name, Object status) {
 		return new Specification<Item>() {
 
 			@Override
@@ -27,6 +27,7 @@ public class SearchSpecs {
 				Predicate categoryPred = null;
 				Predicate gradePred = null;
 				Predicate namePred = null;
+				Predicate statusPred = null;
 				
 				// 이름으로 찾기
 				if (name != null) {
@@ -40,6 +41,11 @@ public class SearchSpecs {
 					siguPred = criteriaBuilder.like(root.get("location"), arrAddress+"%");
 
 				}
+				// 경매 마감 여부
+				if (status != null) {
+					statusPred = criteriaBuilder.equal(root.get("status"), 1);
+				}
+				
 				// 카테고리는 "A,B"형식으로 들어오기 때문에 ","를 기준으로 배열을 만들어 준 뒤에 배열 내의 분야들의 검색결과를 categoryList에 넣는다
 				// 그 중 겹치는 결과들만 최종 categoryPred에 넣어준다
 				if (categories != null) {
@@ -73,6 +79,11 @@ public class SearchSpecs {
 				if (siguPred != null) {
 					if (allPredicates == null) allPredicates = categoryPred;
 					else allPredicates = criteriaBuilder.and(allPredicates, siguPred);
+				}
+				
+				if (statusPred != null) {
+					if (allPredicates == null) allPredicates = statusPred;
+					else allPredicates = criteriaBuilder.and(allPredicates, statusPred);
 				}
 				
 				if (categoryPred != null) {
