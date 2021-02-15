@@ -177,7 +177,7 @@ export default Vue.extend({
   },
   watch: {
     biddingLog() {
-      console.log('watched!')
+      // console.log('watched!')
       if (this.nowPrice === Number(this.biddingLog[0].split(';')[1])) {
         this.isOver = true;
       }
@@ -192,7 +192,8 @@ export default Vue.extend({
         this.nextPrice = res.data.object.nextPrice;
         this.nowPrice = res.data.object.nowPrice;
       })
-      .catch(() => this.$router.push({ path: '/404' }));
+      // 404 처리
+      .catch(() => this.$router.replace({ path: '/404' }));
     },
     connect () {
       // socket 연결
@@ -207,7 +208,7 @@ export default Vue.extend({
             this.biddingLog.unshift(info.log);
             this.nowPrice = info.nowPrice;
             this.nextPrice = info.nextPrice;
-            console.log(info)
+            // console.log(info)
             if (info.test !== undefined) {
               this.log()
             }
@@ -258,7 +259,7 @@ export default Vue.extend({
       // 응찰 내역 불러오기
       auctionApi.log(Number(this.$route.params.id)).then((res: AxiosResponse) => {
           this.biddingLog = res.data.object.log.reverse();
-          console.log(this.biddingLog);
+          // console.log(this.biddingLog);
         })
         .catch(() => {
           this.biddingLog = [];
@@ -270,9 +271,9 @@ export default Vue.extend({
     const id = Number(this.$route.params.id);
     this.getItem(id);
     // socket 연결
-    this.connect();
     // 응찰 내역
     this.log();
+    this.connect();
   },
 });
 </script>

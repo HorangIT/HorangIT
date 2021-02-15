@@ -105,6 +105,7 @@ export default Vue.extend({
       
       itemApi.getItemPage(page, filters).then((res: AxiosResponse) => {
         this.items = res.data.object;
+        console.log(this.items)
       })
     },
     // reset버튼을 누르면 기본 필터값으로 적용됩니다.
