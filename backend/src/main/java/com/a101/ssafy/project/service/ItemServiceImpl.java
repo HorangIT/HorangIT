@@ -229,6 +229,8 @@ public class ItemServiceImpl implements ItemService{
 			jobj.put("category",items.get(i).getCategory());
 			jobj.put("grade",items.get(i).getGrade());
 			jobj.put("startDate",items.get(i).getStartDate());
+			jobj.put("endDate",items.get(i).getEndDate());
+			jobj.put("status",items.get(i).getStatus());
 			jobj.put("image", items.get(i).image.iterator().next().getFilePath());
 			
 			returningItems.add(jobj);
@@ -296,6 +298,17 @@ public class ItemServiceImpl implements ItemService{
 		
 		result.object = jobj;
 		return result;
+	}
+	
+	@Override
+	public void setStatusById(long itemId, int status) {
+		Optional<Item> opt = itemRepository.findById(itemId);
+		if(opt.isPresent()) {
+			Item item = opt.get();
+			
+			item.setStatus(status);
+			itemRepository.save(item);
+		}
 	}
 
 }
