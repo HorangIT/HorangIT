@@ -191,7 +191,8 @@ export default Vue.extend({
         this.happyPrice = res.data.object.happyPrice;
         this.nextPrice = res.data.object.nextPrice;
         this.nowPrice = res.data.object.nowPrice;
-      });
+      })
+      .catch(() => this.$router.push({ path: '/404' }));
     },
     connect () {
       // socket 연결
