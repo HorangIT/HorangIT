@@ -10,15 +10,22 @@ import org.springframework.stereotype.Component;
 
 import com.a101.ssafy.project.redis.RedisUtil;
 import com.a101.ssafy.project.service.AuctionService;
+import com.a101.ssafy.project.service.ItemService;
 import com.a101.ssafy.project.service.ReceiptService;
 
 @Component
 public class KeyExpiredListener implements MessageListener{
 	ReceiptService receiptService;
+	ItemService itemService;
 	
 	@Autowired
 	public void setReceiptService(ReceiptService receiptService) {
 		this.receiptService = receiptService;
+	}
+	
+	@Autowired
+	public void setItemService(ItemService itemService) {
+		this.itemService = itemService;
 	}
 	
 	final String ITEM_HAPPY_PRICE = "Happy";

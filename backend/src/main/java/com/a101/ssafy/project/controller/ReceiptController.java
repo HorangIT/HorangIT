@@ -24,7 +24,7 @@ public class ReceiptController {
 		
 		System.out.println("receiptRequest: "+receiptRequest.toString());
 				
-		return receiptService.createReceipt(receiptRequest);
+		return receiptService.createReceipt();
 	}
 	
 }
