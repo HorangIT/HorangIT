@@ -114,7 +114,7 @@ public class ItemServiceImpl implements ItemService{
 		redisUtil.setData(ITEM_NAME+item.getId(), item.getStartPrice()+""); //expired trigger 오면 삭제해주기!
 //		startPrice <- 사는거 (처음에는 삼 ㅋㅋ)
 		//expired trigger 오면 삭제해주기!
-		redisUtil.setData(ITEM_NAME+item.getId()+ITEM_HAPPY_PRICE, item.getHappyPrice()+"");
+		redisUtil.setData(ITEM_HAPPY_PRICE+item.getId(), item.getHappyPrice()+"");
 		redisUtil.setDataExpire(ITEM_EXPIRED+item.getId(), endTimeToEpochTime+"", remainingTime); 
 		
 		return result;
