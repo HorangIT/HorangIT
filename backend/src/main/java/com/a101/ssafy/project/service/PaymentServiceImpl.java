@@ -4,6 +4,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Optional;
 
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -14,6 +15,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import com.a101.ssafy.project.model.BasicResponse;
 import com.a101.ssafy.project.model.item.Item;
 import com.a101.ssafy.project.model.payment.KakaopayResponse;
 import com.a101.ssafy.project.model.receipt.ReceiptDto;
@@ -39,6 +41,8 @@ public class PaymentServiceImpl implements PaymentService {
 	@Override
 	public Object createPaymentRequest(String itemName, Long price, int buyerId) {
 		
+		JSONObject jobj = new JSONObject();
+		
 //		Optional<Item> tmpName = itemRepository.findById(receiptDto.getItemId());
 //		String itemName = null;
 //		if (tmpName.isPresent()) {
@@ -51,7 +55,7 @@ public class PaymentServiceImpl implements PaymentService {
 		HttpHeaders headers = new HttpHeaders();
 		
 		// 권한: 발급 받은 admin 키 포함시키기
-		headers.add("Authorization", "KakaoAK " + "");
+		headers.add("Authorization", "KakaoAK " + "b72064f93d9c3b3279646385be48d02d");
         headers.add("Accept", MediaType.APPLICATION_JSON_VALUE);
         headers.add("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE + ";charset=UTF-8");
         
@@ -83,7 +87,9 @@ public class PaymentServiceImpl implements PaymentService {
         	System.out.println("");
         	System.out.println(kakaopayResponse.toString());
         	
-        	return kakaopayResponse.getNext_redirect_pc_url();
+        	jobj.put("successUrl", kakaopayResponse.getNext_redirect_pc_url().toString());
+        	return jobj;
+//        	return kakaopayResponse.getNext_redirect_pc_url();
         
         } catch (RestClientException e) {
 			e.printStackTrace();
@@ -92,7 +98,7 @@ public class PaymentServiceImpl implements PaymentService {
 		}
         
         // 여기는 에러났을 때
-        return "/pay";
+        return null;
         
 
 	}
