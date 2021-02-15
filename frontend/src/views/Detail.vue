@@ -77,7 +77,7 @@
                 </h2>
               </v-btn>              
             </div>
-            <div>
+            <div v-else>
               <v-btn
                 class="primary white--text"
                 outlined
