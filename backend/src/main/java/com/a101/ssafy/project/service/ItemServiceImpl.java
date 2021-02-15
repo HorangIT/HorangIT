@@ -297,5 +297,16 @@ public class ItemServiceImpl implements ItemService{
 		result.object = jobj;
 		return result;
 	}
+	
+	@Override
+	public void setStatusById(long itemId, int status) {
+		Optional<Item> opt = itemRepository.findById(itemId);
+		if(opt.isPresent()) {
+			Item item = opt.get();
+			
+			item.setStatus(status);
+			itemRepository.save(item);
+		}
+	}
 
 }

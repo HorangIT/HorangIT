@@ -52,7 +52,7 @@ public class ReviewServiceImpl implements ReviewService {
 		// 등록될 review 객체 생성
 		Review createdReview = new Review();
 		BeanUtils.copyProperties(reviewDto, createdReview);
-		createdReview.setReceipt(receipt);
+//		createdReview.setReceipt(receipt);
 		
 		System.out.println("\n*******\ncreatedReview: "+createdReview);
 		
