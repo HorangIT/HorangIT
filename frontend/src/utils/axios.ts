@@ -91,7 +91,6 @@ export const itemApi = {
   }
 };
 
-
 export const auctionApi = {
   // bidding(itemId: number, data: any): any {
   //   return request.post("/auction", data);
@@ -104,8 +103,11 @@ export const auctionApi = {
   }
 };
 
-export const myAuctionapi = {
-  pay (data: any): any {
-    return request.post('/payment', data);
-  }
+export const myAuctionApi = {
+  buyer(userId: any): any {
+    return request.get(`/auction/buyer/${userId}`);
+  },
+  seller(userId: any): any {
+    return request.get(`/auction/seller/${userId}`);
+  },
 };
