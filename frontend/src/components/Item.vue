@@ -2,7 +2,7 @@
   <v-hover v-slot:default="{ hover }">
     <v-card
       class="mx-auto"
-      color="grey lighten-4"
+      :color="!isOver ? 'grey lighten-4' : 'grey darken-2'"
       max-width="600"
       :elevation="hover ? 12 : 2"
       :class="{ 'on-hover': hover }"
@@ -13,6 +13,7 @@
         height="200px"
         :src="item.image"
       >
+      <p v-if="isOver" class="grey darken-2 grey--text text--lighten-4">경매 종료되었습니다.</p>
       </v-img>
       <div>
         <h2 class="my-1">{{ item.name }}</h2>
@@ -35,6 +36,8 @@ export default Vue.extend({
   },
   data: () => ({
     startDate: "",
+    isOver: false,
+    beforeAuction: false,
   }),
   methods: {
     goDetail(id: any) {
@@ -43,6 +46,15 @@ export default Vue.extend({
   },
   created() {
     this.startDate = moment(this.item.startDate).format('YY[/]MM[/]DD HH:mm');
+    // 경매 시작 전/종료 후 확인
+    const now = new Date()
+    if (new Date(this.item.endDate) < now) {
+      this.isOver = true;
+    } else if (new Date(this.item.startDate) > now) {
+      this.beforeAuction = true;
+    }
+    // console.log(this.isOver)
+    // console.log(this.beforeAuction)
   }
 });
 </script>

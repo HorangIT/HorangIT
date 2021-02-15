@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.a101.ssafy.project.model.BasicResponse;
+import com.a101.ssafy.project.model.payment.PaymentDto;
 import com.a101.ssafy.project.model.receipt.ReceiptDto;
 import com.a101.ssafy.project.service.PaymentService;
 
@@ -32,10 +33,10 @@ public class PaymentController {
 	}
 	
 	@PostMapping
-	public Object createPaymentRequest(String itemName, Long price, int buyerId) {
+	public Object createPaymentRequest(@RequestBody PaymentDto paymentDto) {
 		
 		BasicResponse result = new BasicResponse();
-		Object returnValue = paymentService.createPaymentRequest(itemName, price, buyerId);
+		Object returnValue = paymentService.createPaymentRequest(paymentDto);
 		if (returnValue != null) {
 			result.status = true;
 			result.object = returnValue;

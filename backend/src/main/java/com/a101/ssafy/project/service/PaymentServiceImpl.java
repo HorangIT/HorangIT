@@ -18,6 +18,7 @@ import org.springframework.web.client.RestTemplate;
 import com.a101.ssafy.project.model.BasicResponse;
 import com.a101.ssafy.project.model.item.Item;
 import com.a101.ssafy.project.model.payment.KakaopayResponse;
+import com.a101.ssafy.project.model.payment.PaymentDto;
 import com.a101.ssafy.project.model.receipt.ReceiptDto;
 import com.a101.ssafy.project.repository.ItemRepository;
 
@@ -39,7 +40,7 @@ public class PaymentServiceImpl implements PaymentService {
 	
 	
 	@Override
-	public Object createPaymentRequest(String itemName, Long price, int buyerId) {
+	public Object createPaymentRequest(PaymentDto paymentDto) {
 		
 		JSONObject jobj = new JSONObject();
 		
@@ -55,7 +56,7 @@ public class PaymentServiceImpl implements PaymentService {
 		HttpHeaders headers = new HttpHeaders();
 		
 		// 권한: 발급 받은 admin 키 포함시키기
-		headers.add("Authorization", "KakaoAK " + "3e4d2ea6d7863f42efc8e7307887c191");
+		headers.add("Authorization", "KakaoAK " + "ADMIN");
         headers.add("Accept", MediaType.APPLICATION_JSON_VALUE);
         headers.add("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE + ";charset=UTF-8");
         
@@ -65,9 +66,9 @@ public class PaymentServiceImpl implements PaymentService {
         params.add("cid", "TC0ONETIME");		// 가맹점코드 : 테스트 결제 코드
         params.add("partner_order_id", "a101");	// 가맹점 주문번호
         params.add("partner_user_id", "a101");	// 가맹점 회원 id
-        params.add("item_name", itemName+"");		// 상품명
+        params.add("item_name", paymentDto.getName());		// 상품명
         params.add("quantity", "1");			// 상품 수량
-        params.add("total_amount", price+""); // 상품 총액
+        params.add("total_amount", paymentDto.getPrice()+""); // 상품 총액
         params.add("tax_free_amount", "0"); 	// 상품 비과세 금액
         
         // 성공 | 실패 | 취소 url
