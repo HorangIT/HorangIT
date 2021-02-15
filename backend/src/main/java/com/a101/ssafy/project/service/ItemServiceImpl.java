@@ -110,11 +110,12 @@ public class ItemServiceImpl implements ItemService{
 		long endTimeToEpochTime = item.getEndDate().getTime(); 
 		
 		long remainingTime = (endTimeToEpochTime - startTimeToEpochTime)/1000;
+		System.out.println(remainingTime+"남았다고 가정");
 		redisUtil.setData(ITEM_NAME+item.getId(), item.getStartPrice()+""); //expired trigger 오면 삭제해주기!
 //		startPrice <- 사는거 (처음에는 삼 ㅋㅋ)
 		//expired trigger 오면 삭제해주기!
 		redisUtil.setData(ITEM_NAME+item.getId()+ITEM_HAPPY_PRICE, item.getHappyPrice()+"");
-		redisUtil.setDataExpire(ITEM_NAME+item.getId()+ITEM_EXPIRED, endTimeToEpochTime+"", remainingTime); 
+		redisUtil.setDataExpire(ITEM_EXPIRED+item.getId(), endTimeToEpochTime+"", remainingTime); 
 		
 		return result;
 	}

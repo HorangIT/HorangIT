@@ -36,7 +36,7 @@ public class AuctionServiceImpl implements AuctionService{
 	
 	@Override
 	public String getCurrentExpiredValue(String itemId) {
-		String value = redisUtil.getData(ITEM_NAME+itemId+ITEM_EXPIRED);
+		String value = redisUtil.getData(ITEM_EXPIRED+itemId);
 		
 		return value==null?"null":value;
 	}
