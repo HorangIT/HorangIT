@@ -11,6 +11,9 @@
 import Vue from "vue";
 import Navbar from "./components/Navbar.vue";
 import Footer from "./components/Footer.vue";
+// test
+import Chatroom from "./components/myauction/Chatroom.vue";
+import WindowPortal from "./components/WindowPortal.vue";
 export default Vue.extend({
   name: "App",
   components: {

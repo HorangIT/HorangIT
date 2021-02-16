@@ -10,8 +10,9 @@ const authHeader = function(): Record<string, string> {
 };
 
 const request: AxiosInstance = axios.create({
-  //baseURL: "http://i4a101.p.ssafy.io:8000/api",
-  baseURL: "http://localhost:8000/api",
+  baseURL: process.env.VUE_APP_API_SERVER,
+  // baseURL: "http://i4a101.p.ssafy.io/api",
+  // baseURL: "http://localhost:8000/api",
   headers: authHeader()
 });
 
@@ -86,9 +87,12 @@ export const itemApi = {
       params: searchParams
     });
   },
-  getChatLog (page: number): any {
-    return request.get(`/item/${page}/chat`)
-  }
+  getChatLog (itemId: number): any {
+    return request.get(`/item/${itemId}/chat`)
+  },
+  getChatRoomLog (itemId: number): any {
+    return request.get(`/item/${itemId}/chatroom`)
+  },
 };
 
 export const auctionApi = {
