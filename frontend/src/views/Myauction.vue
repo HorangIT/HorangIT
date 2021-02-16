@@ -51,7 +51,7 @@
             </v-card>
           </v-dialog>
           <v-btn class="mr-4" v-if="item.status==2" disabled>결제완료</v-btn>
-          <v-btn class="mr-4" v-if="item.status==3">수령확인</v-btn>
+          <v-btn class="mr-4" v-if="item.status==3" @click="takeCompleted(item.itemId)">수령확인</v-btn>
           <v-btn class="mr-4" v-if="item.status==4" disabled>거래완료</v-btn>
           <v-btn>채팅</v-btn>
         </v-list-item>
@@ -131,15 +131,17 @@ export default Vue.extend({
   async created() {
     const uid = (this as any).$store.state.userModule.user.object.user.id;
     try {
-      console.log('buyer');
-      // await myAuctionApi.buyer(uid);
+      const { data } = await myAuctionApi.buyer(uid);
+      console.log(data);
+      this.buyItems = data.object;
     } catch(error) {
       console.log(error);
     }
 
     try {
-      console.log('seller');
-      // await myAuctionApi.seller(uid);
+      const { data } = await myAuctionApi.seller(uid);
+      console.log(data);
+      this.sellItems = data.object;
     } catch(error) {
       console.log(error);
     }
@@ -157,6 +159,13 @@ export default Vue.extend({
       });
     },
     async deliveryCompleted(itemId: any) {
+      try {
+        // const { data } = await myAuctionApi.item(itemId);
+      } catch(error) {
+        console.log(error);
+      }
+    },
+    async takeCompleted(itemId: any) {
       try {
         // const { data } = await myAuctionApi.item(itemId);
       } catch(error) {

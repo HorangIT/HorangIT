@@ -113,6 +113,9 @@ export const myAuctionApi = {
   pay (data: any): any {
     return request.post('/payment', data);
   },
+  item(itemId: any): any {
+    return request.get(`/auction/item/${itemId}`);
+  },
   success (token: any):any {
     const params = {
       pg_token: token
