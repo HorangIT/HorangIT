@@ -183,11 +183,8 @@ export default Vue.extend({
     happyPrice: -1,
     sellerId: -1,
     biddingLog: new Array<String>(),
-    isOver: false,
     dialog: false,
     stompClient: Stomp.over(new SockJS(`${process.env.VUE_APP_API_SERVER}/ws`)),
-
-
   }),
   filters: {
     comma(val: number | string) {
