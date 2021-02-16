@@ -179,9 +179,12 @@ stompClient: Stomp.over(new SockJS("http://i4a101.p.ssafy.io:8000/api/ws")),
   watch: {
     biddingLog() {
       // console.log('watched!')
-      if (this.nowPrice === Number(this.biddingLog[0].split(';')[1])) {
+      if (this.nowPrice === this.happyPrice) {
         this.isOver = true;
       }
+      //  if (this.nowPrice === Number(this.biddingLog[0].split(';')[1])) {
+      //   this.isOver = true;
+      // }
     }
   },
   methods: {

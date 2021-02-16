@@ -47,10 +47,10 @@ const routes: Array<RouteConfig> = [
       },
     ]
   },
-  {
-    path: "/404",
-    component: Notfound
-  },
+  // {
+  //   path: "/404",
+  //   component: Notfound
+  // },
   // test page
   {
     path: "/profile",
