@@ -10,16 +10,14 @@
         <v-row justify="end" class="py-2 d-md-flex d-none">
           <span v-if="login" class="d-flex align-center">
             <span class="d-none d-flex" id="welcome">{{ nickname }} 님, 환영합니다.</span>
-              <v-btn icon class="mx-1" to="/myauction">
-                <v-badge content="5" value="5" color="orange" overlap>
-                  <v-icon>mdi-bell</v-icon>
-                </v-badge>
+              <v-btn icon class="ml-2" to="/myauction">
+                <i class="fas fa-gavel"></i>
               </v-btn>
             <v-btn
               :ripple="false"
               plain
               depressed
-              class="mx-2 d-none d-flex"
+              class="mr-2 d-none d-flex"
               @click="logout"
               id="logout-btn"
             >

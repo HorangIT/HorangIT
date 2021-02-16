@@ -15,12 +15,8 @@
           <div class="col-sm-12 col-xs-12 col-md-12">
             <v-tabs>
               <v-tab>경매 톡톡</v-tab>
-              <v-tab>리뷰</v-tab>
               <v-tab-item>
                 <Chat />
-              </v-tab-item>
-              <v-tab-item>
-                <Review />
               </v-tab-item>
             </v-tabs>
           </div>
@@ -122,9 +118,6 @@
         </div>
       </div>
     </v-container>
-    <v-divider></v-divider>
-    <v-divider></v-divider>
-    <Info />
     <br /><br /><br /><br /><br />
   </div>
 </template>
@@ -132,9 +125,7 @@
 import Vue from "vue";
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
-import Info from "../components/Info.vue";
 import Chat from "../components/detail/Chat.vue";
-import Review from "../components/detail/Review.vue";
 import BiddingLog from "../components/detail/BiddingLog.vue";
 import TimeBar from "../components/detail/TimeBar.vue";
 import { itemApi, auctionApi } from "../utils/axios";
@@ -145,10 +136,8 @@ export default Vue.extend({
   name: "Product",
   components: {
     Chat,
-    Review,
     BiddingLog,
     TimeBar,
-    Info,
   },
 
   data: () => ({
@@ -179,9 +168,9 @@ export default Vue.extend({
   watch: {
     biddingLog() {
       // console.log('watched!')
-      if (this.nowPrice === this.happyPrice) {
-        this.isOver = true;
-      }
+      // if (this.nowPrice === this.happyPrice) {
+      //   this.isOver = true;
+      // }
       //  if (this.nowPrice === Number(this.biddingLog[0].split(';')[1])) {
       //   this.isOver = true;
       // }
