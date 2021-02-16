@@ -114,6 +114,7 @@
                 </v-dialog>
               </div>
             </span>
+
             <span v-else> <!-- 판매자고 -->
               <div v-if="isOver"> <!-- 경매가 끝났으면 -->
                 <v-btn
@@ -142,6 +143,7 @@
                     경매가 진행중입니다.
                   </h2>
                 </v-btn>
+              </div>
             </span>
             <v-divider></v-divider>
             <p class="py-4 ma-0">응찰내역</p>
