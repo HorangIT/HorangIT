@@ -37,23 +37,13 @@ public class ChatController {
 	final String ITEM_CHAT_LOG_USER_CONTENT = "itemChatUserContent";
 	final String ITEM_CHAT_LOG_USER_TIME = "itemChatUserTime";
 	final String ITEM_CHAT_LOG_USER_NICKNAME = "itemChatNickname";
-
-	//////////
-	///////////
-	////////////
 	
-	///
-	//1. 가격 확인 
-	//2. 가격갱신 (한단계 높게)
-	////걸리는 억겁의시간의 렉이 걸리면  --> 실시간 처리를 했다고 해도 .... 또!!!! 똑같은 근본적 문제 발생.
-	////이를 처리하기위해 service 클래스에 @transactional을 걸껀데. 이거 애노테이션을 좀더 공부해보고 이게 적저한지를 판단하는 작업 거쳐야함.
-	//3. 다시 setContent로 가격을 높여주고 그 가격 보냄
-	///
+	final String ROOM_CHAT_LOG_USER_ID = "roomChatUserId";
+	final String ROOM_CHAT_LOG_USER_CONTENT = "roomChatUserContent";
+	final String ROOM_CHAT_LOG_USER_TIME = "roomChatUserTime";
+	final String ROOM_CHAT_LOG_USER_NICKNAME = "roomChatNickname";
 	
-	////////////
-	///////////
-	////////////
-	
+	/** 아이템 세부 페이지에 들어갔을 때 사람들끼리 채팅하는 함수 */
 	@MessageMapping("/chat.sendMessage/{itemId}")
 	public void sss(@DestinationVariable("itemId")long itemId, @Payload ChatMessage chatMessage) {
 		chatMessage.setType(MessageType.REPLY);
@@ -73,6 +63,7 @@ public class ChatController {
 		
 		chatMessage.setContent(jobj);
 		simpMessagingTemplate.convertAndSend("/topic/chat/"+itemId, chatMessage);
+		
 	}
 	
 	
@@ -83,6 +74,27 @@ public class ChatController {
 		headerAccessor.getSessionAttributes().put("username", chatMessage.getSender());
 		
 		return chatMessage;
+	}
+	
+	/** 거래가 성사되고 나서 사람들끼리 1:1 채팅을 하는 함수 */
+	@MessageMapping("/room.sendMessage/{itemId}")
+	public void ddd(@DestinationVariable("itemId")long itemId, @Payload ChatMessage chatMessage) {
+		System.out.println("오는지는 ?");
+		Date date = java.util.Calendar.getInstance().getTime();
+		
+		JSONObject jobj = new JSONObject();
+		
+		redisUtil.setLdata(ROOM_CHAT_LOG_USER_ID+itemId, chatMessage.getSender());
+		redisUtil.setLdata(ROOM_CHAT_LOG_USER_CONTENT+itemId, chatMessage.getContent()+"");
+		redisUtil.setLdata(ROOM_CHAT_LOG_USER_TIME+itemId, format.format(date));
+		redisUtil.setLdata(ROOM_CHAT_LOG_USER_NICKNAME+itemId, redisUtil.getHdata("user", chatMessage.getSender())+"");
+		 
+		jobj.put("userNickname", redisUtil.getLastLdata(ROOM_CHAT_LOG_USER_NICKNAME+itemId).get(0));
+		jobj.put("chatContent" ,redisUtil.getLastLdata(ROOM_CHAT_LOG_USER_CONTENT+itemId).get(0));
+		jobj.put("chatCreatedAt", redisUtil.getLastLdata(ROOM_CHAT_LOG_USER_TIME+itemId).get(0));
+		
+		chatMessage.setContent(jobj);
+		simpMessagingTemplate.convertAndSend("/queue/room/"+itemId, chatMessage);
 	}
 	
 }

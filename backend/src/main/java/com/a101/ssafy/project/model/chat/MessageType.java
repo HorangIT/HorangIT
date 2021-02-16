@@ -6,8 +6,5 @@ public enum MessageType {
 	LEAVE,
 	FLEX,
 	AUCTION,
-	BLOCKED,
-	BUYER,
-	SELLER,
 	REPLY
 }

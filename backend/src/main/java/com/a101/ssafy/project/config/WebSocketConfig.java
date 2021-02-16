@@ -21,7 +21,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer{
 		registry.setApplicationDestinationPrefixes("/app");
 		//"/{prefix}"로 시작되는 메시지가 message-handling methods로 라우팅 되어야 함
 		
-		registry.enableSimpleBroker("/topic");
+		registry.enableSimpleBroker("/topic", "/queue");
 		//"/{주소}"로 시작되는 메시지가 메시지 브로커로 라우팅 되도록 정의
 		//메시지 브로커는 특정 주제를 구독한 연결된 모든 클라이언트에게 메시지를 broadcast함
 	}
