@@ -74,7 +74,7 @@ public class PaymentServiceImpl implements PaymentService {
         // 성공 | 실패 | 취소 url
         params.add("approval_url", "http://i4a101.p.ssafy.io/api/payment/success");
         params.add("cancel_url", "http://i4a101.p.ssafy.io/api/payment/cancel");
-        params.add("fail_url", "http://i4a101.p.ssafy.io/api/pagit statyment/fail");
+        params.add("fail_url", "http://i4a101.p.ssafy.io/api/payment/fail");
 //        params.add("approval_url", "http://localhost:8080/api/payment/success");
 //        params.add("cancel_url", "http://localhost:8080/api/payment/cancel");
 //        params.add("fail_url", "http://localhost:8080/api/payment/fail");
