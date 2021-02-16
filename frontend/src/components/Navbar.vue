@@ -10,7 +10,8 @@
         <v-row justify="end" class="py-2 d-md-flex d-none">
           <span v-if="login" class="d-flex align-center">
             <span class="d-none d-flex" id="welcome">{{ nickname }} 님, 환영합니다.</span>
-              <v-btn v-on="on" icon class="mx-1" to="/myauction">
+              <!-- <v-btn v-on="on" icon class="mx-1" to="/myauction"> -->
+              <v-btn icon class="mx-1" to="/myauction">
                 <v-badge content="5" value="5" color="orange" overlap>
                   <v-icon>mdi-bell</v-icon>
                 </v-badge>
