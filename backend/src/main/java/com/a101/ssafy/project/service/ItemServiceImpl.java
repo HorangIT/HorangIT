@@ -5,6 +5,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -37,6 +39,10 @@ public class ItemServiceImpl implements ItemService{
 	final String ITEM_CHAT_LOG_USER_CONTENT = "itemChatUserContent";
 	final String ITEM_CHAT_LOG_USER_TIME = "itemChatUserTime";
 	final String ITEM_CHAT_LOG_USER_NICKNAME = "itemChatNickname";
+	final String ROOM_CHAT_LOG_USER_ID = "roomChatUserId";
+	final String ROOM_CHAT_LOG_USER_CONTENT = "roomChatUserContent";
+	final String ROOM_CHAT_LOG_USER_TIME = "roomChatUserTime";
+	final String ROOM_CHAT_LOG_USER_NICKNAME = "roomChatNickname";
 	
 	@Autowired
 	ItemRepository itemRepository;
@@ -237,6 +243,17 @@ public class ItemServiceImpl implements ItemService{
 			returningItems.add(jobj);
 		}
 		
+		// 최신 순으로 정렬하기
+//		Collections.sort(returningItems, new Comparator<JSONObject>() {
+//
+//			@Override
+//			public int compare(JSONObject o1, JSONObject o2) {
+//				if (o1.get("itemId")) {
+//					
+//				}
+//				return 0;
+//			}
+//		});
 		
 		return returningItems;
 	}
@@ -312,6 +329,37 @@ public class ItemServiceImpl implements ItemService{
 			return true;
 		}
 		return false;
+	}
+	
+	@Override
+	public BasicResponse getChatRoomLog(long itemId) {
+		BasicResponse result = new BasicResponse();
+		result.status = true;
+		result.data = "1:1 채팅 로그를 조회했습니다.";
+		
+		JSONObject jobj = new JSONObject(); 
+
+		List<String> userId = redisUtil.getAllLdata(ROOM_CHAT_LOG_USER_ID+itemId);
+		List<String> content = redisUtil.getAllLdata(ROOM_CHAT_LOG_USER_CONTENT+itemId);
+		List<String> time = redisUtil.getAllLdata(ROOM_CHAT_LOG_USER_TIME+itemId);
+		List<String> nickname = redisUtil.getAllLdata(ROOM_CHAT_LOG_USER_NICKNAME+itemId);
+		JSONArray jarr = new JSONArray();
+		
+		for(int i=0; i<userId.size(); ++i) {
+			JSONObject temp = new JSONObject();
+			
+			temp.put("userId", userId.get(i));
+			temp.put("userNickname", nickname.get(i));
+			temp.put("chatContent", content.get(i));
+			temp.put("chatCreatedAt", time.get(i));
+			
+			jarr.add(temp);
+		}
+		
+		jobj.put("log", jarr);
+		
+		result.object = jobj;
+		return result;
 	}
 
 }

@@ -11,6 +11,7 @@ import Detail from "@/views/Detail.vue";
 import Notfound from "@/views/Notfound.vue";
 import Myauction from "@/views/Myauction.vue";
 import TestChat from "@/components/myauction/Chat.vue";
+import Success from "@/views/Success.vue";
 
 Vue.use(VueRouter);
 
@@ -43,7 +44,7 @@ const routes: Array<RouteConfig> = [
         path: "/myauction",
         component: Myauction,
         name: "Myauction"
-      }
+      },
     ]
   },
   {
@@ -58,7 +59,17 @@ const routes: Array<RouteConfig> = [
   {
     path: "/profile",
     component: ProfileForm
-  }
+  },
+  {
+    path: "/api/payment/success",
+    component: Success,
+    name: "Success"
+  },
+  {
+    path: "/api/payment/fail",
+    component: Myauction,
+    name: "Myauction"
+  },
 ];
 
 const router = new VueRouter({

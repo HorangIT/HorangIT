@@ -1,0 +1,91 @@
+<html>
+<head>
+</head>
+
+<body>
+<p>안녕하세요</p>
+	<form id="testForm" name="testForm">
+		<textarea rows="5" cols="30" id="msgArea">
+		</textarea>
+		
+		<br>
+		메시지 : <input type="text" id="chatMsg"> <!-- 메시지 보내는 부분 -->
+		<br>
+		상대 아이디 : <input type="text" id="targetUser"> <!-- 채팅 상대 아이디 작성 부분 -->
+	
+		<br>
+		<button type="submit" value="전송" id="btnSend">옹졸한버튼</button>
+	
+	</form>
+	
+	
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+	
+	<script>
+		var stompClient = null;
+
+		//var testForm = document.querySelector('#testForm');
+
+	
+		window.onload = function(){
+			console.log("윈도우 로딩 다 되면 연결시도");
+			
+			function connect(){
+				var socket = new SockJS('/api/ws');
+				stompClient = Stomp.over(socket);
+				
+				stompClient.connect({}, onConnected, onError);
+			}
+			
+			function onConnected(){
+				// SubScribe to the Public Topic
+				stompClient.subscribe('/queue/room/1', onMessageReceived);
+				console.log("연결이 됐다......");
+				
+				stompClient.send("/app/chat.addUser",{},
+						JSON.stringify({sender: "야옹이", type: 'JOIN'})
+						);
+			}
+			connect();
+		};
+		
+		function onError(error) {
+			console.log("오류났어요!!");
+		}
+		
+		function sendMessage(event){
+			console.log("클릭했을때 발동??");
+			console.log(event);
+			
+			if(stompClient){
+				var chatMessage = {
+						sender: "야옹이",
+						content: "반갑습니다",
+						type: 'CHAT'
+				};
+				
+				stompClient.send("/app/room.sendMessage/1", {}, JSON.stringify(chatMessage));
+				
+			}
+			event.preventDefault();
+		}
+		
+		function onMessageReceived(payload){
+			var message = JSON.parse(payload.body);
+			console.log(message+"메시지 받은거");
+			
+			
+			var pID = document.getElementById('msgArea');
+			
+			//console.log(pID+"pid입니다...");
+			pID.innerText = message.content;
+			
+		}
+	
+		testForm.addEventListener('submit', sendMessage, true);
+	</script>
+	
+	
+</body>
+</html>
