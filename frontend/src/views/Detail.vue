@@ -62,8 +62,9 @@
             <p class="my-3">{{ item.description }}</p>
 
             <v-divider></v-divider>
-            <p class="py-4 ma-0">나의 응찰 / 전체 응찰 :</p>
-            <div v-if="isOver">
+            <p v-if="!gseller" class="py-4 ma-0">나의 응찰 / 전체 응찰 :</p>
+            <div v-if="seller"></div>
+            <div v-else-if="isOver">
               <v-btn
                 class="blue-grey"
                 outlined
@@ -152,11 +153,13 @@ export default Vue.extend({
   },
 
   data: () => ({
+    seller: false,
     item: {},
     itemId: 0,
     nowPrice: 0,
     nextPrice: 0,
     happyPrice: 0,
+    sellerId: 0,
     biddingLog: new Array<String>(),
     isOver: false,
     dialog: false,
@@ -198,6 +201,10 @@ export default Vue.extend({
         this.happyPrice = res.data.object.happyPrice;
         this.nextPrice = res.data.object.nextPrice;
         this.nowPrice = res.data.object.nowPrice;
+        if (Number(this.$store.state.userModule.user.object.user.id) === Number(res.data.object.sellerId)) {
+          this.seller = true;
+          console.log(this.seller)
+        }
       })
       // 404 처리
       .catch(() => this.$router.replace({ path: '/404' }));
