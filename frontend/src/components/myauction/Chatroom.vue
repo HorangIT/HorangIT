@@ -2,11 +2,18 @@
   <div>
     <v-card
       style="overflow-x: hidden; overflow-y: auto;"
-      min-height="25vh"
-      max-height="25vh"
+      min-height="50vh"
+      max-height="50vh"
       elevation="0"
       class="chatScroll"
     >
+      <v-toolbar>
+        <v-btn
+          @click="$emit('close')"
+          plain
+        ><v-icon>mdi-arrow-collapse-left</v-icon></v-btn>
+        1:1 채팅방
+      </v-toolbar>
       <v-list
         two-line
       >
@@ -57,9 +64,23 @@ import { itemApi } from "../../utils/axios";
 moment.locale('ko');
 
 export default Vue.extend({
+  data (): Record<string, any> {
+    return {
+      itemId: this.$route.params.id,
+      chatInput: "",
+      chatLog: [],
+      stompClient: Stomp.over(new SockJS(`${process.env.VUE_APP_API_SERVER}/ws`)),
+      momentTest: moment().format('YYYY년 MMMM Do HH:mm:ss'),
+    };
+  },
+  props: [
+    'chatInfo'
+  ],
   created(): void {
+    console.log('내 아이디는 ' + this.chatInfo.myId)
+    console.log('이 아이템은 ' + this.chatInfo.itemId)
     // 채팅로그 확인
-    this.getChatLog();
+    this.getChatRoomLog();
     // 유저 로그인 확인
     if (this.user !== null) {  
       // WebSocket connect
@@ -68,7 +89,8 @@ export default Vue.extend({
         () => {
           console.log('onConnect');
           // 채팅방 구독
-          this.stompClient.subscribe(`/topic/chat/${this.itemId}`, (message: any) => {
+          this.stompClient.subscribe(`/queue/room/${this.chatInfo.itemId}`, (message: any) => {
+          // this.stompClient.subscribe(`/topic/chat/?string/?number`, (message: any) => {
             console.log('im subscribe response callback');
             // chatLog의 낱개로 된 똑같은 dataset의 응답이 필요
             const subscribedMessageBody = JSON.parse(message.body)
@@ -76,29 +98,19 @@ export default Vue.extend({
               ...subscribedMessageBody.content,
               userId: subscribedMessageBody.sender,
               chatCreatedAt: moment(subscribedMessageBody.content.chatCreatedAt).calendar(),
+              // 판매자인지 확인하는 조건 필요
               userNickname: Number(subscribedMessageBody.sender) === this.user.id ? subscribedMessageBody.content.userNickname + ' (본인)' : subscribedMessageBody.content.userNickname,
             }
             console.log(Number(subscribedMessageBody.sender), this.user.id)
             this.chatLog.push(subscribedMessage)
-            // console.log(JSON.parse(message.body).content);
+            console.log(JSON.parse(message.body).content);
           });
-          // this.stompClient.send("/app/chat.addUser", {}, JSON.stringify({sender: this.user.nickname, type: 'JOIN'}));
+          this.stompClient.send("/app/chat.addUser", {}, JSON.stringify({sender: this.user.nickname, type: 'JOIN'}));
         },
         (onError: any) => {
-          alert(onError);
+          console.log(onError);
         });
     }
-  },
-  data (): Record<string, any> {
-    return {
-      itemId: this.$route.params.id,
-      chatInput: "",
-      chatLog: [],
-      // stompClient: (new SockJS("http://localhost:8000/api/ws")),
-      // stompClient: (new SockJS("http://i4a101.p.ssafy.io:8000/api/ws")),
-      stompClient: Stomp.over(new SockJS(`${process.env.VUE_APP_API_SERVER}/ws`)),
-      momentTest: moment().format('YYYY년 MMMM Do HH:mm:ss'),
-    };
   },
   computed: {
     user (): any {
@@ -115,17 +127,21 @@ export default Vue.extend({
   },
   watch: {
     user (): any {
-      this.getChatLog();
+      this.getChatRoomLog();
     }    
   },
   methods: {
     // 채팅로그 확인
-    getChatLog (): void {
-      itemApi.getChatLog(this.itemId)
+    getChatRoomLog (): void {
+      console.log('getChatRoomLog()')
+      itemApi.getChatRoomLog(this.chatInfo.itemId)
         .then((response: any) => {
           this.chatLog = response.data.object.log
+          console.log(response)
+          console.log(this.chatLog, '이거이거이거')
           this.chatLog.forEach((chat: any) => {
             chat.chatCreatedAt = moment(chat.chatCreatedAt).calendar()
+            // 판매자 확인 조건 필요
             if (this.user !== null && Number(chat.userId) === this.user.id) {
               chat.userNickname += ' (본인)'
             }
@@ -140,7 +156,8 @@ export default Vue.extend({
             content: this.chatInput,
             type: 'CHAT',
         };
-        this.stompClient.send(`/app/chat.sendMessage/${this.itemId}`, {}, JSON.stringify(chatMessage));
+        this.stompClient.send(`/app/room.sendMessage/${this.chatInfo.itemId}`, {}, JSON.stringify(chatMessage));
+        // this.stompClient.send(`/app/chat.sendMessage/?string/?number`, {}, JSON.stringify(chatMessage));
         this.chatInput = '';
       }
     },

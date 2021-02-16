@@ -10,6 +10,7 @@ import PostView from "@/views/PostView.vue";
 import Detail from "@/views/Detail.vue";
 import Notfound from "@/views/Notfound.vue";
 import Myauction from "@/views/Myauction.vue";
+import Chatroom from "@/components/myauction/Chatroom.vue";
 import Success from "../components/pay/Success.vue";
 import Fail from "../components/pay/Fail.vue";
 
@@ -46,6 +47,16 @@ const routes: Array<RouteConfig> = [
         name: "Myauction"
       },
     ]
+  },
+  {
+    path: "/404",
+    component: Notfound
+  },
+  {
+    path: "/chatroom/:id",
+    component: Chatroom,
+    name: "Chatroom",
+    props: true,
   },
   // {
   //   path: "/404",
