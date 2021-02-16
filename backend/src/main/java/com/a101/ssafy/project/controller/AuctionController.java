@@ -123,7 +123,8 @@ public class AuctionController {
 				jobj.put("buyerId", receipt.getBuyerId());
 				jobj.put("itemTitle", receipt.getItemTitle());
 				jobj.put("status", receipt.getStatus());
-				jobj.put("message", "축하합니다. 낙찰에 성공했습니다.");
+				jobj.put("message", "축하합니다!! " + receipt.getFinalPrice() + "원에 낙찰 받았습니다.");
+				jobj.put("finalPrice", receipt.getFinalPrice());
 				jarr.add(jobj);
 				
 			}
@@ -153,7 +154,8 @@ public class AuctionController {
 				jobj.put("buyerId", receipt.getBuyerId());
 				jobj.put("itemTitle", receipt.getItemTitle());
 				jobj.put("status", receipt.getStatus());
-				jobj.put("message", "등록하신 상품이 낙찰되었습니다.");
+				jobj.put("message", "등록하신 상품이 " + receipt.getFinalPrice() + "원에 낙찰되었습니다.");
+				jobj.put("finalPrice", receipt.getFinalPrice());
 				jarr.add(jobj);
 				
 			}

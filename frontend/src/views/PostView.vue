@@ -9,7 +9,7 @@
 
             <v-col>
               <h4 class="mb-5">경매 물품 이름</h4>
-              <v-text-field label="" solo v-model="title"></v-text-field>
+              <v-text-field label="" solo v-model="title" ref="title"></v-text-field>
               <h4 class="mb-5">경매 물품 내용</h4>
               <v-textarea label="" solo v-model="description"></v-textarea>
 
@@ -366,7 +366,8 @@ export default Vue.extend({
     this.endDateTime = this.endDate + " " + this.endTime;
 
     this.uid = this.$store.state.userModule.user.object.user.id;
-    
+    // console.log(this.$refs.title);
+    // ((this.$refs.title as any).input as any).focus();
   },
   methods: {
     async writePost() {
