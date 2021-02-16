@@ -35,6 +35,7 @@ public class ItemServiceImpl implements ItemService{
 	final String ITEM_NAME = "item";
 	final String ITEM_EXPIRED = "Expired";
 	final String ITEM_HAPPY_PRICE = "Happy";
+	final String ITEM_SELLER_ID = "Seller";
 	final String ITEM_CHAT_LOG_USER_ID = "itemChatUserId";
 	final String ITEM_CHAT_LOG_USER_CONTENT = "itemChatUserContent";
 	final String ITEM_CHAT_LOG_USER_TIME = "itemChatUserTime";
@@ -118,10 +119,9 @@ public class ItemServiceImpl implements ItemService{
 		long remainingTime = (endTimeToEpochTime - startTimeToEpochTime)/1000;
 		System.out.println(remainingTime+"남았다고 가정");
 		redisUtil.setData(ITEM_NAME+item.getId(), item.getStartPrice()+""); //expired trigger 오면 삭제해주기!
-//		startPrice <- 사는거 (처음에는 삼 ㅋㅋ)
-		//expired trigger 오면 삭제해주기!
 		redisUtil.setData(ITEM_HAPPY_PRICE+item.getId(), item.getHappyPrice()+"");
 		redisUtil.setDataExpire(ITEM_EXPIRED+item.getId(), endTimeToEpochTime+"", remainingTime); 
+		redisUtil.setData(ITEM_SELLER_ID+item.getId(), item.getUserId()+"");
 		
 		return result;
 	}
@@ -151,6 +151,7 @@ public class ItemServiceImpl implements ItemService{
 			jobj.put("happyPrice", item.getHappyPrice());
 			jobj.put("startPrice", item.getStartPrice());
 			jobj.put("itemId", item.getId());
+			jobj.put("sellerId", item.getUserId());
 			
 			String str = redisUtil.getData(ITEM_NAME+item.getId()); //사람이 살가격
 			jobj.put("nowPrice", Long.parseLong(str));

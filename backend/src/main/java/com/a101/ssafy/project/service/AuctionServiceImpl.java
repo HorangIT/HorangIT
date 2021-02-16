@@ -19,6 +19,7 @@ public class AuctionServiceImpl implements AuctionService{
 	final String ITEM_EXPIRED = "Expired"; //만료
 	final String ITEM_START_PRICE = "Start"; //시작가격
 	final String ITEM_HAPPY_PRICE = "Happy"; //flex가격
+	final String ITEM_SELLER_ID = "Seller"; //seller 확인
 
 	final String AUCTION = "auction";
 	@Autowired
@@ -145,8 +146,13 @@ public class AuctionServiceImpl implements AuctionService{
 
 	@Override
 	public JSONObject auction(String userId, String itemId) {
+		if(userId.equals(redisUtil.getData(ITEM_SELLER_ID+itemId))) {
+			JSONObject jobj = new JSONObject();
+			jobj.put("error", "판매자가 경매할 수 없습니다.");
+			return jobj;
+			
+		}
 		String getCurrentPrice = getCurrentAuctionValue(itemId);
-		System.out.println(getCurrentPrice+"현재가 얼마임");
 		addAuctionLog(userId, itemId, getCurrentPrice); 
 	
 		JSONObject jobj = getPriceAfterAuction(getCurrentPrice, itemId);
