@@ -58,7 +58,7 @@
             <p class="my-3">{{ item.description }}</p>
 
             <v-divider></v-divider>
-            <p v-if="!gseller" class="py-4 ma-0">나의 응찰 / 전체 응찰 :</p>
+            <p v-if="!seller" class="py-4 ma-0">나의 응찰 / 전체 응찰 :</p>
             <div v-if="seller"></div>
             <div v-else-if="isOver">
               <v-btn
@@ -173,13 +173,13 @@ export default Vue.extend({
   },
   watch: {
     biddingLog() {
-      // console.log('watched!')
-      // if (this.nowPrice === this.happyPrice) {
-      //   this.isOver = true;
-      // }
-      //  if (this.nowPrice === Number(this.biddingLog[0].split(';')[1])) {
-      //   this.isOver = true;
-      // }
+      console.log('watched!')
+      if (this.nowPrice === this.happyPrice) {
+        this.isOver = true;
+      }
+      if (this.nowPrice === Number(this.biddingLog[0].split(';')[1])) {
+        this.isOver = true;
+      }
     }
   },
   methods: {
@@ -206,6 +206,7 @@ export default Vue.extend({
           // server 옥션 메세지 전송 endpoint 구독하기
           this.stompClient.subscribe(`/topic/auction/${this.itemId}`, res => {
             // nowPrice, nextPrice 업데이트
+            console.log('auction subscribed!!!')
             const info = JSON.parse(res.body).content
             // log 업데이트
             this.biddingLog.unshift(info.log);
