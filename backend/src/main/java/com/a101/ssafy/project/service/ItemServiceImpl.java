@@ -225,11 +225,11 @@ public class ItemServiceImpl implements ItemService{
 		for (int i = 0; i < items.size(); i++) {
 			JSONObject jobj = new JSONObject();
 			
-			// 시작하지 않은 경매를 제외한 경매들을 불러옴	
-			if (items.get(i).getStartDate().after(now)) {	
-				System.out.println(items.get(i).getName()+"'S AUCTION IS NOT AVAILABLE RIGHT NOW");
-				continue;
-			}
+//			// 시작하지 않은 경매를 제외한 경매들을 불러옴	
+//			if (items.get(i).getStartDate().after(now)) {	
+//				System.out.println(items.get(i).getName()+"'S AUCTION IS NOT AVAILABLE RIGHT NOW");
+//				continue;
+//			}
 			
 			jobj.put("itemId",items.get(i).getId());
 			jobj.put("name",items.get(i).getName());
