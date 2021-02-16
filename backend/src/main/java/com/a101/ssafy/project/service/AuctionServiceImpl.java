@@ -66,27 +66,37 @@ public class AuctionServiceImpl implements AuctionService{
 	public JSONObject getPriceAfterAuction(String oldPrice, String itemId) {
 		JSONObject jobj = new JSONObject();
 		System.out.println(oldPrice+"옛날 가격");
+		long happyPrice = Long.parseLong(redisUtil.getData(ITEM_HAPPY_PRICE+itemId));
 		long newPrice = Long.parseLong(oldPrice)+getAuctionUnit(oldPrice);
 		
 		long nextPrice = newPrice+getAuctionUnit(newPrice+"");
+
+		if(happyPrice <= Long.parseLong(oldPrice)) {
+			jobj.put("test", "응찰 가격을 넘어섰어요! 이제 사야해요.");			
+			
+			jobj.put("nowPrice", happyPrice);
+			jobj.put("nextPrice", happyPrice);
+			
+			String str = getLastAuctionLog(itemId);
+			if(str!=null) {
+				jobj.put("log", getLastAuctionLog(itemId)); //log까지 넣어줌			
+			}
+			
+			return jobj;
+			
+		}
 		
 		//happy price 보다 값이 커지는 경우
-		long happyPrice = Long.parseLong(redisUtil.getData(ITEM_HAPPY_PRICE+itemId));
 		if(happyPrice <= newPrice) {
 			newPrice = happyPrice;
-			jobj.put("test", "응찰 가격을 넘어섰어요! 이제 사야해요.");
-//			done();
 		}
 		
 		if(happyPrice <= nextPrice) {			
 			nextPrice = happyPrice;
-			jobj.put("test", "응찰 가격을 넘어섰어요! 이제 사야해요.");
 		}
 //		String now = redisUtil.getData(ITEM_NAME+itemId);
 		
-		if(newPrice!=happyPrice) {
-			redisUtil.setData(ITEM_NAME+itemId, newPrice+""); //레디스 값 갱신 
-		}
+		redisUtil.setData(ITEM_NAME+itemId, newPrice+""); //레디스 값 갱신 
 		
 		String str = getLastAuctionLog(itemId);
 		if(str!=null) {
@@ -99,12 +109,8 @@ public class AuctionServiceImpl implements AuctionService{
 	}
 
 	public void done(String itemId) {
-		redisUtil.deleteData(ITEM_NAME+itemId);
 		redisUtil.deleteData(ITEM_EXPIRED+itemId);
 		redisUtil.deleteData(ITEM_HAPPY_PRICE+itemId);
-		System.out.println("채팅창 서로 만들어주고(없으면안만듬)");
-		System.out.println("영수증 발행하고");
-		System.out.println("레디스 값 지우고(happy price/start price/ expired되지 않았다면 expired 지우고");	
 	}
 
 	@Override
@@ -140,9 +146,14 @@ public class AuctionServiceImpl implements AuctionService{
 	@Override
 	public JSONObject auction(String userId, String itemId) {
 		String getCurrentPrice = getCurrentAuctionValue(itemId);
+		System.out.println(getCurrentPrice+"현재가 얼마임");
 		addAuctionLog(userId, itemId, getCurrentPrice); 
 	
-		return getPriceAfterAuction(getCurrentPrice, itemId);
+		JSONObject jobj = getPriceAfterAuction(getCurrentPrice, itemId);
+		if(jobj.get("test")!=null) { //test!=null 이면 test 즉 이제 응찰해야한다는뜻
+			done(itemId);
+		}
+		return jobj;
 	}
 
 	@Override
