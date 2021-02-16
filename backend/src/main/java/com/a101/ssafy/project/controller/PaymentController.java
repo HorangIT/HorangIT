@@ -80,6 +80,7 @@ public class PaymentController {
 		BasicResponse result = new BasicResponse();
 		JSONObject jobj = new JSONObject();
 		jobj.put("itemId", approved.getItem_code());
+		jobj.put("itemName", approved.getItem_name());
 		
 		if (updateStatus) {
 			result.status = true;
