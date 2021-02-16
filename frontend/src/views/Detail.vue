@@ -200,15 +200,21 @@ export default Vue.extend({
         return this.$store.state.userModule.user.object.user;
       }
       return null;
+    },
+    isOver (): boolean {
+      if (this.biddingLog.length === 0) {
+        return false;
+      }
+      return this.happyPrice === Number(this.biddingLog[0].split(';')[1])
     }
   },
   watch: {
-    biddingLog() {
-      console.log('watched!')
-      if (this.happyPrice === Number(this.biddingLog[0].split(';')[1])) {
-        this.isOver = true;
-      }
-    }
+    // biddingLog() {
+    //   console.log('watched!')
+    //   if (this.happyPrice === Number(this.biddingLog[0].split(';')[1])) {
+    //     this.isOver = true;
+    //   }
+    // }
   },
   methods: {
     getItem(id: number) {
