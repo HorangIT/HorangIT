@@ -11,8 +11,6 @@ const authHeader = function(): Record<string, string> {
 
 const request: AxiosInstance = axios.create({
   baseURL: process.env.VUE_APP_API_SERVER,
-  // baseURL: "http://i4a101.p.ssafy.io/api",
-  // baseURL: "http://localhost:8000/api",
   headers: authHeader()
 });
 
