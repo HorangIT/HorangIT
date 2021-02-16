@@ -86,9 +86,12 @@ export const itemApi = {
       params: searchParams
     });
   },
-  getChatLog (page: number): any {
-    return request.get(`/item/${page}/chat`)
-  }
+  getChatLog (itemId: number): any {
+    return request.get(`/item/${itemId}/chat`)
+  },
+  getChatRoomLog (itemId: number): any {
+    return request.get(`/item/${itemId}/chatroom`)
+  },
 };
 
 export const auctionApi = {

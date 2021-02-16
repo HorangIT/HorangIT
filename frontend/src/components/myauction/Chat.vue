@@ -59,7 +59,7 @@ moment.locale('ko');
 export default Vue.extend({
   created(): void {
     // 채팅로그 확인
-    this.getChatLog();
+    this.getChatRoomLog();
     // 유저 로그인 확인
     if (this.user !== null) {  
       // WebSocket connect
@@ -68,7 +68,8 @@ export default Vue.extend({
         () => {
           console.log('onConnect');
           // 채팅방 구독
-          this.stompClient.subscribe(`/queue/room/${this.itemId}`, (message: any) => {
+          this.stompClient.subscribe(`/topic/chat/1`, (message: any) => {
+          // this.stompClient.subscribe(`/topic/chat/?string/?number`, (message: any) => {
             console.log('im subscribe response callback');
             // chatLog의 낱개로 된 똑같은 dataset의 응답이 필요
             const subscribedMessageBody = JSON.parse(message.body)
@@ -76,16 +77,17 @@ export default Vue.extend({
               ...subscribedMessageBody.content,
               userId: subscribedMessageBody.sender,
               chatCreatedAt: moment(subscribedMessageBody.content.chatCreatedAt).calendar(),
+              // 판매자인지 확인하는 조건 필요
               userNickname: Number(subscribedMessageBody.sender) === this.user.id ? subscribedMessageBody.content.userNickname + ' (본인)' : subscribedMessageBody.content.userNickname,
             }
             console.log(Number(subscribedMessageBody.sender), this.user.id)
             this.chatLog.push(subscribedMessage)
-            // console.log(JSON.parse(message.body).content);
+            console.log(JSON.parse(message.body).content);
           });
-          // this.stompClient.send("/app/chat.addUser", {}, JSON.stringify({sender: this.user.nickname, type: 'JOIN'}));
+          this.stompClient.send("/app/chat.addUser", {}, JSON.stringify({sender: this.user.nickname, type: 'JOIN'}));
         },
         (onError: any) => {
-          alert(onError);
+          console.log(onError);
         });
     }
   },
@@ -113,17 +115,18 @@ export default Vue.extend({
   },
   watch: {
     user (): any {
-      this.getChatLog();
+      this.getChatRoomLog();
     }    
   },
   methods: {
     // 채팅로그 확인
-    getChatLog (): void {
-      itemApi.getChatLog(this.itemId)
+    getChatRoomLog (): void {
+      itemApi.getChatRoomLog(this.itemId)
         .then((response: any) => {
           this.chatLog = response.data.object.log
           this.chatLog.forEach((chat: any) => {
             chat.chatCreatedAt = moment(chat.chatCreatedAt).calendar()
+            // 판매자 확인 조건 필요
             if (this.user !== null && Number(chat.userId) === this.user.id) {
               chat.userNickname += ' (본인)'
             }
@@ -138,7 +141,8 @@ export default Vue.extend({
             content: this.chatInput,
             type: 'CHAT',
         };
-        this.stompClient.send(`/app/room.sendMessage/${this.itemId}`, {}, JSON.stringify(chatMessage));
+        this.stompClient.send(`/app/chat.sendMessage/1`, {}, JSON.stringify(chatMessage));
+        // this.stompClient.send(`/app/chat.sendMessage/?string/?number`, {}, JSON.stringify(chatMessage));
         this.chatInput = '';
       }
     },
