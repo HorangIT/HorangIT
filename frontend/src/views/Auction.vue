@@ -45,7 +45,7 @@
         <div class="text-center mt-12">
           <v-pagination
             v-model="page"
-            :length="6"
+            :length="totalPage"
             @input="getPage"
             color="orange"
           >
@@ -76,6 +76,7 @@ export default Vue.extend({
   },
   data: () => ({
     page: 1,
+    totalPage: 1,
     filters: {
       status: false,
       category: [],
@@ -104,8 +105,9 @@ export default Vue.extend({
       const filters = this.$store.state.auctionModule.filters;
       
       itemApi.getItemPage(page, filters).then((res: AxiosResponse) => {
+        this.totalPage = res.data.total_pages;
         this.items = res.data.object;
-        console.log(this.items)
+        // console.log(this.items)
       })
     },
     // reset버튼을 누르면 기본 필터값으로 적용됩니다.
