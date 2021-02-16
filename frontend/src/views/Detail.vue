@@ -59,59 +59,90 @@
 
             <v-divider></v-divider>
             <p v-if="!seller" class="py-4 ma-0">나의 응찰 / 전체 응찰 :</p>
-            <div v-if="seller"></div>
-            <div v-else-if="isOver">
-              <v-btn
-                class="blue-grey"
-                outlined
-                tile
-                width="100%"
-                height="12vh"
-                disabled
-              >
-                <h2 class="blue-grey--text text--lighten-5">
-                  마감되었습니다.
-                </h2>
-              </v-btn>              
-            </div>
-            <div v-else>
-              <v-btn
-                class="primary white--text"
-                outlined
-                tile
-                width="50%"
-                height="12vh"
-                @click="bid"
-              >
-                <h2>
-                  {{ nowPrice | comma }}원<br />응찰하기<br />
-                  <small>다음 응찰가는 {{ nextPrice | comma }}원입니다.</small>
-                </h2>
-              </v-btn>
-              <v-btn
-                class="orange white--text"
-                outlined
-                tile
-                width="50%"
-                height="12vh"
-                @click="dialog = true"
-              >
-                <h2>{{ item.happyPrice | comma }}원<br />FLEX</h2>
-              </v-btn>
-              <v-dialog v-model="dialog" max-width="290">
-                <v-card>
-                  <h1 class="pt-4 text-center">ARE YOU SURE?</h1>
-                  <v-img src="../assets/img/layout/horangit_6.png"></v-img>
-                  <v-card-actions>
-                    <v-btn color="primary" @click="dialog = false">
-                      한 번 더 생각해볼게요
-                    </v-btn>
-                    <v-spacer></v-spacer>
-                    <v-btn color="warning" @click="flex"> FLEX!!! </v-btn>
-                  </v-card-actions>
-                </v-card>
-              </v-dialog>
-            </div>
+            <!-- <div v-if="seller"></div> -->
+            <span v-if="!seller"> <!-- 판매자가 아니고 -->
+              <div v-if="isOver"> <!-- 경매가 끝났으면 -->
+                <v-btn
+                  class="blue-grey"
+                  outlined
+                  tile
+                  width="100%"
+                  height="12vh"
+                  disabled
+                >
+                  <h2 class="blue-grey--text text--lighten-5">
+                    마감되었습니다.
+                  </h2>
+                </v-btn>              
+              </div>
+              <div v-else> <!-- 경매가 진행중이면 -->
+                <v-btn
+                  class="primary white--text"
+                  outlined
+                  tile
+                  width="50%"
+                  height="12vh"
+                  @click="bid"
+                >
+                  <h2>
+                    {{ nowPrice | comma }}원<br />응찰하기<br />
+                    <small>다음 응찰가는 {{ nextPrice | comma }}원입니다.</small>
+                  </h2>
+                </v-btn>
+                <v-btn
+                  class="orange white--text"
+                  outlined
+                  tile
+                  width="50%"
+                  height="12vh"
+                  @click="dialog = true"
+                >
+                  <h2>{{ item.happyPrice | comma }}원<br />FLEX</h2>
+                </v-btn>
+                <v-dialog v-model="dialog" max-width="290"> <!-- flex 확인 모달 -->
+                  <v-card>
+                    <h1 class="pt-4 text-center">ARE YOU SURE?</h1>
+                    <v-img src="../assets/img/layout/horangit_6.png"></v-img>
+                    <v-card-actions>
+                      <v-btn color="primary" @click="dialog = false">
+                        한 번 더 생각해볼게요
+                      </v-btn>
+                      <v-spacer></v-spacer>
+                      <v-btn color="warning" @click="flex"> FLEX!!! </v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
+              </div>
+            </span>
+            <span v-else> <!-- 판매자고 -->
+              <div v-if="isOver"> <!-- 경매가 끝났으면 -->
+                <v-btn
+                  class="blue-grey"
+                  outlined
+                  tile
+                  width="100%"
+                  height="12vh"
+                  disabled
+                >
+                  <h2 class="blue-grey--text text--lighten-5">
+                    마감되었습니다.
+                  </h2>
+                </v-btn>              
+              </div>
+              <div v-else> <!-- 경매가 진행중이면 -->
+                <v-btn
+                  color="orange lighten-3"
+                  outlined
+                  tile
+                  width="100%"
+                  height="12vh"
+                  disabled
+                >
+                  <h2 class="blue-grey--text text--lighten-5">
+                    경매가 진행중입니다.
+                  </h2>
+                </v-btn>
+            </span>
             <v-divider></v-divider>
             <p class="py-4 ma-0">응찰내역</p>
             <BiddingLog :biddingLog="biddingLog"></BiddingLog>
@@ -174,10 +205,10 @@ export default Vue.extend({
   watch: {
     biddingLog() {
       console.log('watched!')
-      if (this.nowPrice === this.happyPrice) {
-        this.isOver = true;
-      }
-      if (this.nowPrice === Number(this.biddingLog[0].split(';')[1])) {
+      // if (this.nowPrice === this.happyPrice) {
+      //   this.isOver = true;
+      // }
+      if (this.happyPrice === Number(this.biddingLog[0].split(';')[1])) {
         this.isOver = true;
       }
     }
