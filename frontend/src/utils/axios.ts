@@ -113,7 +113,7 @@ export const myAuctionApi = {
   pay (data: any): any {
     return request.post('/payment', data);
   },
-  item(itemId: any): any {
+  item(itemId: number): any {
     return request.get(`/auction/item/${itemId}`);
   },
   success (token: any):any {

@@ -35,7 +35,7 @@
               v-text="item.message"
             ></v-list-item-subtitle>
           </v-list-item-content>
-          <v-btn class="mr-4" v-if="item.status==1" @click="pay">결제</v-btn>
+          <v-btn class="mr-4" v-if="item.status==1" @click="pay(index, item.itemId)">결제</v-btn>
           <v-btn class="mr-4" v-if="item.status==2" disabled>결제완료</v-btn>
           <v-btn class="mr-4" v-if="item.status==3" @click="takeCompleted(item.itemId)">수령확인</v-btn>
           <v-btn class="mr-4" v-if="item.status==4" disabled>거래완료</v-btn>
@@ -133,27 +133,30 @@ export default Vue.extend({
     }
   },
   methods: {
-    pay() {
+    pay(index: number, itemId: number) {
       const data = {
-        buyerId: 1,
-        itemId: 1,
-        name: "컴퓨터",
-        price: 10000
+        buyerId: (this.buyItems[index] as any).buyerId,
+        itemId: itemId,
+        name: (this.buyItems[index] as any).itemTitle,
+        price: (this.buyItems[index] as any).finalPrice,
       }
+      // console.log(data);
       myAuctionApi.pay(data).then((res: AxiosResponse) => {
         location.href = res.data.object.successUrl;
       });
     },
-    async deliveryCompleted(itemId: any) {
+    async deliveryCompleted(itemId: number) {
       try {
-        // const { data } = await myAuctionApi.item(itemId);
+        const { data } = await myAuctionApi.item(itemId);
+        window.location.reload();
       } catch(error) {
         console.log(error);
       }
     },
-    async takeCompleted(itemId: any) {
+    async takeCompleted(itemId: number) {
       try {
-        // const { data } = await myAuctionApi.item(itemId);
+        const { data } = await myAuctionApi.item(itemId);
+        window.location.reload();
       } catch(error) {
         console.log(error);
       }
