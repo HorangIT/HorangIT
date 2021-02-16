@@ -2,6 +2,7 @@
   <v-container v-if="!open">
     <v-list two-line>
       <h3 class="mb-5 mt-5">판매물품</h3>
+      <h5 v-if="sellItems.length == 0">판매중인 물품이 없습니다.</h5>
       <template v-for="index in sellRange((sellPage - 1)*5, 5)">
         <v-list-item :key="'sell' + index" class="blue lighten-5">
           <v-list-item-content>
@@ -34,6 +35,7 @@
       </div>
 
       <h3 class="mb-5 mt-5">구매물품</h3>
+      <h5 v-if="buyItems.length == 0">구매중인 물품이 없습니다.</h5>
       <template  v-for="index in buyRange((buyPage - 1)*5, 5)">
         <v-list-item :key="'buy' + index" class="orange lighten-5">
           <v-list-item-content>
@@ -249,7 +251,8 @@ export default Vue.extend({
     sellRange(start: number, count: number) {
       let arr = [];
       let length = this.sellItems.length;
-
+      
+      if (length <= 0) return [];
       for (let i = 0; i < count; i++) { 
           arr[i] = start;
           start++;
@@ -261,6 +264,7 @@ export default Vue.extend({
       let arr = [];
       let length = this.buyItems.length;
 
+      if (length <= 0) return [];
       for (let i = 0; i < count; i++) { 
           arr[i] = start;
           start++;
