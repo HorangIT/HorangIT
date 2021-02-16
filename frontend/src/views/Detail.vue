@@ -161,6 +161,7 @@ export default Vue.extend({
     isOver: false,
     dialog: false,
     stompClient: Stomp.over(new SockJS("http://localhost:8000/api/ws")),
+//stompClient: Stomp.over(new SockJS("http://i4a101.p.ssafy.io:80/api/ws")),
   }),
   filters: {
     comma(val: number | string) {

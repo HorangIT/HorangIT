@@ -134,10 +134,10 @@ public class ItemServiceImpl implements ItemService{
 		if(optional.isPresent()) {
 			Item item = optional.get();
 			
-			if (item.getStartDate().after(now)) {
-				System.out.println("시작하지 않은 경매");
-				return null;
-			}
+//			if (item.getStartDate().after(now)) {
+//				System.out.println("시작하지 않은 경매");
+//				return null;
+//			}
 			
 			System.out.println(ITEM_NAME+item.getId());
 			jobj = new JSONObject();

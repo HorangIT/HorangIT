@@ -95,6 +95,7 @@ export default Vue.extend({
       chatInput: "",
       chatLog: [],
       stompClient: Stomp.over(new SockJS("http://localhost:8000/api/ws")),
+      //stompClient: Stomp.over(new SockJS("http://i4a101.p.ssafy.io:80/api/ws")),
       momentTest: moment().format('YYYY년 MMMM Do HH:mm:ss'),
     };
   },
