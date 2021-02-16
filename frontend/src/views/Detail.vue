@@ -160,8 +160,8 @@ export default Vue.extend({
     biddingLog: new Array<String>(),
     isOver: false,
     dialog: false,
-    stompClient: Stomp.over(new SockJS("http://localhost:8000/api/ws")),
-//stompClient: Stomp.over(new SockJS("http://i4a101.p.ssafy.io:80/api/ws")),
+    //stompClient: Stomp.over(new SockJS("http://localhost:8000/api/ws")),
+stompClient: Stomp.over(new SockJS("http://i4a101.p.ssafy.io:8000/api/ws")),
   }),
   filters: {
     comma(val: number | string) {
