@@ -24,5 +24,5 @@ public interface ItemService {
 	
 	BasicResponse getChatLog(long itemId);
 	
-	void setStatusById(long itemId, int status);
+	boolean setStatusById(long itemId, int status);
 }
