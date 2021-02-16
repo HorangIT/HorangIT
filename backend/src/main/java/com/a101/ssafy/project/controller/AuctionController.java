@@ -56,8 +56,8 @@ public class AuctionController {
 			simpMessagingTemplate.convertAndSend("/topic/auction/"+itemId, chatMessage);
 			return;
 		}
-		chatMessage.setType(MessageType.REPLY);
 		if(chatMessage.getType()==MessageType.AUCTION) {
+			chatMessage.setType(MessageType.REPLY);
 			JSONObject jobj = auctionService.auction(chatMessage.getSender(), itemId+"");
 			chatMessage.setContent(jobj);
 			simpMessagingTemplate.convertAndSend("/topic/auction/"+itemId, chatMessage);
@@ -65,6 +65,7 @@ public class AuctionController {
 		}
 		
 		if(chatMessage.getType()==MessageType.FLEX){
+			chatMessage.setType(MessageType.REPLY);
 			JSONObject jobj = auctionService.flex(chatMessage.getSender(), itemId+"");			
 			chatMessage.setContent(jobj);
 			simpMessagingTemplate.convertAndSend("/topic/auction/"+itemId, chatMessage);
