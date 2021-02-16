@@ -51,7 +51,6 @@
       </div>
     </div>
     <br />
-    <Info></Info>
     <br /><br /><br /><br />
   </div>
 </template>
@@ -59,7 +58,6 @@
 <script lang="ts">
 import { AxiosResponse } from "axios";
 import Vue from "vue";
-import Info from "../components/Info.vue";
 import Item from "../components/Item.vue";
 import { itemApi } from "../utils/axios";
 
@@ -67,7 +65,6 @@ export default Vue.extend({
   name: "Home",
 
   components: {
-    Info,
     Item
   },
   data: () => ({
