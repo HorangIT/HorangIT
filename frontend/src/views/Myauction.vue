@@ -34,20 +34,6 @@
             ></v-list-item-subtitle>
           </v-list-item-content>
           <v-btn class="mr-4" v-if="item.status==1" @click="pay">결제</v-btn>
-          <v-dialog v-model="dialog" max-width="290" class="modal">
-            <v-card>
-              <h1 class="pt-4 text-center">결제를 해주세요!</h1>
-              <v-html></v-html>
-              <v-img src="../assets/img/layout/horangit_6.png"></v-img>
-              <v-card-actions>
-                <v-btn color="primary" @click="dialog = false">
-                  한 번 더 생각해볼게요
-                </v-btn>
-                <v-spacer></v-spacer>
-                <v-btn color="warning" @click="flex"> FLEX!!! </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
           <v-btn class="mr-4" v-if="item.status==2" disabled>배송중</v-btn>
           <v-btn class="mr-4" v-if="item.status==3">인수</v-btn>
           <v-btn>채팅</v-btn>
@@ -115,8 +101,6 @@ export default Vue.extend({
         status: 3
       },
     ],
-    payQR: "",
-    dialog: false,
   }),
   async created() {
     const uid = (this as any).$store.state.userModule.user.object.user.id;
@@ -138,16 +122,16 @@ export default Vue.extend({
     pay() {
       const data = {
         buyerId: 1,
+        itemId: 1,
         name: "컴퓨터",
         price: 10000
       }
       myAuctionApi.pay(data).then((res: AxiosResponse) => {
         location.href = res.data.object.successUrl;
-        // this.payQR = res.data.object.successUrl;
-        // this.dialog = true;
       });
     },
   },
+
 })
 </script>
 <style>

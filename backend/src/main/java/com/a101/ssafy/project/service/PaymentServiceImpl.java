@@ -72,9 +72,9 @@ public class PaymentServiceImpl implements PaymentService {
         params.add("tax_free_amount", "0"); 	// 상품 비과세 금액
         
         // 성공 | 실패 | 취소 url
-        params.add("approval_url", "http://localhost:8000/api/payment/success");
-        params.add("cancel_url", "http://localhost:8000/api/payment/cancel");
-        params.add("fail_url", "http://localhost:8000/api/payment/fail");
+        params.add("approval_url", "http://localhost:8080/api/payment/success");
+        params.add("cancel_url", "http://localhost:8080/api/payment/cancel");
+        params.add("fail_url", "http://localhost:8080/api/payment/fail");
         
         // 헤더와 바디를 붙인다
         HttpEntity<MultiValueMap<String, String>> body = new HttpEntity<MultiValueMap<String,String>>(params, headers);
