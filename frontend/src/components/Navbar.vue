@@ -10,20 +10,11 @@
         <v-row justify="end" class="py-2 d-md-flex d-none">
           <span v-if="login" class="d-flex align-center">
             <span class="d-none d-flex" id="welcome">{{ nickname }} 님, 환영합니다.</span>
-            <v-menu transition="scroll-y-transition">
-              <template v-slot:activator="{ on }">
-                <v-btn v-on="on" icon class="mx-1">
-                  <v-badge content="5" value="5" color="orange" overlap>
-                    <v-icon>mdi-bell</v-icon>
-                  </v-badge>
-                </v-btn>
-              </template>
-              <v-list>
-                <v-list-item v-for="n in 5" :key="n" link>
-                  <v-list-item-title v-text="'alarm ' + n"></v-list-item-title>
-                </v-list-item>
-              </v-list>
-            </v-menu>
+              <v-btn v-on="on" icon class="mx-1" to="/myauction">
+                <v-badge content="5" value="5" color="orange" overlap>
+                  <v-icon>mdi-bell</v-icon>
+                </v-badge>
+              </v-btn>
             <v-btn
               :ripple="false"
               plain
