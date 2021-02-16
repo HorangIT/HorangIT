@@ -43,7 +43,7 @@ public class SearchSpecs {
 				}
 				// 경매 마감 여부
 				if (status != false) {
-					statusPred = criteriaBuilder.equal(root.get("status"), 1);
+					statusPred = criteriaBuilder.equal(root.get("status"), 0);
 				}
 				
 				// 카테고리는 "A,B"형식으로 들어오기 때문에 ","를 기준으로 배열을 만들어 준 뒤에 배열 내의 분야들의 검색결과를 categoryList에 넣는다

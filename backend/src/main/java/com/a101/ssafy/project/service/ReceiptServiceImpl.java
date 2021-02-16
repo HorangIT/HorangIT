@@ -1,5 +1,6 @@
 package com.a101.ssafy.project.service;
 
+import java.security.cert.PKIXRevocationChecker.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -92,4 +93,5 @@ public class ReceiptServiceImpl implements ReceiptService {
 	public List<Receipt> getReceiptBySellerId(long sellerId) {
 		return receiptRepository.findAllBySellerId(sellerId);
 	}
+
 }
