@@ -81,6 +81,10 @@ public class PaymentController {
 		JSONObject jobj = new JSONObject();
 		jobj.put("itemId", approved.getItem_code());
 		jobj.put("itemName", approved.getItem_name());
+		jobj.put("partnerID", approved.getPartner_user_id());
+		jobj.put("paymentDate",approved.getApproved_at().toString());
+		jobj.put("amount",approved.getAmount());
+		jobj.put("paymentMethod", approved.getPayment_method_type());
 		
 		if (updateStatus) {
 			result.status = true;

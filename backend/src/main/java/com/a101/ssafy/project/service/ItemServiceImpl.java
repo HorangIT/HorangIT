@@ -5,6 +5,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -241,6 +243,17 @@ public class ItemServiceImpl implements ItemService{
 			returningItems.add(jobj);
 		}
 		
+		// 최신 순으로 정렬하기
+//		Collections.sort(returningItems, new Comparator<JSONObject>() {
+//
+//			@Override
+//			public int compare(JSONObject o1, JSONObject o2) {
+//				if (o1.get("itemId")) {
+//					
+//				}
+//				return 0;
+//			}
+//		});
 		
 		return returningItems;
 	}

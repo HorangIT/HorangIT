@@ -64,7 +64,7 @@ public class PaymentServiceImpl implements PaymentService {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
         params.add("cid", "TC0ONETIME");		// 가맹점코드 : 테스트 결제 코드
         params.add("partner_order_id", "a101");	// 가맹점 주문번호
-        params.add("partner_user_id", "a101");	// 가맹점 회원 id
+        params.add("partner_user_id", "호랑it");	// 가맹점 회원 id
         params.add("item_name", paymentDto.getName());		// 상품명
         params.add("item_code", paymentDto.getItemId().toString()); // 상품 코드
         params.add("quantity", "1");			// 상품 수량
@@ -120,7 +120,7 @@ public class PaymentServiceImpl implements PaymentService {
         params.add("cid", "TC0ONETIME");	
         params.add("tid", paymentReady.getTid().toString());
         params.add("partner_order_id", "a101");	
-        params.add("partner_user_id", "a101");	
+        params.add("partner_user_id", "호랑it");	
         params.add("pg_token", pg_token);		// 결제승인 요청을 인증하는 토큰
 		
      // 헤더와 바디를 붙인다
