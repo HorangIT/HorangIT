@@ -36,22 +36,8 @@
             ></v-list-item-subtitle>
           </v-list-item-content>
           <v-btn class="mr-4" v-if="item.status==1" @click="pay">결제</v-btn>
-          <v-dialog v-model="dialog" max-width="290" class="modal">
-            <v-card>
-              <h1 class="pt-4 text-center">결제를 해주세요!</h1>
-              <v-html></v-html>
-              <v-img src="../assets/img/layout/horangit_6.png"></v-img>
-              <v-card-actions>
-                <v-btn color="primary" @click="dialog = false">
-                  한 번 더 생각해볼게요
-                </v-btn>
-                <v-spacer></v-spacer>
-                <v-btn color="warning" @click="flex"> FLEX!!! </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
           <v-btn class="mr-4" v-if="item.status==2" disabled>결제완료</v-btn>
-          <v-btn class="mr-4" v-if="item.status==3">수령확인</v-btn>
+          <v-btn class="mr-4" v-if="item.status==3" @click="takeCompleted(item.itemId)">수령확인</v-btn>
           <v-btn class="mr-4" v-if="item.status==4" disabled>거래완료</v-btn>
           <v-btn>채팅</v-btn>
         </v-list-item>
@@ -140,15 +126,17 @@ export default Vue.extend({
   async created() {
     const uid = (this as any).$store.state.userModule.user.object.user.id;
     try {
-      console.log('buyer');
-      // await myAuctionApi.buyer(uid);
+      const { data } = await myAuctionApi.buyer(uid);
+      console.log(data);
+      this.buyItems = data.object;
     } catch(error) {
       console.log(error);
     }
 
     try {
-      console.log('seller');
-      // await myAuctionApi.seller(uid);
+      const { data } = await myAuctionApi.seller(uid);
+      console.log(data);
+      this.sellItems = data.object;
     } catch(error) {
       console.log(error);
     }
@@ -177,6 +165,13 @@ export default Vue.extend({
       this.open = true;
       this.chatInfo.itemId = itemId;
       this.chatInfo.myId = (this as any).$store.state.userModule.user.object.user.id;
+    },
+    async takeCompleted(itemId: any) {
+      try {
+        // const { data } = await myAuctionApi.item(itemId);
+      } catch(error) {
+        console.log(error);
+      }
     }
   },
 

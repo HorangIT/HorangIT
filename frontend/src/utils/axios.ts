@@ -10,8 +10,8 @@ const authHeader = function(): Record<string, string> {
 };
 
 const request: AxiosInstance = axios.create({
-  // baseURL: "http://i4a101.p.ssafy.io:8000/api",
-  baseURL: "http://localhost:8000/api",
+  baseURL: "http://i4a101.p.ssafy.io:8000/api",
+  //baseURL: "http://localhost:8000/api",
   headers: authHeader()
 });
 
@@ -115,6 +115,9 @@ export const myAuctionApi = {
   },
   pay (data: any): any {
     return request.post('/payment', data);
+  },
+  item(itemId: any): any {
+    return request.get(`/auction/item/${itemId}`);
   },
   success (token: any):any {
     const params = {

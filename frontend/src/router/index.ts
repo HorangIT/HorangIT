@@ -11,7 +11,8 @@ import Detail from "@/views/Detail.vue";
 import Notfound from "@/views/Notfound.vue";
 import Myauction from "@/views/Myauction.vue";
 import Chatroom from "@/components/myauction/Chatroom.vue";
-import Success from "@/views/Success.vue";
+import Success from "../components/pay/Success.vue";
+import Fail from "../components/pay/Fail.vue";
 
 Vue.use(VueRouter);
 
@@ -57,6 +58,10 @@ const routes: Array<RouteConfig> = [
     name: "Chatroom",
     props: true,
   },
+  // {
+  //   path: "/404",
+  //   component: Notfound
+  // },
   // test page
   {
     path: "/profile",
@@ -69,8 +74,8 @@ const routes: Array<RouteConfig> = [
   },
   {
     path: "/api/payment/fail",
-    component: Myauction,
-    name: "Myauction"
+    component: Fail,
+    name: "Fail"
   },
 ];
 

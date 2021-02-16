@@ -134,10 +134,10 @@ public class ItemServiceImpl implements ItemService{
 		if(optional.isPresent()) {
 			Item item = optional.get();
 			
-			if (item.getStartDate().after(now)) {
-				System.out.println("시작하지 않은 경매");
-				return null;
-			}
+//			if (item.getStartDate().after(now)) {
+//				System.out.println("시작하지 않은 경매");
+//				return null;
+//			}
 			
 			System.out.println(ITEM_NAME+item.getId());
 			jobj = new JSONObject();
@@ -225,11 +225,11 @@ public class ItemServiceImpl implements ItemService{
 		for (int i = 0; i < items.size(); i++) {
 			JSONObject jobj = new JSONObject();
 			
-			// 시작하지 않은 경매를 제외한 경매들을 불러옴	
-			if (items.get(i).getStartDate().after(now)) {	
-				System.out.println(items.get(i).getName()+"'S AUCTION IS NOT AVAILABLE RIGHT NOW");
-				continue;
-			}
+//			// 시작하지 않은 경매를 제외한 경매들을 불러옴	
+//			if (items.get(i).getStartDate().after(now)) {	
+//				System.out.println(items.get(i).getName()+"'S AUCTION IS NOT AVAILABLE RIGHT NOW");
+//				continue;
+//			}
 			
 			jobj.put("itemId",items.get(i).getId());
 			jobj.put("name",items.get(i).getName());
@@ -242,18 +242,6 @@ public class ItemServiceImpl implements ItemService{
 			
 			returningItems.add(jobj);
 		}
-		
-		// 최신 순으로 정렬하기
-//		Collections.sort(returningItems, new Comparator<JSONObject>() {
-//
-//			@Override
-//			public int compare(JSONObject o1, JSONObject o2) {
-//				if (o1.get("itemId")) {
-//					
-//				}
-//				return 0;
-//			}
-//		});
 		
 		return returningItems;
 	}
