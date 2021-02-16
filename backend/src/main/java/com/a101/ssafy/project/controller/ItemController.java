@@ -193,11 +193,17 @@ public class ItemController {
 		
 	}
 	
-	
 	@GetMapping("/{itemId}/chat")
 	@ResponseBody
 	public Object getChatLog(@PathVariable("itemId")long itemId) {
 		BasicResponse result = itemService.getChatLog(itemId);
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	
+	@GetMapping("/{itemId}/chatroom")
+	@ResponseBody
+	public Object getChatRoomLog(@PathVariable("itemId")long itemId) {
+		BasicResponse result = itemService.getChatRoomLog(itemId);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	
