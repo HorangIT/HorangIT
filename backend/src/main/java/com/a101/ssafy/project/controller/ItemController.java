@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +32,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.a101.ssafy.project.model.BasicResponse;
+import com.a101.ssafy.project.model.PaginationResponse;
 import com.a101.ssafy.project.model.image.Image;
 import com.a101.ssafy.project.model.item.Item;
 import com.a101.ssafy.project.model.item.RegisterDto;
@@ -109,11 +111,10 @@ public class ItemController {
 	@GetMapping("/page/{pageNo}")
 	public Object searchItems(@PathVariable int pageNo, SearchDto searchDto) {
 		
-		System.out.println("\n***************\nSEARCHDTO\n"+searchDto.toString()+"\n***************");
-		
-		BasicResponse result = new BasicResponse();
+//		BasicResponse result = new BasicResponse();
+		PaginationResponse result = new PaginationResponse();
 		List<JSONObject> returningItems = new ArrayList<JSONObject>();
-		Pageable paging = PageRequest.of(pageNo-1, 12);
+		Pageable paging = PageRequest.of(pageNo-1, 12, Sort.by("startDate").descending());
 		Page<Item> pages;
 		boolean empty = false;
 		
@@ -139,6 +140,9 @@ public class ItemController {
 			result.status = true;
 			result.data = "모든 아이템 보내기!";
 			result.object = returningItems;
+			result.page = pages.getNumber()+1;			// 현재 페이지 번호
+			result.total_elements = pages.getTotalElements(); 	// 전체 요소 갯수
+			result.total_pages = pages.getTotalPages(); // 전체 페이지 수
 						
 			return new ResponseEntity<>(result, HttpStatus.OK);
 		}
@@ -152,6 +156,9 @@ public class ItemController {
 			result.data = "이거시 네가 찾던 자료냥";
 			result.status = true;
 			result.object = returningItems;
+			result.page = pages.getNumber()+1;			// 현재 페이지 번호
+			result.total_elements = pages.getTotalElements(); 	// 전체 요소 갯수
+			result.total_pages = pages.getTotalPages(); // 전체 페이지 수
 			
 			return new ResponseEntity<>(result, HttpStatus.OK);			
 		}
