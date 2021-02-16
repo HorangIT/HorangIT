@@ -151,7 +151,7 @@ public class ItemController {
 			result.object = null;
 			result.data = "못 찾았어요ㅠ";
 			
-			return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(result, HttpStatus.OK);
 		} else {
 			result.data = "이거시 네가 찾던 자료냥";
 			result.status = true;
