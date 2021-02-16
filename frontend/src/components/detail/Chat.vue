@@ -68,7 +68,7 @@ export default Vue.extend({
         () => {
           console.log('onConnect');
           // 채팅방 구독
-          this.stompClient.subscribe(`/queue/room/${this.itemId}`, (message: any) => {
+          this.stompClient.subscribe(`/topic/chat/${this.itemId}`, (message: any) => {
             console.log('im subscribe response callback');
             // chatLog의 낱개로 된 똑같은 dataset의 응답이 필요
             const subscribedMessageBody = JSON.parse(message.body)
@@ -140,7 +140,7 @@ export default Vue.extend({
             content: this.chatInput,
             type: 'CHAT',
         };
-        this.stompClient.send(`/app/room.sendMessage/${this.itemId}`, {}, JSON.stringify(chatMessage));
+        this.stompClient.send(`/app/chat.sendMessage/${this.itemId}`, {}, JSON.stringify(chatMessage));
         this.chatInput = '';
       }
     },
