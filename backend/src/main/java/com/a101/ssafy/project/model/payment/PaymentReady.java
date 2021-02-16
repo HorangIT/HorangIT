@@ -11,7 +11,7 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
-public class KakaopayResponse {
+public class PaymentReady {
 	
 	//결제 고유 번호, 20자
 	String tid;	

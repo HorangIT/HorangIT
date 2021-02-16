@@ -302,14 +302,16 @@ public class ItemServiceImpl implements ItemService{
 	}
 	
 	@Override
-	public void setStatusById(long itemId, int status) {
+	public boolean setStatusById(long itemId, int status) {
 		Optional<Item> opt = itemRepository.findById(itemId);
 		if(opt.isPresent()) {
 			Item item = opt.get();
 			
 			item.setStatus(status);
 			itemRepository.save(item);
+			return true;
 		}
+		return false;
 	}
 
 }

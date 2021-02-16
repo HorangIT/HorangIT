@@ -127,8 +127,6 @@ export default Vue.extend({
         status: 4
       }
     ],
-    payQR: "",
-    dialog: false,
   }),
   async created() {
     const uid = (this as any).$store.state.userModule.user.object.user.id;
@@ -150,13 +148,12 @@ export default Vue.extend({
     pay() {
       const data = {
         buyerId: 1,
+        itemId: 1,
         name: "컴퓨터",
         price: 10000
       }
       myAuctionApi.pay(data).then((res: AxiosResponse) => {
         location.href = res.data.object.successUrl;
-        // this.payQR = res.data.object.successUrl;
-        // this.dialog = true;
       });
     },
     async deliveryCompleted(itemId: any) {
@@ -167,6 +164,7 @@ export default Vue.extend({
       }
     }
   },
+
 })
 </script>
 <style>

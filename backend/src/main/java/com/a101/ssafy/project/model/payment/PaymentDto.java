@@ -22,5 +22,7 @@ public class PaymentDto {
 	@ApiModelProperty(required = true)
 	Long buyerId;
 	
+	@ApiModelProperty(required = true)
+	Long itemId;
 	
 }
