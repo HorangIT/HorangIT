@@ -128,7 +128,7 @@
                   <h2 class="blue-grey--text text--lighten-5">
                     마감되었습니다.
                   </h2>
-                </v-btn>              
+                </v-btn>
               </div>
               <div v-else> <!-- 경매가 진행중이면 -->
                 <v-btn
@@ -177,16 +177,14 @@ export default Vue.extend({
   data: () => ({
     seller: false,
     item: {},
-    itemId: 0,
-    nowPrice: 0,
-    nextPrice: 0,
-    happyPrice: 0,
-    sellerId: 0,
+    itemId: -1,
+    nowPrice: -1,
+    nextPrice: -1,
+    happyPrice: -1,
+    sellerId: -1,
     biddingLog: new Array<String>(),
     isOver: false,
     dialog: false,
-    //stompClient: Stomp.over(new SockJS("http://localhost:8000/api/ws")),
-    // stompClient: Stomp.over(new SockJS("http://i4a101.p.ssafy.io:8000/api/ws")),
     stompClient: Stomp.over(new SockJS(`${process.env.VUE_APP_API_SERVER}/ws`)),
 
 
@@ -207,9 +205,6 @@ export default Vue.extend({
   watch: {
     biddingLog() {
       console.log('watched!')
-      // if (this.nowPrice === this.happyPrice) {
-      //   this.isOver = true;
-      // }
       if (this.happyPrice === Number(this.biddingLog[0].split(';')[1])) {
         this.isOver = true;
       }
