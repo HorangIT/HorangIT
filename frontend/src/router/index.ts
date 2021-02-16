@@ -10,7 +10,7 @@ import PostView from "@/views/PostView.vue";
 import Detail from "@/views/Detail.vue";
 import Notfound from "@/views/Notfound.vue";
 import Myauction from "@/views/Myauction.vue";
-import TestChat from "@/components/myauction/Chat.vue";
+import Chatroom from "@/components/myauction/Chatroom.vue";
 import Success from "@/views/Success.vue";
 
 Vue.use(VueRouter);
@@ -52,8 +52,10 @@ const routes: Array<RouteConfig> = [
     component: Notfound
   },
   {
-    path: "/chat",
-    component: TestChat
+    path: "/chatroom/:id",
+    component: Chatroom,
+    name: "Chatroom",
+    props: true,
   },
   // test page
   {

@@ -7,6 +7,13 @@
       elevation="0"
       class="chatScroll"
     >
+      <v-toolbar>
+        <v-btn
+          @click="$emit('close')"
+          plain
+        ><v-icon>mdi-arrow-collapse-left</v-icon></v-btn>
+        1:1 채팅방
+      </v-toolbar>
       <v-list
         two-line
       >
@@ -57,7 +64,21 @@ import { itemApi } from "../../utils/axios";
 moment.locale('ko');
 
 export default Vue.extend({
+  data (): Record<string, any> {
+    return {
+      itemId: this.$route.params.id,
+      chatInput: "",
+      chatLog: [],
+      stompClient: Stomp.over(new SockJS("http://localhost:8000/api/ws")),
+      momentTest: moment().format('YYYY년 MMMM Do HH:mm:ss'),
+    };
+  },
+  props: [
+    'chatInfo'
+  ],
   created(): void {
+    console.log('내 아이디는 ' + this.chatInfo.myId)
+    console.log('이 아이템은 ' + this.chatInfo.itemId)
     // 채팅로그 확인
     this.getChatRoomLog();
     // 유저 로그인 확인
@@ -68,7 +89,7 @@ export default Vue.extend({
         () => {
           console.log('onConnect');
           // 채팅방 구독
-          this.stompClient.subscribe(`/topic/chat/1`, (message: any) => {
+          this.stompClient.subscribe(`/queue/room/${this.chatInfo.itemId}`, (message: any) => {
           // this.stompClient.subscribe(`/topic/chat/?string/?number`, (message: any) => {
             console.log('im subscribe response callback');
             // chatLog의 낱개로 된 똑같은 dataset의 응답이 필요
@@ -90,15 +111,6 @@ export default Vue.extend({
           console.log(onError);
         });
     }
-  },
-  data (): Record<string, any> {
-    return {
-      itemId: this.$route.params.id,
-      chatInput: "",
-      chatLog: [],
-      stompClient: Stomp.over(new SockJS("http://localhost:8000/api/ws")),
-      momentTest: moment().format('YYYY년 MMMM Do HH:mm:ss'),
-    };
   },
   computed: {
     user (): any {
@@ -141,7 +153,7 @@ export default Vue.extend({
             content: this.chatInput,
             type: 'CHAT',
         };
-        this.stompClient.send(`/app/chat.sendMessage/1`, {}, JSON.stringify(chatMessage));
+        this.stompClient.send(`/app/room.sendMessage/${this.chatInfo.itemId}`, {}, JSON.stringify(chatMessage));
         // this.stompClient.send(`/app/chat.sendMessage/?string/?number`, {}, JSON.stringify(chatMessage));
         this.chatInput = '';
       }

@@ -2,15 +2,8 @@
   <v-app style="background-color: #fdfafa;">
     <Navbar />
     <div style="height:130px;"></div>
-    <v-checkbox
-      label="눌러"
-      v-model="open"
-    ></v-checkbox>
     <router-view class="container" />
     <Footer />
-    <WindowPortal v-model="open">
-      <Chat />
-    </WindowPortal>
   </v-app>
 </template>
 
@@ -19,19 +12,15 @@ import Vue from "vue";
 import Navbar from "./components/Navbar.vue";
 import Footer from "./components/Footer.vue";
 // test
-import Chat from "./components/myauction/Chat.vue";
+import Chatroom from "./components/myauction/Chatroom.vue";
 import WindowPortal from "./components/WindowPortal.vue";
 export default Vue.extend({
   name: "App",
   components: {
     Navbar,
     Footer,
-    // test
-    Chat,
-    WindowPortal
   },
   data: () => ({
-    open: false,
   })
 });
 </script>

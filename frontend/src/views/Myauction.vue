@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container v-if="!open">
     <v-list two-line>
       <h3 class="mb-5 mt-5">판매물품</h3>
       <template v-for="(item, index) in sellItems">
@@ -16,7 +16,7 @@
           <v-btn class="mr-4" v-if="item.status==2" @click="deliveryCompleted(item.itemId)">배송완료</v-btn>
           <v-btn class="mr-4" v-if="item.status==3" disabled>배송중</v-btn>
           <v-btn class="mr-4" v-if="item.status==4">대금확인</v-btn>
-          <v-btn>채팅</v-btn>
+          <v-btn @click="openChat(item.itemId)">채팅</v-btn>
         </v-list-item>
 
         <v-divider
@@ -62,17 +62,26 @@
       </template>
     </v-list>
   </v-container>
+  <Chatroom :chatInfo="chatInfo" @close="open = false" v-else />
 </template>
 
 <script lang="ts">
 import Vue from "vue";
 import { AxiosResponse } from "axios";
 import { myAuctionApi } from "../utils/axios";
+import Chatroom from "@/components/myauction/Chatroom.vue";
 
 export default Vue.extend({
   name:"Myauction",
-  
+  components: {
+    Chatroom,
+  },
   data: () => ({
+    open: false,
+    chatInfo: {
+      itemId: '0',
+      myId: '0',
+    },
     sellItemPage: 1,
     buyItemPage: 1,
     sellItems: [
@@ -162,10 +171,14 @@ export default Vue.extend({
       } catch(error) {
         console.log(error);
       }
+    },
+    openChat (itemId: string) {
+      console.log('click openChat');
+      this.open = true;
+      this.chatInfo.itemId = itemId;
+      this.chatInfo.myId = (this as any).$store.state.userModule.user.object.user.id;
     }
   },
 
 })
 </script>
-<style>
-</style>
