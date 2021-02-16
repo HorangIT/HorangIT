@@ -16,7 +16,7 @@
           <v-btn class="mr-4" v-if="item.status==2" @click="deliveryCompleted(item.itemId)">배송완료</v-btn>
           <v-btn class="mr-4" v-if="item.status==3" disabled>배송중</v-btn>
           <v-btn class="mr-4" v-if="item.status==4">대금확인</v-btn>
-          <v-btn @click="openChat(item.itemId)">채팅</v-btn>
+          <v-btn @click="openChat(item.itemId, 'buyer')">채팅</v-btn>
         </v-list-item>
 
         <v-divider
@@ -39,7 +39,7 @@
           <v-btn class="mr-4" v-if="item.status==2" disabled>결제완료</v-btn>
           <v-btn class="mr-4" v-if="item.status==3" @click="takeCompleted(item.itemId)">수령확인</v-btn>
           <v-btn class="mr-4" v-if="item.status==4" disabled>거래완료</v-btn>
-          <v-btn>채팅</v-btn>
+          <v-btn @click="openChat(item.itemId, 'seller')">채팅</v-btn>
         </v-list-item>
         <v-divider
           v-if="index < buyItems.length - 1"
@@ -67,6 +67,7 @@ export default Vue.extend({
     chatInfo: {
       itemId: '0',
       myId: '0',
+      me: '',
     },
     sellItemPage: 1,
     buyItemPage: 1,
@@ -160,11 +161,12 @@ export default Vue.extend({
         console.log(error);
       }
     },
-    openChat (itemId: string) {
+    openChat (itemId: string, me: string) {
       console.log('click openChat');
       this.open = true;
       this.chatInfo.itemId = itemId;
       this.chatInfo.myId = (this as any).$store.state.userModule.user.object.user.id;
+      this.chatInfo.me = me;
     },
     async takeCompleted(itemId: any) {
       try {

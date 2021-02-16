@@ -2,8 +2,8 @@
   <div>
     <v-card
       style="overflow-x: hidden; overflow-y: auto;"
-      min-height="25vh"
-      max-height="25vh"
+      min-height="50vh"
+      max-height="50vh"
       elevation="0"
       class="chatScroll"
     >
@@ -69,7 +69,7 @@ export default Vue.extend({
       itemId: this.$route.params.id,
       chatInput: "",
       chatLog: [],
-      stompClient: Stomp.over(new SockJS("http://localhost:8000/api/ws")),
+      stompClient: Stomp.over(new SockJS(`${process.env.VUE_APP_API_SERVER}/ws`)),
       momentTest: moment().format('YYYY년 MMMM Do HH:mm:ss'),
     };
   },
@@ -133,9 +133,12 @@ export default Vue.extend({
   methods: {
     // 채팅로그 확인
     getChatRoomLog (): void {
-      itemApi.getChatRoomLog(this.itemId)
+      console.log('getChatRoomLog()')
+      itemApi.getChatRoomLog(this.chatInfo.itemId)
         .then((response: any) => {
           this.chatLog = response.data.object.log
+          console.log(response)
+          console.log(this.chatLog, '이거이거이거')
           this.chatLog.forEach((chat: any) => {
             chat.chatCreatedAt = moment(chat.chatCreatedAt).calendar()
             // 판매자 확인 조건 필요
