@@ -1,6 +1,7 @@
 package com.a101.ssafy.project.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -13,8 +14,10 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,8 +26,12 @@ import com.a101.ssafy.project.model.BasicResponse;
 import com.a101.ssafy.project.model.auction.AuctionInputDTO;
 import com.a101.ssafy.project.model.chat.ChatMessage;
 import com.a101.ssafy.project.model.chat.MessageType;
+import com.a101.ssafy.project.model.item.Item;
 import com.a101.ssafy.project.model.receipt.Receipt;
+import com.a101.ssafy.project.repository.ItemRepository;
+import com.a101.ssafy.project.repository.ReceiptRepository;
 import com.a101.ssafy.project.service.AuctionService;
+import com.a101.ssafy.project.service.ItemService;
 import com.a101.ssafy.project.service.ReceiptService;
 
 @CrossOrigin(origins = { "*" })
@@ -34,9 +41,15 @@ public class AuctionController {
 	@Autowired
 	SimpMessagingTemplate simpMessagingTemplate; 
 	
+	@Autowired
 	AuctionService auctionService;
+	
+	@Autowired
 	ReceiptService receiptService;
 	
+	@Autowired
+	ItemService itemService;
+		
 	@Autowired
 	public void setAuctionService(AuctionService auctionService) {
 		this.auctionService = auctionService;
@@ -163,5 +176,44 @@ public class AuctionController {
 		result.object = jarr;
 		return new ResponseEntity(result, HttpStatus.OK);
 		
+	}
+	
+	@PatchMapping("/seller/{userId}/{itemId}")
+	public Object sendItem(@PathVariable("userId")long userId, @PathVariable("itemId")long itemId) {
+		
+		BasicResponse result = new BasicResponse();
+		
+		Receipt receipt = receiptService.setStatusByItemId(itemId+"", 3);
+		boolean updateItem = itemService.setStatusById(itemId, 3);
+		
+		if (receipt != null && updateItem) {
+			
+			result.data = "판매자가 배송을 했다!";
+			result.status = true;
+			result.object = null;
+			
+			return new ResponseEntity(result, HttpStatus.OK);
+		}
+		
+		return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+	}
+	
+	@PatchMapping("/buyer/{userId}/{itemId}")
+	public Object receiveItem(@PathVariable("userId")long userId, @PathVariable("itemId")long itemId) {
+BasicResponse result = new BasicResponse();
+		
+		Receipt receipt = receiptService.setStatusByItemId(itemId+"", 4);
+		boolean updateItem = itemService.setStatusById(itemId, 4);
+		
+		if (receipt != null && updateItem) {
+			
+			result.data = "구매자가 받았대!";
+			result.status = true;
+			result.object = null;
+			
+			return new ResponseEntity(result, HttpStatus.OK);
+		}
+		
+		return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 	}
 }

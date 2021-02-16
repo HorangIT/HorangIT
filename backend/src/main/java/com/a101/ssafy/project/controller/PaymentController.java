@@ -41,12 +41,7 @@ public class PaymentController {
 	ItemService itemService;
 	
 	PaymentReady preparationResponse;
-	
-//	@GetMapping
-//	public void getPayment() {
-//		
-//	}
-	
+		
 	@PostMapping
 	public Object createPaymentRequest(@RequestBody PaymentDto paymentDto) {
 		
@@ -74,7 +69,7 @@ public class PaymentController {
 		
 		// 성공시 status를 2로 바꾸기
 		// itemId를 결제 초기부터 success까지 쭉 받아야함
-//		Receipt updatedStatus = receiptService.setStatusByItemId(approved.getItem_code(), 2);
+		Receipt updatedStatus = receiptService.setStatusByItemId(approved.getItem_code(), 2);
 		boolean updateStatus = itemService.setStatusById(Long.parseLong(approved.getItem_code()), 2);
 
 		BasicResponse result = new BasicResponse();
