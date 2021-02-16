@@ -99,7 +99,7 @@ public class AuctionController {
 			result.status = false;
 			result.data = "해당 물품에 대해 아직 아무도 응찰하지 않았어요! 첫번째 주인공이 되어보세요!!";
 			
-			responseEntity = new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+			responseEntity = new ResponseEntity<>(result, HttpStatus.OK);
 		}else {
 			JSONObject jobj = new JSONObject();
 			jobj.put("log", list);
