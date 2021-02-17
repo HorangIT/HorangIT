@@ -53,6 +53,9 @@ export default Vue.extend({
     } else if (new Date(this.item.startDate) > now) {
       this.beforeAuction = true;
     }
+    if (Number(this.item.status) !== 0) {
+      this.isOver = true;
+    }
     // console.log(this.isOver)
     // console.log(this.beforeAuction)
   }
