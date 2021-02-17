@@ -116,10 +116,10 @@ export default Vue.extend({
     passwordConfirmShow: false,
     formHasErrors: false,
     rules: {
-      // required: (v: string) => !!v || '해당 칸을 입력해주세요.',
-      // nickname: (v: string) => (v.length >= 2 && v.length <= 10) || '닉네임은 2~10자로 설정해주세요.',
-      // email: (v: string) => /.+@.+/.test(v) || '이메일 형식에 맞게 작성해주세요.',
-      // password: (v: string) => /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&*+=]).*$/.test(v) || '비밀번호는 문자/숫자/특수문자를 포함한 8~15자리로 입력해주세요.',
+      required: (v: string) => !!v || '해당 칸을 입력해주세요.',
+      nickname: (v: string) => (v.length >= 2 && v.length <= 10) || '닉네임은 2~10자로 설정해주세요.',
+      email: (v: string) => /.+@.+/.test(v) || '이메일 형식에 맞게 작성해주세요.',
+      password: (v: string) => /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&*+=]).*$/.test(v) || '비밀번호는 문자/숫자/특수문자를 포함한 8~15자리로 입력해주세요.',
     },
   }),
 
