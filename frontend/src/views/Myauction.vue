@@ -227,7 +227,7 @@ export default Vue.extend({
     async deliveryCompleted(userId: number, itemId: number) {
       try {
         const { data } = await myAuctionApi.sellerItem(userId, itemId);
-        // window.location.reload();
+        window.location.reload();
       } catch(error) {
         console.log(error);
       }
@@ -235,7 +235,7 @@ export default Vue.extend({
     async takeCompleted(userId: number, itemId: number) {
       try {
         const { data } = await myAuctionApi.buyerItem(userId, itemId);
-        // window.location.reload();
+        window.location.reload();
       } catch(error) {
         console.log(error);
       }
