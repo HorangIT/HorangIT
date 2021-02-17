@@ -20,6 +20,7 @@ export default Vue.extend({
   computed: {
     // bidding: string = "닉네임;응찰가격;응찰시간"
     biddingSplit () {
+      if (this.bidding == undefined) return [];
       return this.bidding.split(';')
     }
   },

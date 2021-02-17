@@ -202,7 +202,6 @@ export default Vue.extend({
       if (this.biddingLog.length === 0) {
         return false;
       }
-      if (this.biddingLog[0] == "이미 끝난 경매입니다.") return true;
       return this.happyPrice === Number(this.biddingLog[0].split(';')[1])
     }
   },
