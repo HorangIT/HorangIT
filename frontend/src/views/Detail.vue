@@ -202,6 +202,7 @@ export default Vue.extend({
       if (this.biddingLog.length === 0) {
         return false;
       }
+      if (this.biddingLog[0] == "이미 끝난 경매입니다.") return true;
       return this.happyPrice === Number(this.biddingLog[0].split(';')[1])
     }
   },
@@ -239,16 +240,11 @@ export default Vue.extend({
             // nowPrice, nextPrice 업데이트
             console.log('auction subscribed!!!')
             const info = JSON.parse(res.body).content
-            // 경매 종료 확인 (경매가 종료되면 type이 AUCTION으로 온다)
-            // 중복 구분
-            if (Number(this.biddingLog[0].split(';')[1]) !== this.nowPrice) {
-              // log 업데이트
-              this.biddingLog.unshift(info.log);
-              this.nowPrice = info.nowPrice;
-              this.nextPrice = info.nextPrice;
-            }
+            // log 업데이트
+            this.biddingLog.unshift(info.log);
+            this.nowPrice = info.nowPrice;
+            this.nextPrice = info.nextPrice;
             // console.log(info)
-            // 이거 뭔 코드야
             // if (info.test !== undefined) {
             //   this.log()
             // }
