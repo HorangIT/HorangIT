@@ -240,17 +240,18 @@ export default Vue.extend({
             console.log('auction subscribed!!!')
             const info = JSON.parse(res.body).content
             // 경매 종료 확인 (경매가 종료되면 type이 AUCTION으로 온다)
-            if (JSON.parse(res.body).type === 'AUCTION') {
-              this.isOver = true;
+            // 중복 구분
+            if (Number(this.biddingLog[0].split(';')[1]) !== this.nowPrice) {
+              // log 업데이트
+              this.biddingLog.unshift(info.log);
+              this.nowPrice = info.nowPrice;
+              this.nextPrice = info.nextPrice;
             }
-            // log 업데이트
-            this.biddingLog.unshift(info.log);
-            this.nowPrice = info.nowPrice;
-            this.nextPrice = info.nextPrice;
             // console.log(info)
-            if (info.test !== undefined) {
-              this.log()
-            }
+            // 이거 뭔 코드야
+            // if (info.test !== undefined) {
+            //   this.log()
+            // }
           });
         },
         // socket 연결 실패
