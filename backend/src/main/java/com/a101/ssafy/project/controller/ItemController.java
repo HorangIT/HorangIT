@@ -86,7 +86,7 @@ public class ItemController {
 			result.data = "조회할 데이터가 없습니다.";
 			result.object = null;
 			
-			response = new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+			response = new ResponseEntity<>(result, HttpStatus.OK);
 		}
 		
 		return response;

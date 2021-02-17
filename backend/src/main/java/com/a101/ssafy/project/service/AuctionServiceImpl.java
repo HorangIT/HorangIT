@@ -131,6 +131,8 @@ public class AuctionServiceImpl implements AuctionService{
 
 	@Override
 	public String getNicknameById(String userId) {
+		
+		
 		return (String)redisUtil.getHdata("user", userId);
 	}
 
