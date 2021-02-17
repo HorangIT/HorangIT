@@ -79,6 +79,7 @@ export default Vue.extend({
   methods: {
     logout() {
       this.$store.dispatch("userModule/logout");
+      this.$router.push({ path: '/' })
     }
   },
   created() {
