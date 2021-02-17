@@ -10,6 +10,8 @@ import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 
 /** This class can save data that type is {key, value}.
@@ -61,21 +63,25 @@ public class RedisUtil {
     }
     
     /** redis List 구조 저장 및 조회를 위한 함수 */
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public Long setLdata(String key, String value) {
     	ListOperations<String, String> valueOperations = stringRedisTemplate.opsForList();
     	return valueOperations.rightPush(key, value);
     }
     
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public List<String> getAllLdata(String key){
     	ListOperations<String, String> valueOperations = stringRedisTemplate.opsForList();
     	return valueOperations.range(key, 0, getLSize(key));
     }
     
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public Long getLSize(String key) {
     	ListOperations<String, String> valueOperations = stringRedisTemplate.opsForList();
     	return valueOperations.size(key);
     }
     
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public List<String> getLastLdata(String key) {
     	ListOperations<String, String> valueOperations = stringRedisTemplate.opsForList();
     	if(getLSize(key)==0) {
