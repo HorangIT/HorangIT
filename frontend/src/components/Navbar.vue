@@ -217,6 +217,7 @@ export default Vue.extend({
   methods: {
     logout (): void {
       this.$store.dispatch("userModule/logout");
+      this.$router.push({ path: '/' });
     },
     getNickname (): void {
       const user = JSON.parse(localStorage.getItem("user") || "{}");
