@@ -21,7 +21,15 @@ export default Vue.extend({
     Footer,
   },
   data: () => ({
-  })
+  }),
+  watch: {
+    $route: {
+      immediate: true,
+      handler(to, from) {
+          document.title = to.meta.title || '호랑it';
+      }
+    }
+  },
 });
 </script>
 
