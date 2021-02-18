@@ -137,6 +137,9 @@ export default Vue.extend({
           .catch((error: any) => {
             alert(error);
           })
+        this.errorMessages = '';
+        this.email = '';
+        this.password = '';
       }
     },
     goToSignup (): void {

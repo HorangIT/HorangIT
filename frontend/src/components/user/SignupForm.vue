@@ -169,6 +169,12 @@ export default Vue.extend({
         // console.log(user);
         this.$store.dispatch('userModule/signup', user).then(() => {
           alert('회원가입이 완료되었습니다.');
+          // 폼 초기화
+          this.errorMessages = '';
+          this.nickname = '';
+          this.email = '';
+          this.password = '';
+          this.passwordConfirm = '';
           this.goToLogin();
         })
       }
