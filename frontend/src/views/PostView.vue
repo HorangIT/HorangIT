@@ -165,9 +165,9 @@
                     </v-date-picker>
                   </v-menu>
                 </v-col>
-                <v-col>
+                <!-- <v-col>
                   <time-select v-model="startTime"></time-select>
-                </v-col>
+                </v-col> -->
 
                 <v-col>
                   <v-menu
@@ -375,6 +375,11 @@ export default Vue.extend({
       if (this.uploadFlag == 1) return;
 
       this.uploadFlag = 1;
+      
+      const today = moment();
+      this.startDate = today.format("YYYY-MM-DD");
+      this.startTime = today.format("HH:mm");
+      
       this.startDateTime = this.startDate + " " + this.startTime;
       this.endDateTime = this.endDate + " " + this.endTime;
 
