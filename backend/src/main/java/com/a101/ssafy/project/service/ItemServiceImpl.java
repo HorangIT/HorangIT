@@ -153,12 +153,14 @@ public class ItemServiceImpl implements ItemService{
 			jobj.put("itemId", item.getId());
 			jobj.put("sellerId", item.getUserId());
 			
-			String[] str = auctionService.getLastAuctionLog(item.getId()+"").split(";");
-			if(str==null) {
+			String temp = auctionService.getLastAuctionLog(item.getId()+"");
+			
+			if(temp==null) {
 				jobj.put("nowPrice", item.getStartPrice());
 				long nextPrice = auctionService.getAuctionUnit(item.getStartPrice()+"") + Long.parseLong(item.getStartPrice()+""); //다음 응찰가격은 nextPrice입니다.
 				jobj.put("nextPrice", nextPrice);				
 			}else {
+				String[] str = temp.split(";");
 				jobj.put("nowPrice", Long.parseLong(str[1]));
 				
 				long nextPrice = auctionService.getAuctionUnit(str[1]) + Long.parseLong(str[1]); //다음 응찰가격은 nextPrice입니다.
