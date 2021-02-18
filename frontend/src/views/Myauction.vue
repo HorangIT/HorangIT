@@ -17,7 +17,9 @@
           <v-btn class="mr-4" v-if="sellItems[index].status==2" 
           @click="deliveryCompleted(sellItems[index].sellerId, sellItems[index].itemId)">배송완료</v-btn>
           <v-btn class="mr-4" v-if="sellItems[index].status==3" disabled>배송중</v-btn>
-          <v-btn class="mr-4" v-if="sellItems[index].status==4">대금확인</v-btn>
+          <v-btn class="mr-4" v-if="sellItems[index].status==4"
+          @click="sellCompleted(index, sellItems[index].sellerId, sellItems[index].itemId)">대금확인</v-btn>
+          <v-btn class="mr-4" v-if="sellItems[index].status==5" disabled>거래완료</v-btn>
           <v-btn @click="openChat(sellItems[index].itemId, 'buyer')">채팅</v-btn>
         </v-list-item>
         <v-divider
@@ -137,6 +139,15 @@ export default Vue.extend({
     async takeCompleted(userId: number, itemId: number) {
       try {
         const { data } = await myAuctionApi.buyerItem(userId, itemId);
+        window.location.reload();
+      } catch(error) {
+        console.log(error);
+      }
+    },
+    async sellCompleted(index:number, userId: number, itemId: number) {
+      try {
+        const { data } = await myAuctionApi.sellerItem(userId, itemId);
+        alert(this.sellItems[index] + "원이 입금되었습니다.");
         window.location.reload();
       } catch(error) {
         console.log(error);
