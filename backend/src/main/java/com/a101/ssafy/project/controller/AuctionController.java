@@ -200,7 +200,8 @@ public class AuctionController {
 	
 	@PatchMapping("/buyer/{userId}/{itemId}")
 	public Object receiveItem(@PathVariable("userId")long userId, @PathVariable("itemId")long itemId) {
-BasicResponse result = new BasicResponse();
+		
+		BasicResponse result = new BasicResponse();
 		
 		Receipt receipt = receiptService.setStatusByItemId(itemId+"", 4);
 		boolean updateItem = itemService.setStatusById(itemId, 4);
@@ -208,6 +209,26 @@ BasicResponse result = new BasicResponse();
 		if (receipt != null && updateItem) {
 			
 			result.data = "구매자가 받았대!";
+			result.status = true;
+			result.object = null;
+			
+			return new ResponseEntity(result, HttpStatus.OK);
+		}
+		
+		return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+	}
+	
+	@PatchMapping("/final/{userId}/{itemId}")
+	public Object finalItem(@PathVariable("userId")long userId, @PathVariable("itemId")long itemId) {
+		
+		BasicResponse result = new BasicResponse();
+		
+		Receipt receipt = receiptService.setStatusByItemId(itemId+"", 5);
+		boolean updateItem = itemService.setStatusById(itemId, 5);
+		
+		if (receipt != null && updateItem) {
+			
+			result.data = "거래가 끝났대!";
 			result.status = true;
 			result.object = null;
 			
