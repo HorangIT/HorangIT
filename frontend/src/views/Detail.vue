@@ -227,7 +227,7 @@ export default Vue.extend({
         }
       })
       // 404 처리
-      .catch(() => this.$router.replace({ path: '/404' }));
+      // .catch(() => this.$router.replace({ path: '/404' }));
     },
     connect () {
       // socket 연결
