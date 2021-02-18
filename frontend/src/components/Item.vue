@@ -16,10 +16,10 @@
       <p v-if="isOver" class="grey darken-2 grey--text text--lighten-4">경매 종료되었습니다.</p>
       </v-img>
       <div>
-        <h2 class="my-1">{{ item.name }}</h2>
-        <p class="text-left mx-2 mb-0">경매: {{ startDate }}</p>
-        <p class="text-left mx-2 mb-0">등급: {{ item.grade }}</p>
-        <p class="text-left mx-2 mb-0">카테고리: {{ item.category }}</p>
+        <h2 class="my-1 text-over ml-3">{{ item.name }}</h2>
+        <p class="text-left mx-2 mb-0 text-over">경매: {{ startDate }}</p>
+        <p class="text-left mx-2 mb-0 text-over">등급: {{ item.grade }}</p>
+        <p class="text-left mx-2 mb-0 text-over">카테고리: {{ item.category }}</p>
       </div>
     </v-card>
   </v-hover>
@@ -41,6 +41,7 @@ export default Vue.extend({
   }),
   methods: {
     goDetail(id: any) {
+
       this.$router.push({ name: 'Detail', params: { id: id} });
     }
   },
@@ -72,5 +73,5 @@ export default Vue.extend({
   width: 100%;
 }
 
-.text-over {width:100px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.text-over {width:90%; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 </style>
