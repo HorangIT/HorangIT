@@ -28,7 +28,7 @@
               <v-spacer></v-spacer>
               <div class="d-flex align-center">
                 <v-avatar class="d-inline-flex">
-                  <v-img src="https://cdn.vuetifyjs.com/images/lists/1.jpg">
+                  <v-img src="@/assets/img/avatar/horangit.png">
                   </v-img>
                 </v-avatar>
                 <p class="ma-0 mx-2">{{ item.nickname }}</p>
@@ -230,7 +230,7 @@ export default Vue.extend({
         }
       })
       // 404 처리
-      .catch(() => this.$router.replace({ path: '/404' }));
+      // .catch(() => this.$router.replace({ path: '/404' }));
     },
     connect () {
       // socket 연결

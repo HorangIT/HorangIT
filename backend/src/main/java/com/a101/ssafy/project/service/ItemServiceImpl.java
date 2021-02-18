@@ -153,15 +153,24 @@ public class ItemServiceImpl implements ItemService{
 			jobj.put("itemId", item.getId());
 			jobj.put("sellerId", item.getUserId());
 			
-			String str = redisUtil.getData(ITEM_NAME+item.getId()); //사람이 살가격
-			jobj.put("nowPrice", Long.parseLong(str));
-			
-			long nextPrice = auctionService.getAuctionUnit(str) + Long.parseLong(str); //다음 응찰가격은 nextPrice입니다.
-			if(nextPrice >= item.getHappyPrice()) {
-				nextPrice = item.getHappyPrice();
-				jobj.put("test", "응찰 가격을 넘어섰어요! 이제 사야해요.");
+			String[] str = auctionService.getLastAuctionLog(item.getId()+"").split(";");
+			if(str==null) {
+				jobj.put("nowPrice", item.getStartPrice());
+				long nextPrice = auctionService.getAuctionUnit(item.getStartPrice()+"") + Long.parseLong(item.getStartPrice()+""); //다음 응찰가격은 nextPrice입니다.
+				jobj.put("nextPrice", nextPrice);				
+			}else {
+				jobj.put("nowPrice", Long.parseLong(str[1]));
+				
+				long nextPrice = auctionService.getAuctionUnit(str[1]) + Long.parseLong(str[1]); //다음 응찰가격은 nextPrice입니다.
+				if(nextPrice >= item.getHappyPrice()) {
+					nextPrice = item.getHappyPrice();
+					jobj.put("test", "응찰 가격을 넘어섰어요! 이제 사야해요.");
+				}
+				jobj.put("nextPrice", nextPrice);
+				
 			}
-			jobj.put("nextPrice", nextPrice);
+//			String str = redisUtil.getData(ITEM_NAME+item.getId()); //사람이 살가격
+			
 			
 			
 			jobj.put("nickname", redisUtil.getHdata("user", item.getUserId()+""));
