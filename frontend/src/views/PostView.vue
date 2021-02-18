@@ -297,9 +297,6 @@
             <div class="text-center mt-3">
               <v-btn @click="writePost" color="orange" large> 작성하기 </v-btn>
             </div>
-            <v-btn @click="testButton" block color="white" class="mt-5 w-50">
-              테스트하기
-            </v-btn>
           </div>
         </v-row>
       </div>
@@ -523,51 +520,6 @@ export default Vue.extend({
 
     locationEdit() {
       this.location = "";
-    },
-
-    testButton() {
-      this.startDateTime = this.startDate + " " + this.startTime;
-      this.endDateTime = this.endDate + " " + this.endTime;
-
-      console.log("'-----------TEST-----------'");
-      console.log("'변수명:타입'");
-      // uid
-      console.log("'uid:string'");
-      console.log(this.uid);
-      // title
-      console.log("'title:string'");
-      console.log(this.title);
-      // description,
-      console.log("'description:string'");
-      console.log(this.description);
-      // category
-      console.log("'category:string'");
-      console.log(this.category);
-      // location
-      console.log("'location:string'");
-      console.log(this.location);
-      // startPrice
-      console.log("'startPrice:string'");
-      console.log(this.startPrice);
-      // happyPrice
-      console.log("'happyPrice:string'");
-      console.log(this.happyPrice);
-      // grade
-      console.log("'grade:string'");
-      console.log(this.grade);
-      // direct
-      console.log("'direct:string'");
-      console.log(this.direct);
-      // startDate
-      console.log("'startDateTime:string'");
-      console.log(this.startDateTime);
-      // endDate
-      console.log("'endDateTime:string'");
-      console.log(this.endDateTime);
-      // files
-      console.log("'files:file'");
-      console.log(this.files);
-      console.log("'--------------------------'");
     },
   },
 });

@@ -71,4 +71,6 @@ export default Vue.extend({
   position: absolute;
   width: 100%;
 }
+
+.text-over {width:100px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 </style>
