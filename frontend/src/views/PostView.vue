@@ -408,7 +408,7 @@ export default Vue.extend({
         alert("경매시작가는 즉시구매가보다 작아야합니다.");
       else if (!grade) alert("상품등급을 입력해주세요.");
       else if (!endDateTime) alert("경매종료일을 입력해주세요.");
-      else if (!files) alert("사진을 입력해주세요.");
+      else if (files.length === 0) alert("사진을 입력해주세요.");
       else {
         const formData = new FormData();
 
@@ -433,11 +433,11 @@ export default Vue.extend({
         const { data } = await itemApi.item(formData);
 
         // state true?
-        console.log(data);
+        // console.log(data);
         if (data.status) {
           alert("업로드가 완료되었습니다.");
           this.$emit("close");
-          window.location.reload();
+          // window.location.reload();
           // 업로드 후 자동 라우팅 -> 아이템 번호 필요
           this.$router.push({ name: 'Detail', params: { id: '12' }})
         } else {
