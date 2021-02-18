@@ -146,7 +146,7 @@ export default Vue.extend({
     },
     async sellCompleted(index:number, userId: number, itemId: number) {
       try {
-        const { data } = await myAuctionApi.sellerItem(userId, itemId);
+        const { data } = await myAuctionApi.finalItem(userId, itemId);
         alert(this.sellItems[index] + "원이 입금되었습니다.");
         window.location.reload();
       } catch(error) {
