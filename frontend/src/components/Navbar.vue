@@ -90,7 +90,7 @@
                 />
                 <p
                   id="logo-font"
-                  class="grey--text text--darken-4 mb-0 mx-2 d-md-inline"
+                  class="grey--text text--darken-4 mb-0 mx-2 d-sm-inline d-none"
                 >
                   호랑it
                 </p>

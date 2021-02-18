@@ -48,7 +48,7 @@
       >
       </v-select> 
       <h3 class="mt-2">물품 등급</h3>
-      <v-container class="pa-0 d-flex" fluid>
+      <v-container class="pa-0 d-flex d-sm-inline d-lg-flex" fluid>
         <v-checkbox v-model="filters.grade" label="S" value="S" class="mx-2" color="orange darken-3"></v-checkbox>
         <v-checkbox v-model="filters.grade" label="A" value="A" class="mx-2" color="orange darken-3"></v-checkbox>
         <v-checkbox v-model="filters.grade" label="B" value="B" class="mx-2" color="orange darken-3"></v-checkbox>
