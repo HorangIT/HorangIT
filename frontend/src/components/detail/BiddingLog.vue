@@ -1,7 +1,7 @@
 <template>
   <!-- 응찰 내역 높이, 스크롤 설정 -->
   <v-list
-    height="300px"
+    height="40vh"
     style="overflow: auto"
   >
     <Bidding v-for="(bidding, index) in biddingLog" :bidding="bidding" :key="index"></Bidding>

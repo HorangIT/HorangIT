@@ -2,8 +2,8 @@
   <div>
     <v-card
       style="overflow-x: hidden; overflow-y: auto;"
-      min-height="25vh"
-      max-height="25vh"
+      min-height="40vh"
+      max-height="40vh"
       elevation="0"
       class="chatScroll"
     >
