@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-navigation-drawer v-model="active" absolute temporary>
+    <v-navigation-drawer v-model="active" fixed temporary>
       <SideNavbar @login="dialogLogin = true" @signup="dialogSignup = true"></SideNavbar>
     </v-navigation-drawer>
     <v-app-bar elevate-on-scroll app color="white" height="130px" id="header">
