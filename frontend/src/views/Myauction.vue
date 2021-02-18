@@ -52,6 +52,7 @@
           <v-btn class="mr-4" v-if="buyItems[index].status==3" 
           @click="takeCompleted(buyItems[index].buyerId, buyItems[index].itemId)">수령확인</v-btn>
           <v-btn class="mr-4" v-if="buyItems[index].status==4" disabled>거래완료</v-btn>
+          <v-btn class="mr-4" v-if="buyItems[index].status==5" disabled>거래완료</v-btn>
           <v-btn @click="openChat(buyItems[index].itemId, 'seller')">채팅</v-btn>
         </v-list-item>
         <v-divider
@@ -131,6 +132,7 @@ export default Vue.extend({
     async deliveryCompleted(userId: number, itemId: number) {
       try {
         const { data } = await myAuctionApi.sellerItem(userId, itemId);
+        alert('배송완료!');
         window.location.reload();
       } catch(error) {
         console.log(error);
@@ -139,6 +141,7 @@ export default Vue.extend({
     async takeCompleted(userId: number, itemId: number) {
       try {
         const { data } = await myAuctionApi.buyerItem(userId, itemId);
+        alert('수령확인!');
         window.location.reload();
       } catch(error) {
         console.log(error);
@@ -147,7 +150,7 @@ export default Vue.extend({
     async sellCompleted(index:number, userId: number, itemId: number) {
       try {
         const { data } = await myAuctionApi.finalItem(userId, itemId);
-        alert(this.sellItems[index] + "원이 입금되었습니다.");
+        alert((this.sellItems[index] as any).finalPrice + "원이 입금되었습니다.");
         window.location.reload();
       } catch(error) {
         console.log(error);
