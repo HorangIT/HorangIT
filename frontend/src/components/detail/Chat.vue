@@ -134,6 +134,10 @@ export default Vue.extend({
     },
     // Chat send
     submit (): void {
+      if (!this.$store.state.userModule.user) {
+        alert("로그인을 해주세요!");
+        return;
+      }
       if (this.chatInput && this.stompClient) {
         const chatMessage = {
             sender: this.user.id,

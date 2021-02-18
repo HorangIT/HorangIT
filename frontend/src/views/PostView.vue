@@ -295,7 +295,7 @@
               </div>
             </div>
             <div class="text-center mt-3">
-              <v-btn @click="writePost" color="orange" large> 작성하기 </v-btn>
+              <v-btn @click="writePost" color="orange" large @disabled="this.uploadFlag"> 작성하기 </v-btn>
             </div>
           </div>
         </v-row>
@@ -311,6 +311,7 @@ import { itemApi } from "../utils/axios";
 import moment from "moment";
 import TimeSelect from "../utils/vuetify-time-select/TimeSelect.vue";
 import DaumPostcode from "vuejs-daum-postcode";
+import { colors } from "vuetify/lib";
 
 export default Vue.extend({
   components: { TimeSelect, DaumPostcode },
@@ -351,6 +352,8 @@ export default Vue.extend({
         !!(v || "").match(/^[1-9][0-9]*$/) ||
         "잘못된 입력입니다. 가격을 입력해주세요.",
     },
+
+    uploadFlag: 0,
   }),
   created() {
     const today = moment();
@@ -363,11 +366,15 @@ export default Vue.extend({
     this.endDateTime = this.endDate + " " + this.endTime;
 
     this.uid = this.$store.state.userModule.user.object.user.id;
+    
     // console.log(this.$refs.title);
     // ((this.$refs.title as any).input as any).focus();
   },
   methods: {
     async writePost() {
+      if (this.uploadFlag == 1) return;
+
+      this.uploadFlag = 1;
       this.startDateTime = this.startDate + " " + this.startTime;
       this.endDateTime = this.endDate + " " + this.endTime;
 
@@ -432,6 +439,8 @@ export default Vue.extend({
           alert("업로드에 실패하였습니다.");
         }
       }
+
+      this.uploadFlag = 0;
     },
 
     imageUpload() {
