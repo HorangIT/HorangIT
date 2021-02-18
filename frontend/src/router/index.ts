@@ -20,31 +20,37 @@ const routes: Array<RouteConfig> = [
   {
     path: "/",
     component: Layout,
+    meta: { title: '호랑 it' },
     children: [
       {
         path: "/",
         component: Home,
-        name: "Home"
+        name: "Home",
+        meta: { title: '호랑 it' }
       },
       {
         path: "/detail/:id",
         component: Detail,
-        name: "Detail"
+        name: "Detail",
+        meta: { title: '호랑 it - 제품 상세' }
       },
       {
         path: "/postview",
         component: PostView,
-        name: "PostView"
+        name: "PostView",
+        meta: { title: '호랑 it - 판매 등록' }
       },
       {
         path: "/auction",
         component: Auction,
-        name: "Auction"
+        name: "Auction",
+        meta: { title: '호랑 it - 경매' }
       },
       {
         path: "/myauction",
         component: Myauction,
-        name: "Myauction"
+        name: "Myauction",
+        meta: { title: '호랑 it - 내 경매' }
       },
     ]
   },
@@ -57,15 +63,17 @@ const routes: Array<RouteConfig> = [
     component: Chatroom,
     name: "Chatroom",
     props: true,
+    meta: { title: '호랑 it - 개인 채팅' }
   },
   // {
-  //   path: "/404",
-  //   component: Notfound
-  // },
-  // test page
-  {
-    path: "/profile",
-    component: ProfileForm
+    //   path: "/404",
+    //   component: Notfound
+    // },
+    // test page
+    {
+      path: "/profile",
+      component: ProfileForm,
+      meta: { title: '호랑 it - 개인 정보' }
   },
   {
     path: "/api/payment/success",
