@@ -214,8 +214,8 @@ export default Vue.extend({
     // }
   },
   methods: {
-    getItem(id: number) {
-      itemApi.getItem(id).then((res: AxiosResponse) => {
+    async getItem(id: number) {
+      await itemApi.getItem(id).then((res: AxiosResponse) => {
         this.item = res.data.object;
         this.itemId = res.data.object.itemId;
         this.happyPrice = res.data.object.happyPrice;
