@@ -439,7 +439,7 @@ export default Vue.extend({
           this.$emit("close");
           // window.location.reload();
           // 업로드 후 자동 라우팅 -> 아이템 번호 필요
-          this.$router.push({ name: 'Detail', params: { id: '12' }})
+          this.$router.replace({ path: '/auction' });
         } else {
           alert("업로드에 실패하였습니다.");
         }
