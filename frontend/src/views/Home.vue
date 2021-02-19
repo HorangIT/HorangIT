@@ -4,7 +4,6 @@
       <v-carousel-item
         :src="require('../assets/img/home/main_buy.jpg')"
         class="pa-4"
-        to="/auction"
       >
         <v-row class="fill-height" align="center" justify="center">
           <div class="display-2 white--text pl-5 pr-5 hidden-sm-only">
@@ -16,7 +15,6 @@
       <v-carousel-item
         :src="require('../assets/img/home/main_sell.jpg')"
         class="pa-4"
-        to="/postview"
       >
         <v-row class="fill-height" align="center" justify="center">
           <div class="display-2 white--text pl-5 pr-5 hidden-sm-only">
@@ -28,7 +26,6 @@
       <v-carousel-item
         :src="require('../assets/img/home/main_info.jpg')"
         class="pa-4"
-        to="/"
       >
         <v-row class="fill-height" align="center" justify="center">
           <div class="display-2 white--text pl-5 pr-5 hidden-sm-only">
