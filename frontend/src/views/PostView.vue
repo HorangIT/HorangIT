@@ -240,7 +240,7 @@
                     <div>
                       <div class="text-center">이미지</div>
                       <div class="room-file-notice-item">
-                        실 사진 최소 3장 이상 등록하셔야 하며. 가로사진을
+                        실 사진 최소 1장 이상 등록하셔야 하며. 가로사진을
                         권장합니다.
                       </div>
                       <div class="room-file-notice-item" style="color: #ef4351">
