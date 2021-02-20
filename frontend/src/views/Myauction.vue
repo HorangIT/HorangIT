@@ -17,7 +17,9 @@
           <v-btn class="mr-4" v-if="sellItems[index].status==2" 
           @click="deliveryCompleted(sellItems[index].sellerId, sellItems[index].itemId)">배송완료</v-btn>
           <v-btn class="mr-4" v-if="sellItems[index].status==3" disabled>배송중</v-btn>
-          <v-btn class="mr-4" v-if="sellItems[index].status==4">대금확인</v-btn>
+          <v-btn class="mr-4" v-if="sellItems[index].status==4"
+          @click="sellCompleted(index, sellItems[index].sellerId, sellItems[index].itemId)">대금확인</v-btn>
+          <v-btn class="mr-4" v-if="sellItems[index].status==5" disabled>거래완료</v-btn>
           <v-btn @click="openChat(sellItems[index].itemId, 'buyer')">채팅</v-btn>
         </v-list-item>
         <v-divider
@@ -50,6 +52,7 @@
           <v-btn class="mr-4" v-if="buyItems[index].status==3" 
           @click="takeCompleted(buyItems[index].buyerId, buyItems[index].itemId)">수령확인</v-btn>
           <v-btn class="mr-4" v-if="buyItems[index].status==4" disabled>거래완료</v-btn>
+          <v-btn class="mr-4" v-if="buyItems[index].status==5" disabled>거래완료</v-btn>
           <v-btn @click="openChat(buyItems[index].itemId, 'seller')">채팅</v-btn>
         </v-list-item>
         <v-divider
@@ -92,106 +95,8 @@ export default Vue.extend({
     },
     sellItemPage: 1,
     buyItemPage: 1,
-    sellItems: [
-      {
-        itemId: 1,
-        itemTitle: '전자기기1',
-        message: '등록하신 상품이 낙찰되었습니다.',
-        status: 1
-      },
-      {
-        itemId: 2,
-        itemTitle: '의류1',
-        message: '등록하신 상품이 낙찰되었습니다.',
-        status: 2
-      },
-      {
-        itemId: 3,
-        itemTitle: '전자기기1',
-        message: '등록하신 상품이 낙찰되었습니다.',
-        status: 3
-      },
-      {
-        itemId: 4,
-        itemTitle: '의류1',
-        message: '등록하신 상품이 낙찰되었습니다.',
-        status: 4
-      },
-            {
-        itemId: 1,
-        itemTitle: '전자기기1',
-        message: '등록하신 상품이 낙찰되었습니다.',
-        status: 1
-      },
-      {
-        itemId: 2,
-        itemTitle: '의류1',
-        message: '등록하신 상품이 낙찰되었습니다.',
-        status: 2
-      },
-      {
-        itemId: 3,
-        itemTitle: '전자기기1',
-        message: '등록하신 상품이 낙찰되었습니다.',
-        status: 3
-      },
-      {
-        itemId: 4,
-        itemTitle: '의류1',
-        message: '등록하신 상품이 낙찰되었습니다.',
-        status: 4
-      },
-    ],
-    buyItems: [
-      {
-        itemId: 5,
-        itemTitle: '전자기기3',
-        message: '축하합니다. 낙찰에 성공했습니다.',
-        status: 1
-      },
-      {
-        itemId: 6,
-        itemTitle: '의류2',
-        message: '축하합니다. 낙찰에 성공했습니다.',
-        status: 2
-      },
-      {
-        itemId: 7,
-        itemTitle: '전자기기4',
-        message: '축하합니다. 낙찰에 성공했습니다.',
-        status: 3
-      }, 
-      {
-        itemId: 8,
-        itemTitle: '전자기기3',
-        message: '축하합니다. 낙찰에 성공했습니다.',
-        status: 4
-      },
-           {
-        itemId: 5,
-        itemTitle: '전자기기3',
-        message: '축하합니다. 낙찰에 성공했습니다.',
-        status: 1
-      },
-      {
-        itemId: 6,
-        itemTitle: '의류2',
-        message: '축하합니다. 낙찰에 성공했습니다.',
-        status: 2
-      },
-      {
-        itemId: 7,
-        itemTitle: '전자기기4',
-        message: '축하합니다. 낙찰에 성공했습니다.',
-        status: 3
-      }, 
-      {
-        itemId: 8,
-        itemTitle: '전자기기3',
-        message: '축하합니다. 낙찰에 성공했습니다.',
-        status: 4
-      }
-    ],
+    sellItems: [],
+    buyItems: [],
   }),
   async created() {
     const uid = (this as any).$store.state.userModule.user.object.user.id;
@@ -227,6 +132,7 @@ export default Vue.extend({
     async deliveryCompleted(userId: number, itemId: number) {
       try {
         const { data } = await myAuctionApi.sellerItem(userId, itemId);
+        alert('배송완료!');
         window.location.reload();
       } catch(error) {
         console.log(error);
@@ -235,6 +141,16 @@ export default Vue.extend({
     async takeCompleted(userId: number, itemId: number) {
       try {
         const { data } = await myAuctionApi.buyerItem(userId, itemId);
+        alert('수령확인!');
+        window.location.reload();
+      } catch(error) {
+        console.log(error);
+      }
+    },
+    async sellCompleted(index:number, userId: number, itemId: number) {
+      try {
+        const { data } = await myAuctionApi.finalItem(userId, itemId);
+        alert((this.sellItems[index] as any).finalPrice + "원이 입금되었습니다.");
         window.location.reload();
       } catch(error) {
         console.log(error);

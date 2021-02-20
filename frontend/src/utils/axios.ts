@@ -118,6 +118,9 @@ export const myAuctionApi = {
   sellerItem(userId: any, itemId: any): any {
     return request.patch(`/auction/seller/${userId}/${itemId}`);
   },
+  finalItem(userId: any, itemId: any): any {
+    return request.patch(`/auction/final/${userId}/${itemId}`);
+  },
   pay (data: any): any {
     return request.post('/payment', data);
   },

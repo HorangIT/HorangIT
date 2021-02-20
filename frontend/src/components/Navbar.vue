@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-navigation-drawer v-model="active" absolute temporary>
+    <v-navigation-drawer v-model="active" fixed temporary>
       <SideNavbar @login="dialogLogin = true" @signup="dialogSignup = true"></SideNavbar>
     </v-navigation-drawer>
     <v-app-bar elevate-on-scroll app color="white" height="130px" id="header">
@@ -90,7 +90,7 @@
                 />
                 <p
                   id="logo-font"
-                  class="grey--text text--darken-4 mb-0 mx-2 d-md-inline"
+                  class="grey--text text--darken-4 mb-0 mx-2 d-sm-inline d-none"
                 >
                   호랑it
                 </p>

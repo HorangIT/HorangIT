@@ -214,14 +214,17 @@ export default Vue.extend({
     // }
   },
   methods: {
-    getItem(id: number) {
-      itemApi.getItem(id).then((res: AxiosResponse) => {
+    async getItem(id: number) {
+      await itemApi.getItem(id).then((res: AxiosResponse) => {
         this.item = res.data.object;
         this.itemId = res.data.object.itemId;
         this.happyPrice = res.data.object.happyPrice;
         this.nextPrice = res.data.object.nextPrice;
         this.nowPrice = res.data.object.nowPrice;
-        if (Number(this.$store.state.userModule.user.object.user.id) === Number(res.data.object.sellerId)) {
+        if (!this.$store.state.userModule.user) {
+          // alert("로그인을 해주세요.");
+        }
+        else if (Number(this.$store.state.userModule.user.object.user.id) === Number(res.data.object.sellerId)) {
           this.seller = true;
           console.log(this.seller)
         }

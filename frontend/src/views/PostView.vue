@@ -165,9 +165,9 @@
                     </v-date-picker>
                   </v-menu>
                 </v-col>
-                <v-col>
+                <!-- <v-col>
                   <time-select v-model="startTime"></time-select>
-                </v-col>
+                </v-col> -->
 
                 <v-col>
                   <v-menu
@@ -240,7 +240,7 @@
                     <div>
                       <div class="text-center">이미지</div>
                       <div class="room-file-notice-item">
-                        실 사진 최소 3장 이상 등록하셔야 하며. 가로사진을
+                        실 사진 최소 1장 이상 등록하셔야 하며. 가로사진을
                         권장합니다.
                       </div>
                       <div class="room-file-notice-item" style="color: #ef4351">
@@ -295,7 +295,7 @@
               </div>
             </div>
             <div class="text-center mt-3">
-              <v-btn @click="writePost" color="orange" large> 작성하기 </v-btn>
+              <v-btn @click="writePost" color="orange" large @disabled="this.uploadFlag"> 작성하기 </v-btn>
             </div>
           </div>
         </v-row>
@@ -311,6 +311,7 @@ import { itemApi } from "../utils/axios";
 import moment from "moment";
 import TimeSelect from "../utils/vuetify-time-select/TimeSelect.vue";
 import DaumPostcode from "vuejs-daum-postcode";
+import { colors } from "vuetify/lib";
 
 export default Vue.extend({
   components: { TimeSelect, DaumPostcode },
@@ -351,6 +352,8 @@ export default Vue.extend({
         !!(v || "").match(/^[1-9][0-9]*$/) ||
         "잘못된 입력입니다. 가격을 입력해주세요.",
     },
+
+    uploadFlag: 0,
   }),
   created() {
     const today = moment();
@@ -363,11 +366,20 @@ export default Vue.extend({
     this.endDateTime = this.endDate + " " + this.endTime;
 
     this.uid = this.$store.state.userModule.user.object.user.id;
+    
     // console.log(this.$refs.title);
     // ((this.$refs.title as any).input as any).focus();
   },
   methods: {
     async writePost() {
+      if (this.uploadFlag == 1) return;
+
+      this.uploadFlag = 1;
+      
+      const today = moment();
+      this.startDate = today.format("YYYY-MM-DD");
+      this.startTime = today.format("HH:mm");
+      
       this.startDateTime = this.startDate + " " + this.startTime;
       this.endDateTime = this.endDate + " " + this.endTime;
 
@@ -396,7 +408,7 @@ export default Vue.extend({
         alert("경매시작가는 즉시구매가보다 작아야합니다.");
       else if (!grade) alert("상품등급을 입력해주세요.");
       else if (!endDateTime) alert("경매종료일을 입력해주세요.");
-      else if (!files) alert("사진을 입력해주세요.");
+      else if (files.length === 0) alert("사진을 입력해주세요.");
       else {
         const formData = new FormData();
 
@@ -421,17 +433,19 @@ export default Vue.extend({
         const { data } = await itemApi.item(formData);
 
         // state true?
-        console.log(data);
+        // console.log(data);
         if (data.status) {
           alert("업로드가 완료되었습니다.");
           this.$emit("close");
-          window.location.reload();
+          // window.location.reload();
           // 업로드 후 자동 라우팅 -> 아이템 번호 필요
-          this.$router.push({ name: 'Detail', params: { id: '12' }})
+          this.$router.replace({ path: '/auction' });
         } else {
           alert("업로드에 실패하였습니다.");
         }
       }
+
+      this.uploadFlag = 0;
     },
 
     imageUpload() {
