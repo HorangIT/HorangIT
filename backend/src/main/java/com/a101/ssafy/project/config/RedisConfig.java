@@ -18,7 +18,11 @@ import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.listener.Topic;
 
 import com.a101.ssafy.project.eventlistener.KeyExpiredListener;
-
+/**
+ * @author SongEunjoo
+ * 레디스 환경설정을 위한 클래스
+ * 
+ */
 @Configuration
 public class RedisConfig {
 	@Value("${redis.hostname}")
