@@ -6,21 +6,22 @@
     실시간 경매를 도입한 이색 중고거래
     <br />
     <br />
-    <a href="#"><strong>호랑IT 보러가기</strong></a>
+    <a href="https://i4a101.p.ssafy.io"><strong>호랑IT 보러가기</strong></a> |
+  	<a href="https://youtu.be/8es-sfv_9KY"><strong>호랑IT UCC</strong></a>
 </p>
 
 <br><br>
 
 ## 👨‍👩‍👧‍👦 호랑IT 개발진
 
-| ROLE                           | NAME           | CONTACT |
-| ------------------------------ | -------------- | ------- |
-| Captain & Backend & DevOps     | :crown: 송은주 |         |
-| Backend & Presentation & UI/UX | :girl: 이지영  |         |
-| Backend & Security             | :boy: 김성진​   |         |
-| Frontend & DevOps              | :boy: 전원표   |         |
-| Frontend & UI/UX               | :girl: 이승아  |         |
-| Frontend & DevOps              | :boy: 장재용​   |         |
+| ROLE                           | NAME           |
+| ------------------------------ | -------------- |
+| Captain & Backend & DevOps     | :crown: 송은주 |
+| Backend & Presentation & UI/UX | :girl: 이지영  |
+| Backend & Security             | :boy: 김성진​   |
+| Frontend & DevOps              | :boy: 전원표   |
+| Frontend & UI/UX               | :girl: 이승아  |
+| Frontend & DevOps              | :boy: 장재용​   |
 
 <br><br>
 
@@ -46,43 +47,15 @@
 
 ## :hammer: 프로젝트 설계​
 
+#### 전체 구조도
+
+![img](./res/호랑it구조도.png)
+
+
+
 #### ERD 
 
 ![img](./res/erd.png)
-
-#### VUE
-
-
-
-#### 배포
-
-
-
-<br><br>
-
-## ⚡ 기능 소개
-
-#### 1. 실시간 경매 
-
-
-
-#### 2. 채팅
-
-
-
-#### 3. 회원
-
-
-
-#### 4. 아이템 관리 (등록, 필터링, 마감처리(시간, 이벤트))
-
-
-
-#### 5. 모바일 반응형
-
-
-
-
 
 <br><br>
 
