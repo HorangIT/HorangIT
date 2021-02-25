@@ -1,4 +1,4 @@
-![img](./res/호랑잇.png)
+![img](./README.assets/호랑잇.png)
 
 <h2 align="center">호랑IT</h2>
 
@@ -9,7 +9,6 @@
     <a href="https://i4a101.p.ssafy.io"><strong>호랑IT 보러가기</strong></a> |
   	<a href="https://youtu.be/8es-sfv_9KY"><strong>호랑IT UCC</strong></a>
 </p>
-
 <br><br>
 
 ## 👨‍👩‍👧‍👦 호랑IT 개발진
@@ -27,13 +26,13 @@
 
 ## :book: 프로젝트 소개
 
-![프로젝트소개](./res/20210129_124022.png)
+![프로젝트소개](./README.assets/20210129_124022.png)
 
 <br><br>
 
 ## :sparkles: 기획 의도
 
-![기획의도](./res/기획의도.png)
+![기획의도](./README.assets/기획의도.png)
 
 2020년 국내 중고거래 시장 규모는 약 20조원 규모로 추산됩니다. MZ세대의 중고거래에 대한 의식이 긍정적으로 변화함에 따라 `호랑IT` 은 이색적인 쇼핑 경험을 제공하고자 합니다.
 
@@ -41,7 +40,7 @@
 
 ## :books: 기술 스택
 
-![img](./res/20210129_124055.png)
+![img](./README.assets/20210129_124055.png)
 
 <br><br>
 
@@ -49,13 +48,13 @@
 
 #### 전체 구조도
 
-![img](./res/호랑it구조도.png)
+![img](./README.assets/호랑it구조도.png)
 
 
 
 #### ERD 
 
-![img](./res/erd.png)
+![img](./README.assets/erd.png)
 
 <br><br>
 
