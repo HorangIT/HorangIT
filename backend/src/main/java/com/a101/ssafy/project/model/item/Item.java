@@ -22,12 +22,21 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+
+/**
+ * @author 송은주(OctopusSwellfish)
+ * 
+ * Items를 저장하기 위한 엔티티입니다. (경매 물품)
+ * 아이템에 여러 이미지가 들어갈 수 있기 때문에, 아이템:이미지=1:N으로 맵핑한 구조입니다.
+ * 
+ * 맵핑 시 조인 컬럼은 itemId입니다.
+ *
+ */
 @Entity
 @Getter
 @Setter
 @ToString
 @NoArgsConstructor
-//@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Item {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

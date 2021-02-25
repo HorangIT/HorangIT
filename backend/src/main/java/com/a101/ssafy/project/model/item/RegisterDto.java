@@ -8,6 +8,16 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+
+
+/**
+ * @author 문어복어(OctopusSwellfish)
+ * 아이템을 등록하기 위한 DTO입니다.
+ * 
+ * 아이템 Entity에는 형식이 지정되어 있지만, 프론트단에서는 모두  String으로 보내주기로 약속했기 때문에,
+ * 현재 DTO에 담고 아이템 Entity 형식으로 변환하는 작업이 필요합니다.
+ *
+ */
 @Valid
 @Setter
 @Getter
@@ -18,15 +28,12 @@ public class RegisterDto {
 	String title;
 	
 	@ApiModelProperty(required = true)
-//	@NotNull
 	String description;
 	
 	@ApiModelProperty(required = true)
-//	@NotNull
 	String startPrice;
 	
 	@ApiModelProperty(required = true)
-//	@NotNull
 	String happyPrice;
 	
 	@ApiModelProperty(required = true)
