@@ -13,19 +13,28 @@ import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 import com.a101.ssafy.project.model.chat.ChatMessage;
 import com.a101.ssafy.project.model.chat.MessageType;
 
-
-//@ComponentScan
-@org.springframework.stereotype.Component
+/**
+ * @author 송은주(OctopusSwellfish)
+ * 
+ * 웹 소켓에서 사용자가 들어오고 나갈 때의 이벤트를 수행하는 함수입니다.
+ *
+ */
 public class WebSocketEventListener {
 	@Autowired
 	private SimpMessageSendingOperations messagingTemplate;
 	
+	/**
+	 * 소켓이 연결되었을 때 이벤트 받는 함수
+	 */
 	@EventListener //ApplicationEvent를 상속받음
 	public void handleWebSocketConnectListener(SessionConnectedEvent event) {
-		//ChatController의 addUser()에서 broadcast해서 사용자 참여 이벤트 알렸어서 여기는 그냥 sysout
+		//ChatController의 addUser()에서 broadcast해서 사용자 참여 이벤트 알렸어서  여기는 그냥 sysout
 		System.out.println("Received a new web socket connection");
 	}
 	
+	/**
+	 * 소켓의 연결 해제되었을 때 이벤트 받는 함수
+	 */
 	@EventListener
 	public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
 		StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
