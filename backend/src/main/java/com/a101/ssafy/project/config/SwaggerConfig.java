@@ -11,6 +11,10 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+/** 
+ * @author 송은주(OctopusSwellfish)
+ * 기본적인 Swagger설정을 위한 클래스
+ */
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig {

@@ -19,9 +19,10 @@ import org.springframework.data.redis.listener.Topic;
 
 import com.a101.ssafy.project.eventlistener.KeyExpiredListener;
 /**
- * @author SongEunjoo
+ * @author 송은주(OctopusSwellfish)
  * 레디스 환경설정을 위한 클래스
- * 
+ * Lettuce를 이용해서 제작
+ * 메시지 리스너 추가 (단 레디스에서 환경설정을 추가로 해 줘야 함)
  */
 @Configuration
 public class RedisConfig {
@@ -31,6 +32,8 @@ public class RedisConfig {
 	@Value("${redis.port}")
 	private int port;
 	
+	
+	//KeyExpiredListener를 Autowired하지 않으면 이벤트를 처리하는 부분에서 다른 컴포넌트들을 Autowired로 받아올 수 없음
 	@Autowired
 	KeyExpiredListener keyExpiredListener;
 	
@@ -47,6 +50,9 @@ public class RedisConfig {
 		return new LettuceConnectionFactory(redisStandaloneConfiguration, lettuceClientConfiguration);
 	}
 	
+	/** 레디스 키 삭제/키 만료 이벤트 리스너 등록을 위한 함수 
+	 * 	0번 데이터베이스의 키 삭제/만료 이벤트를 수신하겠다는 의미
+	 * */
 	@Bean
 	public RedisMessageListenerContainer getListenerContainer() {
 		//create connection container
