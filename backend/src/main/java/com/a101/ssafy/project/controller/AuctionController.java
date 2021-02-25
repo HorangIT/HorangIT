@@ -34,6 +34,11 @@ import com.a101.ssafy.project.service.AuctionService;
 import com.a101.ssafy.project.service.ItemService;
 import com.a101.ssafy.project.service.ReceiptService;
 
+/** 
+ * @author 송은주(OctopusSwellfish)
+ * Auction(경매)가 진행되는 상세 페이지에 관련된 컨트롤러 클래스입니다.
+ * 실시간 경매 처리(웹소켓 메시지), 본인이 구매/판매한 물건 현황을 보여줄 수 있는 함수가 있는 클래스입니다.
+ */
 @CrossOrigin(origins = { "*" })
 @RestController
 @RequestMapping("/auction")
@@ -60,6 +65,10 @@ public class AuctionController {
 		this.receiptService = receiptService;
 	}
 	
+	/**  
+	 * 경매 요청이 들어오면 auction인지, flex인지 확인해서 경매 로직을 진행하는 함수입니다.
+	 * 레디스에서 경매 정보를 가져와서, 만료되지 않았다면 진행합니다.
+	 *  */
 	@MessageMapping("/auction.sendMessage/{itemId}")
 	public void onAuction(@DestinationVariable("itemId")long itemId, @Payload ChatMessage chatMessage) {
 		String getCurrentExpiredValue = auctionService.getCurrentExpiredValue(itemId+"");
@@ -87,7 +96,9 @@ public class AuctionController {
 		
 	} 	
 	
-	// /action/log/{id} 응찰 내역을 가져옵니다ㅎㅎ
+	/** 
+	 * 레디스에 저장된, 현재 까지의 경매 정보가 저장되어있는 로그 정보(응찰 내역)를 보내줍니다.
+	 * */
 	@GetMapping("/log/{id}")
 	public Object getAuctionLogForItem(@PathVariable("id")long id) {
 		ResponseEntity responseEntity = null;
@@ -114,6 +125,9 @@ public class AuctionController {
 		return responseEntity;
 	}
 	
+	/** 
+	 * userId가 구매 성공을 했던 물건 항목에 대해 가지고 오는 함수입니다.
+	 * */
 	@GetMapping("/buyer/{userId}")
 	public Object getReceiptBuyer(@PathVariable("userId")long userId) {
 		List<Receipt> list = receiptService.getReceiptByBuyerId(userId);
@@ -145,6 +159,9 @@ public class AuctionController {
 		result.object = jarr;
 		return new ResponseEntity(result, HttpStatus.OK);
 	}
+	/**
+	 * userId가 판매 성공을 한 물건 내역에 대해 가져오는 함수입니다.
+	 */
 	@GetMapping("/seller/{userId}")
 	public Object getReceiptSeller(@PathVariable("userId")long userId) {
 		List<Receipt> list = receiptService.getReceiptBySellerId(userId);
@@ -178,6 +195,9 @@ public class AuctionController {
 		
 	}
 	
+	/**
+	 * @author 이지영
+	 */
 	@PatchMapping("/seller/{userId}/{itemId}")
 	public Object sendItem(@PathVariable("userId")long userId, @PathVariable("itemId")long itemId) {
 		
@@ -198,6 +218,9 @@ public class AuctionController {
 		return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 	}
 	
+	/**
+	 * @author 이지영
+	 */
 	@PatchMapping("/buyer/{userId}/{itemId}")
 	public Object receiveItem(@PathVariable("userId")long userId, @PathVariable("itemId")long itemId) {
 		
@@ -218,6 +241,9 @@ public class AuctionController {
 		return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 	}
 	
+	/**
+	 * @author 이지영
+	 */
 	@PatchMapping("/final/{userId}/{itemId}")
 	public Object finalItem(@PathVariable("userId")long userId, @PathVariable("itemId")long itemId) {
 		

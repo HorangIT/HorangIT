@@ -11,10 +11,6 @@ import lombok.ToString;
 @NoArgsConstructor
 public class SearchDto {
 		
-//	long minPrice;
-//	long maxPrice;
-//	long currentPrice;
-	
 	// 주소
 	String si;
 	String gu;

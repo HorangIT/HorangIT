@@ -14,5 +14,4 @@ import lombok.Getter;
 @NoArgsConstructor
 public class SearchLocationDto {
 	String districtName;
-
 }

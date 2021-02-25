@@ -20,8 +20,12 @@ import com.a101.ssafy.project.model.chat.MessageType;
 import com.a101.ssafy.project.redis.RedisUtil;
 
 
+/** 
+ * @author 송은주(OctopusSwellfish)
+ * 웹소켓으로 채팅을 구현하기 위한 클래스입니다.
+ * 1:1채팅 및 물건 각자에 대한 전체 채팅에 대한 정보들을 저장하고 대응합니다.
+ */
 //WebSocketConfig 에서 /{prefix}로  시작하는 대상이 있는 클라이언트에서 보낸 모든 메시지는 @MessageMapping 으로 라우팅됨
-//
 @CrossOrigin(origins = { "*" })
 @Controller
 public class ChatController {
@@ -43,7 +47,9 @@ public class ChatController {
 	final String ROOM_CHAT_LOG_USER_TIME = "roomChatUserTime";
 	final String ROOM_CHAT_LOG_USER_NICKNAME = "roomChatNickname";
 	
-	/** 아이템 세부 페이지에 들어갔을 때 사람들끼리 채팅하는 함수 */
+	/** 
+	 * 아이템 세부 페이지에 들어갔을 때 사람들끼리 채팅하는 함수 
+	 * */
 	@MessageMapping("/chat.sendMessage/{itemId}")
 	public void sss(@DestinationVariable("itemId")long itemId, @Payload ChatMessage chatMessage) {
 		chatMessage.setType(MessageType.REPLY);
@@ -66,17 +72,20 @@ public class ChatController {
 		
 	}
 	
-	
+	/** 
+	 * 웹소켓과 처음 연결되고 유저가 들어올 때 대응하는 함수
+	 * */
 	@MessageMapping("/chat.addUser")
 	@SendTo("/topic/public")
 	public ChatMessage addUser(@Payload ChatMessage chatMessage, SimpMessageHeaderAccessor headerAccessor) {
-		System.out.println(chatMessage.getType()+"???");
 		headerAccessor.getSessionAttributes().put("username", chatMessage.getSender());
 		
 		return chatMessage;
 	}
 	
-	/** 거래가 성사되고 나서 사람들끼리 1:1 채팅을 하는 함수 */
+	/** 
+	 * 거래가 성사되고 나서 사람들끼리 1:1 채팅을 하는 함수 
+	 * */
 	@MessageMapping("/room.sendMessage/{itemId}")
 	public void ddd(@DestinationVariable("itemId")long itemId, @Payload ChatMessage chatMessage) {
 		System.out.println("오는지는 ?");

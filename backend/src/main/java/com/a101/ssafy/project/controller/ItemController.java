@@ -44,6 +44,13 @@ import com.a101.ssafy.project.service.ItemService;
 import com.a101.ssafy.project.service.S3Service;
 import com.google.gson.JsonObject;
 
+/**
+ * @author 송은주(OctopusSwellfish)
+ * 경매 물품 등록 및 조회에 대응하기 위한 클래스입니다.
+ * 
+ * 경매 물품을 등록하고 상세정보를 확인할 수 있는 함수가 있는 클래스입니다. 
+ * 
+ */
 @CrossOrigin(origins = { "*" })
 @Controller
 @RequestMapping("/item")
@@ -65,8 +72,9 @@ public class ItemController {
 	@Autowired
 	ItemRepository itemRepository;
 	
-	//이후 주석 꼭 달기!
-	
+	/** 
+	 * 해당하는 아이템 id를 요청하면 해당 아이템의 상세 정보를 리턴하는 함수입니다. 
+	 * */
 	@GetMapping("/{id}")
 	@ResponseBody
 	public Object readItem(@PathVariable("id")long id) {
@@ -92,7 +100,9 @@ public class ItemController {
 		return response;
 	}
 	
-	
+	/** 
+	 * 아이템 정보를 받으면 이를 등록하는 함수입니다. 
+	 * */
 	@PostMapping
 	public Object registerItem(RegisterDto request, @RequestParam("files") MultipartFile[] multipartFiles) throws IOException, ParseException {
 		BasicResponse result = itemService.registerItem(request, multipartFiles);
@@ -107,6 +117,9 @@ public class ItemController {
 		return response;
 	}
 	
+	/** 
+	 * @author 이지영
+	 * */
 	// pagination + filter!	
 	@GetMapping("/page/{pageNo}")
 	public Object searchItems(@PathVariable int pageNo, SearchDto searchDto) {
@@ -165,7 +178,8 @@ public class ItemController {
 		
 	}
 		
-	/*
+	/**
+	 * @author 이지영
 	 * 지역 리스트 뽑아주기:
 	 * - null이 들어오면 "시" 리턴
 	 * - null이 아니면 "시-군구" 리턴
@@ -199,7 +213,10 @@ public class ItemController {
 		}
 		
 	}
-	
+
+	/**
+	 * 아이템이 응찰 되었을 때, 해당 아이템의 거래를 위해 판매자-구매자간 1:1채팅을 열게 되는데, 이 때의 채팅 로그를 가져오는 함수입니다.
+	 */
 	@GetMapping("/{itemId}/chat")
 	@ResponseBody
 	public Object getChatLog(@PathVariable("itemId")long itemId) {
@@ -207,6 +224,9 @@ public class ItemController {
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	
+	/**
+	 * 해당 아이템의 chatting 이전 로그를 한 번에 리턴하는 함수입니다.
+	 */
 	@GetMapping("/{itemId}/chatroom")
 	@ResponseBody
 	public Object getChatRoomLog(@PathVariable("itemId")long itemId) {
