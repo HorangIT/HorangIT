@@ -20,6 +20,14 @@ import com.a101.ssafy.project.model.search.SearchSpecs;
 import com.a101.ssafy.project.repository.SearchRepository;
 import com.a101.ssafy.project.service.SearchService;
 
+/**
+ * @author 송은주(OctopusSwellfish)
+ * 검색 및 페이징을 위한 클래스입니다.
+ * 
+ * This Class is deprecated and is replaced with AuctionController.
+ * 이 함수들은 현재는 쓰이지 않으며, AuctionController의 함수로 개편되었습니다.
+ *
+ */
 @RestController
 @CrossOrigin(origins = {"*"})
 @RequestMapping("/search")
@@ -36,7 +44,9 @@ public class SearchController {
 	@Autowired
 	SearchRepository searchRepository;
 	
-	/** 검색할 때 */
+	/** 검색할 때 페이징 및 필터를 위한 예시 함수입니다.
+	 * This function is deprecated and is replaced with AuctionController's function.
+	 * */
 	@GetMapping("/hi")
 	public Object searchWithFilter(SearchDto searchDto) {
 		Specification<Item> spe = Specification.where(SearchSpecs.price(10000, 20000));
@@ -45,23 +55,14 @@ public class SearchController {
 		
 		List<Item>p1 = searchRepository.findAll(spe);
 		
-//		System.out.println(p.toString());
-//		for(int i=0; i<p.size(); ++i) {
-//			System.out.println(p.get(i).getId());
-//		}
-		
-		System.out.println(p1.size()+"전체 사이증ㅎㅎ");
-		System.out.println(p.getSize() + "page의 사이즈");
-		System.out.println(p.getNumber() + "page의 넘버");
-		
 		List<Item> kk = p.getContent();
-		for(int i=0; i<kk.size(); ++i) {
-			System.out.println(kk.get(i).getId()+"zz");
-		}
 		return "hi";
 	}
 	
-	
+	/**
+	 * 시/도 요청 시 보내주는 예시 함수입니다.
+	 * This function is deprecated and is replaced with AuctionController's function.
+	 */
 	@GetMapping
 	public Object getLocationNames(SearchLocationDto searchLocationDto) {
 		

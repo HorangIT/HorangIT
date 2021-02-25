@@ -13,7 +13,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /** 
  * @author 송은주(OctopusSwellfish)
- * 기본적인 Swagger설정을 위한 클래스
+ * 기본적인 Swagger설정을 위한 클래스입니다.
  */
 @Configuration
 @EnableSwagger2

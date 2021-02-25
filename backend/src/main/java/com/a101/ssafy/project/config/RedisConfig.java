@@ -20,8 +20,8 @@ import org.springframework.data.redis.listener.Topic;
 import com.a101.ssafy.project.eventlistener.KeyExpiredListener;
 /**
  * @author 송은주(OctopusSwellfish)
- * 레디스 환경설정을 위한 클래스
- * Lettuce를 이용해서 제작
+ * 레디스 환경설정을 위한 클래스입니다.
+ * Lettuce를 이용해서 제작했습니다.
  * 메시지 리스너 추가 (단 레디스에서 환경설정을 추가로 해 줘야 함)
  */
 @Configuration

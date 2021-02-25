@@ -8,7 +8,7 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 
 /** 
  * @author 송은주(OctopusSwellfish)
- * Websocket 연결 및 기본 설정을 위한 클래스
+ * Websocket 연결 및 기본 설정을 위한 클래스입니다.
  * 
  */
 @Configuration
