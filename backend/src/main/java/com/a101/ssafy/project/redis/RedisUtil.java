@@ -31,7 +31,7 @@ public class RedisUtil {
 
     /**
      * {key, value} 형태의 데이터를 가져오는 함수입니다.
-     * null을 리턴받을 수 있습니다.
+     * null을 리턴할 수 있습니다.
      */
     public String getData(String key){
         ValueOperations<String,String> valueOperations = stringRedisTemplate.opsForValue();
@@ -75,7 +75,7 @@ public class RedisUtil {
     /**
      * Redis에 Hash데이터 구조에 있는 특정 Key값을 모두 조회합니다. 
      * redis Hash구조는 Map<Object, Map<Object, Object> > 의 구조로 저장
-     * 
+     * null을 리턴할 수 있습니다.
      */
     public Map<Object, Object> getAllHdata(String redisKey) {
     	HashOperations<String, Object, Object> valueOperations = stringRedisTemplate.opsForHash();
@@ -85,7 +85,7 @@ public class RedisUtil {
     /**
      * Redis에 Hash데이터 구조에 있는 특정 Key값의 key값 1개를  조회합니다. 
      * redis Hash구조는 Map<Object, Map<Object, Object> > 의 구조로 저장
-     * 
+     * null을 리턴할 수 있습니다.
      */
     public Object getHdata(String redisKey, String key) {
     	HashOperations<String, Object, Object> valueOperations = stringRedisTemplate.opsForHash();
@@ -103,7 +103,7 @@ public class RedisUtil {
     
     /** 
      * Redis List데이터 구조로 저장한 값을 모두 조회 위한 함수입니다.
-     *  
+     * null을 리턴할 수 있습니다.
      * */
     public List<String> getAllLdata(String key){
     	ListOperations<String, String> valueOperations = stringRedisTemplate.opsForList();
