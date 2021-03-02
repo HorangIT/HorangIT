@@ -1,4 +1,6 @@
 module.exports = {
   transpileDependencies: ["vuetify"],
-  lintOnSave: false
+  lintOnSave: false,
+  // Only Use When Deploy
+  // publicPath: "/HorangIT",
 };
