@@ -45,7 +45,7 @@ public class UserServiceImpl {
     
     @SuppressWarnings("unchecked")
 	public Object login(LoginDto loginDto) {
-    	final BasicResponse result = new BasicResponse();
+		final BasicResponse result = new BasicResponse();
     	User user = userRepository.findByEmail(loginDto.getEmail());
     	
 		if(user == null || !passwordEncoder.matches(loginDto.getPassword(), user.getPassword())) {

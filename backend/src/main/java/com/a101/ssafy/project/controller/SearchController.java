@@ -9,7 +9,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,61 +24,54 @@ import com.a101.ssafy.project.service.SearchService;
 @RequestMapping("/search")
 public class SearchController {
 
-	@Autowired
-	SearchService searchService;
-	
-	@Autowired
-	public void setSearchService(SearchService searchService) {
-		this.searchService = searchService;
-	}
-	
-	@Autowired
-	SearchRepository searchRepository;
-	
-	/** 검색할 때 */
-	@GetMapping("/hi")
-	public Object searchWithFilter(SearchDto searchDto) {
-		Specification<Item> spe = Specification.where(SearchSpecs.price(10000, 20000));
-		PageRequest pageRequest = PageRequest.of(0, 5);
-		Page<Item> p = searchRepository.findAll(spe, pageRequest);
-		
-		List<Item>p1 = searchRepository.findAll(spe);
-		
-//		System.out.println(p.toString());
-//		for(int i=0; i<p.size(); ++i) {
-//			System.out.println(p.get(i).getId());
-//		}
-		
-		System.out.println(p1.size()+"전체 사이증ㅎㅎ");
-		System.out.println(p.getSize() + "page의 사이즈");
-		System.out.println(p.getNumber() + "page의 넘버");
-		
-		List<Item> kk = p.getContent();
-		for(int i=0; i<kk.size(); ++i) {
-			System.out.println(kk.get(i).getId()+"zz");
-		}
-		return "hi";
-	}
-	
-	
-	@GetMapping
-	public Object getLocationNames(SearchLocationDto searchLocationDto) {
-		
-		JSONObject jobj = new JSONObject();
-				
-		// 지역이 비어 있으면 "시"부터 리턴
-		if(searchLocationDto.getDistrictName()==null) {
-			List<String> districts = searchService.getDistrict();
-			jobj.put("districts", districts);					
-		}
-		// null이 아니면 이미 "시"는 있으니 군/구 리턴
-		else {
-			List<String> gunGu = searchService.getSiGunGu(searchLocationDto.getDistrictName());
-			jobj.put("gungu", gunGu);	
-		}
-		
-		return jobj;
-	}
-	
+    @Autowired
+    SearchService searchService;
+
+    @Autowired
+    public void setSearchService(SearchService searchService) {
+        this.searchService = searchService;
+    }
+
+    @Autowired
+    SearchRepository searchRepository;
+
+    /**
+     * 검색할 때
+     */
+    @GetMapping("/hi")
+    public Object searchWithFilter(SearchDto searchDto) {
+        Specification<Item> spe = Specification.where(SearchSpecs.price(10000, 20000));
+        PageRequest pageRequest = PageRequest.of(0, 5);
+        Page<Item> p = searchRepository.findAll(spe, pageRequest);
+
+        List<Item> p1 = searchRepository.findAll(spe);
+
+        List<Item> kk = p.getContent();
+        for (int i = 0; i < kk.size(); ++i) {
+            System.out.println(kk.get(i).getId() + "zz");
+        }
+        return "hi";
+    }
+
+
+    @GetMapping
+    public Object getLocationNames(SearchLocationDto searchLocationDto) {
+
+        JSONObject jobj = new JSONObject();
+
+        // 지역이 비어 있으면 "시"부터 리턴
+        if (searchLocationDto.getDistrictName() == null) {
+            List<String> districts = searchService.getDistrict();
+            jobj.put("districts", districts);
+        }
+        // null이 아니면 이미 "시"는 있으니 군/구 리턴
+        else {
+            List<String> gunGu = searchService.getSiGunGu(searchLocationDto.getDistrictName());
+            jobj.put("gungu", gunGu);
+        }
+
+        return jobj;
+    }
+
 
 }

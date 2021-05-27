@@ -22,8 +22,8 @@ import lombok.NoArgsConstructor;
 @Service
 @NoArgsConstructor
 public class S3Service {
-	private AmazonS3 s3Client;
-	
+    private AmazonS3 s3Client;
+
     @Value("${cloud.aws.credentials.accessKey}")
     private String accessKey;
 
@@ -35,23 +35,23 @@ public class S3Service {
 
     @Value("${cloud.aws.region.static}")
     private String region;
-    
+
     @PostConstruct
     public void setS3Client() {
-    	AWSCredentials credentials = new BasicAWSCredentials(this.accessKey, this.secretKey);
-    	
-    	s3Client = AmazonS3ClientBuilder.standard()
-    			.withCredentials(new AWSStaticCredentialsProvider(credentials))
-    			.withRegion(this.region)
-    			.build();
+        AWSCredentials credentials = new BasicAWSCredentials(this.accessKey, this.secretKey);
+
+        s3Client = AmazonS3ClientBuilder.standard()
+                .withCredentials(new AWSStaticCredentialsProvider(credentials))
+                .withRegion(this.region)
+                .build();
     }
-    
+
     public String upload(MultipartFile file) throws IOException {
         String fileName = file.getOriginalFilename();
 
         s3Client.putObject(new PutObjectRequest(bucket, fileName, file.getInputStream(), null)
                 .withCannedAcl(CannedAccessControlList.PublicRead));
-        
+
         return s3Client.getUrl(bucket, fileName).toString();
     }
 

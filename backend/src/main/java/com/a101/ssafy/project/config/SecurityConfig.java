@@ -46,19 +46,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter { // 추가적�
     public void configure(WebSecurity web) {
         web.ignoring()
                 .antMatchers(
-                		"/favicon.ico" // favicon관련 요청은 모두 무시
-                        ,"/error"
-                        ,"/v2/api-docs" // 스웨거
-                        ,"/swagger-resources/**"
-                        ,"/swagger-ui.html"
-                        ,"/webjars/**"
-                        ,"/swagger/**"
-                        ,"/index.html"
-                        ,"/api/**"
-                        ,"/"
-                        
+                        "/favicon.ico" // favicon관련 요청은 모두 무시
+                        , "/error"
+                        , "/v2/api-docs" // 스웨거
+                        , "/swagger-resources/**"
+                        , "/swagger-ui.html"
+                        , "/webjars/**"
+                        , "/swagger/**"
+                        , "/index.html"
+                        , "/api/**"
+                        , "/"
+
                 );
-        
+
     }
 
     @Override
@@ -82,25 +82,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter { // 추가적�
 //                .antMatchers("/account/signup").permitAll() // /account/signup요청은 인증없이 접근 허용
 //                .antMatchers("/account/login").permitAll() 
 //                .antMatchers("/item").permitAll()
-              //나중에 이렇게 위처럼 수정하기
                 .antMatchers("/**").permitAll() //나중에 수정!
                 .anyRequest().authenticated() // 나머지 요청은 모두 인증을 받아야한다
 
                 .and()
                 .apply(new JwtSecurityConfig(tokenProvider));
     }
+
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
-    	CorsConfiguration configuration = new CorsConfiguration();
-    	
-    	configuration.addAllowedOrigin("*");
-    	configuration.addAllowedHeader("*");
-    	configuration.addAllowedMethod("*");
-    	configuration.setAllowCredentials(true);
-    	
-    	UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-    	source.registerCorsConfiguration("/**", configuration);
-    	return source;
+        CorsConfiguration configuration = new CorsConfiguration();
+
+        configuration.addAllowedOrigin("*");
+        configuration.addAllowedHeader("*");
+        configuration.addAllowedMethod("*");
+        configuration.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 
 }

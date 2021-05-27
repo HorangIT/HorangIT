@@ -1,15 +1,10 @@
 package com.a101.ssafy.project.eventlistener;
 
-import java.util.Arrays;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.stereotype.Component;
 
-import com.a101.ssafy.project.redis.RedisUtil;
-import com.a101.ssafy.project.service.AuctionService;
 import com.a101.ssafy.project.service.ItemService;
 import com.a101.ssafy.project.service.ReceiptService;
 
@@ -44,16 +39,12 @@ public class KeyExpiredListener implements MessageListener{
 		String itemId = "";
 		switch(channel) {
 		case "__keyevent@0__:expired":
-			System.out.println("expiredEvent ?");
 			itemId = msg.substring(7);
-			System.out.println(itemId);
 			itemService.setStatusById(Long.parseLong(itemId), 1);
 			receiptService.createReceipt(itemId);
 			
 			break;
 		case "__keyevent@0__:del":
-			System.out.println("delEvent ?");
-
 			if(msg.startsWith(ITEM_HAPPY_PRICE)) {
 				itemId = msg.substring(5);
 				itemService.setStatusById(Long.parseLong(itemId), 1);
@@ -62,11 +53,6 @@ public class KeyExpiredListener implements MessageListener{
 			}
 			break;
 		}
-		
-			
-			
-
-		System.out.println("<<<<<<<<<<<<<<");
 	}
  
 }

@@ -14,16 +14,20 @@ import com.a101.ssafy.project.model.item.RegisterDto;
 
 @Service
 public interface ItemService {
-	BasicResponse registerItem(RegisterDto request, MultipartFile[] multipartFiles) throws ParseException;
-	JSONObject getItemById(long id);
-	
-	//Pagination & Filters
-	List<JSONObject> getAllPages(List<Item> items);
-	List<String> getDistrict();
-	List<String> getSiGunGu(String districtName);
-	
-	BasicResponse getChatLog(long itemId);
-	BasicResponse getChatRoomLog(long itemId);
-	
-	boolean setStatusById(long itemId, int status);
+    BasicResponse registerItem(RegisterDto request, MultipartFile[] multipartFiles) throws ParseException;
+
+    JSONObject getItemById(long id);
+
+    //Pagination & Filters
+    List<JSONObject> getAllPages(List<Item> items);
+
+    List<String> getDistrict();
+
+    List<String> getSiGunGu(String districtName);
+
+    BasicResponse getChatLog(long itemId);
+
+    BasicResponse getChatRoomLog(long itemId);
+
+    boolean setStatusById(long itemId, int status);
 }
