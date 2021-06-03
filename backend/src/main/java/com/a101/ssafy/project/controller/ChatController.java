@@ -45,7 +45,7 @@ public class ChatController {
      * 아이템 세부 페이지에 들어갔을 때 사람들끼리 채팅하는 함수
      */
     @MessageMapping("/chat.sendMessage/{itemId}")
-    public void sss(@DestinationVariable("itemId") long itemId, @Payload ChatMessage chatMessage) {
+    public void chat(@DestinationVariable("itemId") long itemId, @Payload ChatMessage chatMessage) {
         chatMessage.setType(MessageType.REPLY);
 
         Date date = java.util.Calendar.getInstance().getTime();
@@ -79,7 +79,7 @@ public class ChatController {
      * 거래가 성사되고 나서 사람들끼리 1:1 채팅을 하는 함수
      */
     @MessageMapping("/room.sendMessage/{itemId}")
-    public void ddd(@DestinationVariable("itemId") long itemId, @Payload ChatMessage chatMessage) {
+    public void transactionCompleteChat(@DestinationVariable("itemId") long itemId, @Payload ChatMessage chatMessage) {
         Date date = java.util.Calendar.getInstance().getTime();
 
         JSONObject jobj = new JSONObject();
