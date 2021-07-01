@@ -49,4 +49,10 @@ public class UserController {
 	public Object createAccessToken(@RequestBody AccessTokenDto accessTokenDto) {
 		return userService.createAccessToken(accessTokenDto);
 	}
+
+	@ApiOperation(value = "로그아웃")
+	@PostMapping("/logout")
+	public Object signup(@RequestBody LoginDto loginDto) {
+		return userService.logout(loginDto);
+	}
 }

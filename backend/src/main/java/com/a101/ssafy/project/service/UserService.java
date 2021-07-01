@@ -11,4 +11,6 @@ public interface UserService {
     public Object signup(SignupDto signupDto);
 
     public Object createAccessToken(AccessTokenDto accessTokenDto);
+
+    public Object logout(LoginDto logoutDto);
 }

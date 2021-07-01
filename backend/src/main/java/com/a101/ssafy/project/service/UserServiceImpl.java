@@ -141,4 +141,12 @@ public class UserServiceImpl {
 		result.object = jsonObject;
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
+
+	public Object logout(LoginDto logoutDto) {
+    	redisUtil.deleteData(logoutDto.getEmail());
+		BasicResponse result = new BasicResponse();
+		result.status = true;
+		result.data = "로그아웃 성공";
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
 }
