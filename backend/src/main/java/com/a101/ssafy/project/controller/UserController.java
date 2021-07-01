@@ -2,6 +2,7 @@ package com.a101.ssafy.project.controller;
 
 import javax.validation.Valid;
 
+import com.a101.ssafy.project.model.user.AccessTokenDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,5 +42,11 @@ public class UserController {
 	@PostMapping("/signup")
 	public Object signup(@Valid @RequestBody SignupDto signupDto) {
 		return userService.signup(signupDto);
+	}
+
+	@ApiOperation(value = "access token 발급")
+	@PostMapping("/accessToken")
+	public Object createAccessToken(@RequestBody AccessTokenDto accessTokenDto) {
+		return userService.createAccessToken(accessTokenDto);
 	}
 }

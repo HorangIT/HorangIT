@@ -30,15 +30,18 @@ public class TokenProvider implements InitializingBean {
 
    private final String secret;
    private final long tokenValidityInMilliseconds;
+   private final long rfeshTokenValidityInMilliseconds;
 
    private Key key;
 
 
    public TokenProvider(
-      @Value("${jwt.secret}") String secret,
-      @Value("${jwt.token-validity-in-seconds}") long tokenValidityInSeconds) {
+           @Value("${jwt.secret}") String secret,
+           @Value("${jwt.token-validity-in-seconds}") long tokenValidityInSeconds,
+           @Value("${jwt.refreshToken-validity-in-seconds}") long rfeshTokenValidityInMilliseconds) {
       this.secret = secret;
       this.tokenValidityInMilliseconds = tokenValidityInSeconds * 1000;
+      this.rfeshTokenValidityInMilliseconds = rfeshTokenValidityInMilliseconds * 1000;
    }
 
    // 주입받은 secret 값을 BASE64 디코드를 한 다음에 key변수에 할당
@@ -49,13 +52,18 @@ public class TokenProvider implements InitializingBean {
    }
 
    // Authentication의 권한정보를 이용해서 토큰을 생성하는 메소드
-   public String createToken(Authentication authentication) {
+   public String createToken(Authentication authentication, String tokenType) {
       String authorities = authentication.getAuthorities().stream()
          .map(GrantedAuthority::getAuthority)
          .collect(Collectors.joining(","));
 
       long now = (new Date()).getTime();
-      Date validity = new Date(now + this.tokenValidityInMilliseconds); // application 파일에 설정한 토큰의 만료시간
+      Date validity;
+      if("access".equals(tokenType)){
+         validity = new Date(now + this.tokenValidityInMilliseconds); // application 파일에 설정한 토큰의 만료시간
+      }else{
+         validity = new Date(now + this.rfeshTokenValidityInMilliseconds); // application 파일에 설정한 토큰의 만료시간
+      }
 
       // jwt 토큰 생성 후 리턴
       return Jwts.builder()

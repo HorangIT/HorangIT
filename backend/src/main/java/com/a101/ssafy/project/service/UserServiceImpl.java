@@ -1,7 +1,9 @@
 package com.a101.ssafy.project.service;
 
+import com.a101.ssafy.project.model.user.*;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,11 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.a101.ssafy.project.repository.UserRepository;
 import com.a101.ssafy.project.jwt.TokenProvider;
 import com.a101.ssafy.project.model.BasicResponse;
-import com.a101.ssafy.project.model.user.Authority;
-import com.a101.ssafy.project.model.user.LoginDto;
-import com.a101.ssafy.project.model.user.SignupDto;
-import com.a101.ssafy.project.model.user.User;
-import com.a101.ssafy.project.model.user.UserDto;
 import com.a101.ssafy.project.redis.RedisUtil;
 
 import java.util.Collections;
@@ -28,15 +25,17 @@ import java.util.Collections;
 public class UserServiceImpl {
 	@Autowired
 	RedisUtil redisUtil;
-	
+
+	private final long rfeshTokenValidityInMilliseconds;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 	private final TokenProvider tokenProvider;
 	private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, TokenProvider tokenProvider,
-					   AuthenticationManagerBuilder authenticationManagerBuilder) {
+    public UserServiceImpl(@Value("${jwt.refreshToken-validity-in-seconds}") long rfeshTokenValidityInMilliseconds, UserRepository userRepository, PasswordEncoder passwordEncoder, TokenProvider tokenProvider,
+						   AuthenticationManagerBuilder authenticationManagerBuilder) {
 		super();
+		this.rfeshTokenValidityInMilliseconds = rfeshTokenValidityInMilliseconds;
 		this.userRepository = userRepository;
 		this.passwordEncoder = passwordEncoder;
 		this.tokenProvider = tokenProvider;
@@ -45,7 +44,7 @@ public class UserServiceImpl {
     
     @SuppressWarnings("unchecked")
 	public Object login(LoginDto loginDto) {
-		final BasicResponse result = new BasicResponse();
+		BasicResponse result = new BasicResponse();
     	User user = userRepository.findByEmail(loginDto.getEmail());
     	
 		if(user == null || !passwordEncoder.matches(loginDto.getPassword(), user.getPassword())) {
@@ -61,11 +60,14 @@ public class UserServiceImpl {
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 
 		// 인증정보를 통해서 JWT 토큰생성
-		String jwt = tokenProvider.createToken(authentication);
-		
+		String accessToken = tokenProvider.createToken(authentication, "access");
+		String refreshToken = tokenProvider.createToken(authentication, "refresh");
+		redisUtil.setDataExpire(loginDto.getEmail(), refreshToken, rfeshTokenValidityInMilliseconds * 1000);
+
 		UserDto userDto = new UserDto(user.getId(), user.getEmail(), user.getUsername(), user.getNickname(), user.getAddress(), user.getPhone());
 		JSONObject jsonObject = new JSONObject();
-        jsonObject.put("token", jwt);
+        jsonObject.put("accessToken", accessToken);
+        jsonObject.put("refreshToken", refreshToken);
         jsonObject.put("user", userDto);
         
         result.status = true;
@@ -77,7 +79,7 @@ public class UserServiceImpl {
     @SuppressWarnings("unchecked")
 	@Transactional
     public Object signup(SignupDto signupDto) {
-    	final BasicResponse result = new BasicResponse();
+    	BasicResponse result = new BasicResponse();
     	
     	if(userRepository.findByEmail(signupDto.getEmail()) != null) {
     		result.status = false;
@@ -110,4 +112,33 @@ public class UserServiceImpl {
         result.object = jsonObject;
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
+
+	public Object createAccessToken(AccessTokenDto accessTokenDto) {
+		BasicResponse result = new BasicResponse();
+		result.status = false;
+
+		if(accessTokenDto == null) {
+			result.data = "토큰 생성 실패";
+			return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+		}
+
+		String refreshToken = redisUtil.getData(accessTokenDto.getEmail());
+		if(refreshToken == null || !accessTokenDto.getRefreshToken().equals(refreshToken)) {
+			result.data = "토큰 생성 실패";
+			return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+		}
+
+		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(accessTokenDto.getEmail(), accessTokenDto.getPassword());
+		Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+		SecurityContextHolder.getContext().setAuthentication(authentication);
+		String accessToken = tokenProvider.createToken(authentication, "access");
+
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("accessToken", accessToken);
+
+		result.status = true;
+		result.data = "토큰 생성 성공";
+		result.object = jsonObject;
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
 }
